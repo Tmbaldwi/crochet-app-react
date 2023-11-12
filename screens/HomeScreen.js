@@ -8,7 +8,7 @@ function HomeScreen({ navigation }) {
       <Text>My Screen Content</Text>
       
       {/* Circular button in the bottom right corner */}
-      <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Add')}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('CreatePattern')}>
         <Text>+</Text>
       </TouchableOpacity>
     </View>

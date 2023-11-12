@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './HomeScreen';  // Import the HomeScreen component
-import AddScreen from './AddScreen';    // Import the AddScreen component
+import HomeScreen from './screens/HomeScreen'; 
+import CreatePatternScreen from './screens/CreatePatternScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,8 +16,8 @@ function App() {
           component={HomeScreen}
         />
         <Stack.Screen
-          name="Add"
-          component={AddScreen}
+          name="CreatePattern"
+          component={CreatePatternScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
