@@ -10,13 +10,12 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* Screen definitions go here */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
         />
         <Stack.Screen
-          name="CreatePattern"
+          name="Create Pattern"
           component={CreatePatternScreen}
         />
       </Stack.Navigator>

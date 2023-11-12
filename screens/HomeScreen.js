@@ -8,7 +8,7 @@ function HomeScreen({ navigation }) {
       <Text>My Screen Content</Text>
       
       {/* Circular button in the bottom right corner */}
-      <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('CreatePattern')}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Create Pattern')}>
         <Text>+</Text>
       </TouchableOpacity>
     </View>
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // Additional styles for your screen content
   },
   buttonContainer: {
     position: 'absolute',
