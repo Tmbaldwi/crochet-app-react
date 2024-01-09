@@ -3,28 +3,48 @@ import { View, TextInput, Text, TouchableOpacity, Pressable } from 'react-native
 import Collapsible from 'react-native-collapsible';
 
 export const InstructionSection = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleContent = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   return (
-    <View>
-      <TouchableOpacity onPress={toggleContent}>
+    <View style={{
+      margin:5,
+      borderWidth: 3,
+    }}>
+      <View style={{
+        height: 60,
+        backgroundColor: 'orange',
+        flexDirection: 'row', //splits horzontally
+        justifyContent: 'space-between', //Center horizontally
+        alignItems: 'center',
+        borderBottomWidth: 3,
+      }}>
         <View style={{
-          height: 60,
-          backgroundColor: 'orange',
-          margin: 5,
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}> 
           <Text>Example Box 1</Text>
         </View>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={toggleContent} style={{
+          height: 60,
+          width: 60,
+          borderLeftWidth: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'stretch',
+        }}>
+          <Text>^</Text>
+        </TouchableOpacity>
+      </View>
       <Collapsible collapsed={isCollapsed}>
         <InstructionContainer>
-          <InstructionBox displayText="Box One"/>
-          <InstructionBox displayText="Box Two"/>
-          <InstructionBox displayText="Box Three"/>
+          <InstructionRow displayText="Box One" style={{marginTop: 10}}/>
+          <InstructionRow displayText="Box Two"/>
+          <InstructionRow displayText="Box Three" style={{marginBottom: 10}}/>
         </InstructionContainer>
       </Collapsible>
     </View>
@@ -37,8 +57,6 @@ export const InstructionContainer = ({ children }) => {
       flex: 1,
       flexDirection: 'column',
       alignItems: 'stretch',
-      borderColor: 'black',
-      borderWidth: 1
     }}>
       {React.Children.map(children, (child, index) => React.cloneElement(child, {
         key: index,
@@ -48,13 +66,13 @@ export const InstructionContainer = ({ children }) => {
   );
 };
 
-export const InstructionBox = ({displayText}) => {
+export const InstructionRow = ({displayText}) => {
   return (
     <View
       style={{
         height: 60,
-        backgroundColor: 'lightblue',
         margin: 5,
+        backgroundColor: 'lightblue',
         flexDirection: 'row', //splits horzontally
         justifyContent: 'space-between', //Center horizontally
         alignItems: 'center',
@@ -80,7 +98,6 @@ export const InstructionSubBox = ({placeholder}) => {
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
-        margin: 5,
       }}>
       <TextInput
         style={{

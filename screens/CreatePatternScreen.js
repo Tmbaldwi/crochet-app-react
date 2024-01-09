@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { InstructionSection } from '../components/InstructionContainer';
 
-const CreatePatternScreen = () => {
+function CreatePatternScreen(){
   return (
     <View>
       <InstructionSection/>
