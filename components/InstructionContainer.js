@@ -1,51 +1,36 @@
-import React, {useState} from "react";
-import { View, TextInput, Text, TouchableOpacity, Pressable } from 'react-native';
+import React, { useState } from "react";
+import { View, TextInput, Text, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 
 export const InstructionSection = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const toggleContent = () => {
+  const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   return (
-    <View style={{
-      margin:5,
-      borderWidth: 3,
-    }}>
-      <View style={{
-        height: 60,
-        backgroundColor: 'orange',
-        flexDirection: 'row', //splits horzontally
-        justifyContent: 'space-between', //Center horizontally
-        alignItems: 'center',
-        borderBottomWidth: 3,
-      }}>
-        <View style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}> 
-          <Text>Example Box 1</Text>
+    <View style={{ margin: 5, borderWidth: 2 }}>
+      <TouchableOpacity onPress={toggleSection}>
+        <View
+          style={{
+            height: 60,
+            margin: 5,
+            backgroundColor: 'orange',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Text>Container</Text>
+          <Text>{isCollapsed ? '^' : '-'}</Text>
         </View>
-        <TouchableOpacity onPress={toggleContent} style={{
-          height: 60,
-          width: 60,
-          borderLeftWidth: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          alignSelf: 'stretch',
-        }}>
-          <Text>^</Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
       <Collapsible collapsed={isCollapsed}>
-        <InstructionContainer>
-          <InstructionRow displayText="Box One" style={{marginTop: 10}}/>
-          <InstructionRow displayText="Box Two"/>
-          <InstructionRow displayText="Box Three" style={{marginBottom: 10}}/>
-        </InstructionContainer>
+        {/* Your existing content goes here */}
+        <InstructionRow displayText="Box One" />
+        <InstructionRow displayText="Box Two" />
+        <InstructionRow displayText="Box Three" />
       </Collapsible>
     </View>
   );
@@ -66,28 +51,28 @@ export const InstructionContainer = ({ children }) => {
   );
 };
 
-export const InstructionRow = ({displayText}) => {
+export const InstructionRow = ({ displayText }) => {
   return (
     <View
       style={{
         height: 60,
         margin: 5,
         backgroundColor: 'lightblue',
-        flexDirection: 'row', //splits horzontally
-        justifyContent: 'space-between', //Center horizontally
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
-      <InstructionSubBox placeholder={displayText}/>
-      <InstructionSubBox placeholder={displayText}/>
-      <InstructionSubBox placeholder={displayText}/>
+      <InstructionSubBox placeholder={displayText} />
+      <InstructionSubBox placeholder={displayText} />
+      <InstructionSubBox placeholder={displayText} />
     </View>
   );
 };
 
 //subbox stuff
 
-export const InstructionSubBox = ({placeholder}) => {
+export const InstructionSubBox = ({ placeholder }) => {
   const [text, onChangeText] = React.useState('');
 
   return (
@@ -110,6 +95,5 @@ export const InstructionSubBox = ({placeholder}) => {
         placeholder={placeholder}
       />
     </View>
-  )
+  );
 }
-
