@@ -22,6 +22,15 @@ export const InstructionSection = ( {title}) => {
     setRows(newRows);
   };
 
+  const onCloseModal = () =>{
+    setIsModalVisible(false);
+  }
+
+  const onSubmitModal = () =>{
+    addInstRow();
+    onCloseModal();
+  }
+
   return (
     <View style={sectionStyles.container}>
       <TouchableOpacity onPress={toggleSection}>
@@ -49,14 +58,25 @@ export const InstructionSection = ( {title}) => {
         </View>
         <Modal
           visible={isModalVisible}
-          onRequestClose={() => setIsModalVisible(false)}
+          onRequestClose={onCloseModal}
           animationType="slide"
           transparent={true} // Make the modal's background transparent
         >
           <View style={sectionStyles.modalOuter}>
             <View style={sectionStyles.modalInner}>
-              <Text>Modal time!</Text>
-              <Button title="Close Modal" onPress={() => setIsModalVisible(false)}/>
+              <View style={sectionStyles.modalContent}>
+                <View>
+                  <Text style={sectionStyles.modalContentHeaderText}>Add New Instruction:</Text>
+                </View>
+              </View>
+              <View style={sectionStyles.modalButtonContainer}>
+                <TouchableOpacity onPress={onCloseModal} style={sectionStyles.modalButtons}>
+                  <Text>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onSubmitModal} style={sectionStyles.modalButtons}>
+                  <Text>Submit</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
@@ -103,10 +123,33 @@ const sectionStyles = StyleSheet.create({
     width: '80%',
     height: '50%',
     backgroundColor: 'white',
-    borderRadius: 10,
     padding: 20,
     alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
+    width: '100%',
+  },
+  modalContentHeaderText: {
+    fontWeight: 'bold',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    height: 40,
+    columnGap: 10,
+    width: '100%',
+  },
+  modalButtons:{
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 8,
   },
 });
 
