@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import { View, Button, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Button, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
+import { InstructionRow } from "./InstructionRow";
 
 //instruction section stuff
 export const InstructionSection = ( {title}) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [rows, setRows] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [instructionText, setInstructionText] = useState("");
+  const [repetitionsNum, setRepetitionsNum] = useState("");
+  const [colorText, setColorText] = useState("");
 
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const addInstRow = () => {
-    const newRow = { instruction: 'New Instruction', repetition: 1, color: 'blue' };
+  const addInstRow = (inst, rep, color) => {
+    const newRow = { instruction: inst, repetition: Number(rep), color: color };
     setRows([...rows, newRow]);
   };
 
@@ -23,11 +27,14 @@ export const InstructionSection = ( {title}) => {
   };
 
   const onCloseModal = () =>{
+    setInstructionText("");
+    setRepetitionsNum("");
+    setColorText("");
     setIsModalVisible(false);
   }
 
   const onSubmitModal = () =>{
-    addInstRow();
+    addInstRow(instructionText, repetitionsNum ? repetitionsNum : 1, colorText);
     onCloseModal();
   }
 
@@ -67,6 +74,39 @@ export const InstructionSection = ( {title}) => {
               <View style={sectionStyles.modalContent}>
                 <View>
                   <Text style={sectionStyles.modalContentHeaderText}>Add New Instruction:</Text>
+                </View>
+                <View style={sectionStyles.modalBody}>
+                  <View style={sectionStyles.modalTextInputContainer}>
+                    <Text>Instruction: </Text>
+                    <TextInput 
+                      style={sectionStyles.modalTextInput}
+                      value={instructionText}
+                      onChangeText={setInstructionText}
+                      placeholder={"ex: [1 inc, 2 dec]"} 
+                      placeholderTextColor={"lightgrey"}
+                    />
+                  </View>
+                  <View style={sectionStyles.modalTextInputContainer}>
+                    <Text>Repetitions: </Text>
+                    <TextInput 
+                      style={sectionStyles.modalTextInput} 
+                      value={repetitionsNum}
+                      onChangeText={setRepetitionsNum}
+                      placeholder={"ex: 3"} 
+                      placeholderTextColor={"lightgrey"}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                  <View style={sectionStyles.modalTextInputContainer}>
+                    <Text>Yarn Color: </Text>
+                    <TextInput 
+                      style={sectionStyles.modalTextInput}
+                      value={colorText}
+                      onChangeText={setColorText}
+                      placeholder={"ex: blue"} 
+                      placeholderTextColor={"lightgrey"}
+                    />
+                  </View>
                 </View>
               </View>
               <View style={sectionStyles.modalButtonContainer}>
@@ -151,6 +191,22 @@ const sectionStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
+  modalBody: {
+    padding: 10,
+    gap: 10,
+    width: '100%',
+    maxWidth: 300,
+  },
+  modalTextInputContainer:{
+    flexDirection: "row",
+    gap: 5,
+  },
+  modalTextInput:{
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 2,
+    textAlign: 'center',
+  },
 });
 
 //instruction container stuff 
@@ -167,59 +223,5 @@ const containerStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch',
-  },
-});
-
-//instruction row stuff
-export const InstructionRow = ({ instruction, repetition, color}) => {
-  return (
-    <View style={rowStyles.rowContainer}>
-      <View style={rowStyles.topContainer}>
-        <InstructionSubBox text={instruction} />
-      </View>
-      <View style={rowStyles.bottomContainer}> 
-        <InstructionSubBox text={"x"+repetition} />
-        <InstructionSubBox text={color} />
-        <InstructionSubBox text={"Info"} />
-      </View>
-    </View>
-  );
-};
-
-const rowStyles = StyleSheet.create({
-  rowContainer: {
-    margin: 5,
-    borderWidth: 2,
-  },
-  topContainer: {
-    height: 60,
-    backgroundColor: 'lightblue',
-    alignItems: 'center',
-  },
-  bottomContainer: {
-    height: 60,
-    backgroundColor: 'lightblue',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-});
-
-//subbox stuff
-export const InstructionSubBox = ({ text }) => {
-  return (
-    <View style={subBoxStyles.subBoxContainer}>
-      <Text>{text}</Text>
-    </View>
-  );
-}
-
-const subBoxStyles = StyleSheet.create({
-  subBoxContainer: {
-    flex: 1,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
   },
 });

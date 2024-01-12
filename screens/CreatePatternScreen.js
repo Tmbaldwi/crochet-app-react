@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { InstructionSection } from '../components/InstructionContainer';
+import { InstructionSection } from '../components/Instruction Stuff/InstructionContainer';
 
 function CreatePatternScreen(){
   return (
