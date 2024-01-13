@@ -4,13 +4,13 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* Your screen content */}
       <Text>My Screen Content</Text>
       
-      {/* Circular button in the bottom right corner */}
-      <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('Create Pattern')}>
-        <Text>+</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Create Pattern')}>
+          <Text>+</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -23,8 +23,15 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: 0,
+    right: 0,
+    height: 60,
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 20,
+  },
+  button: {
     width: 60,
     height: 60,
     borderRadius: 30,
