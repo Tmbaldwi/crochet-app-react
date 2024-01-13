@@ -208,20 +208,3 @@ const sectionStyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-//instruction container stuff 
-export const InstructionContainer = ({ children }) => {
-  return (
-    <View style={containerStyles.container}>
-      {React.Children.map(children, (child, index) => React.cloneElement(child, {key: index,}))}
-    </View>
-  );
-};
-
-const containerStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-});

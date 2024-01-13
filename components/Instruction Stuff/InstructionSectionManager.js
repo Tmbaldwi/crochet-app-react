@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import {InstructionSection} from "./InstructionContainer";
+import {InstructionSection} from "./InstructionSection";
 
 export const InstructionSectionManager = () => {
     return(
