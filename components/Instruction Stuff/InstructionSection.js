@@ -4,7 +4,7 @@ import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
 
 //instruction section stuff
-export const InstructionSection = ( {title}) => {
+export const InstructionSection = ( {title, startNum, endNum}) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [rows, setRows] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -43,7 +43,7 @@ export const InstructionSection = ( {title}) => {
       <TouchableOpacity onPress={toggleSection}>
         <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
           <View style={sectionStyles.headerTextContainer}>
-            <Text>{title}</Text>
+            <Text>{title + ": " + startNum + "-" + endNum}</Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
             <Text>{isCollapsed ? '^' : '-'}</Text>
