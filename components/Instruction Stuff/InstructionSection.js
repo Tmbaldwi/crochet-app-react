@@ -5,7 +5,7 @@ import { InstructionRow } from "./InstructionRow";
 
 //instruction section stuff
 export const InstructionSection = ( {title, startNum, endNum}) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [rows, setRows] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [instructionText, setInstructionText] = useState("");
@@ -60,10 +60,12 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
             />
           </View>
         ))}
-        <View style={[sectionStyles.addButtonContainer, { borderTopWidth: rows.length == 0 ? 0: 2}]}>
+        <View style={{borderTopWidth: rows.length == 0 ? 0: 2}}>
           <Button title="Add Instruction" onPress={() => setIsModalVisible(true)} />
         </View>
-        <Modal
+      </Collapsible>
+
+      <Modal
           visible={isModalVisible}
           onRequestClose={onCloseModal}
           animationType="slide"
@@ -120,7 +122,6 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
             </View>
           </View>
         </Modal>
-      </Collapsible>
     </View>
   );
 };
@@ -146,12 +147,6 @@ const sectionStyles = StyleSheet.create({
     borderLeftWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  addButtonContainer: {
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'orange',
   },
   modalOuter: {
     flex: 1,
