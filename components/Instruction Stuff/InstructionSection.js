@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Button, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
-import { CustomModal } from "../CustomModal"
+import { CustomModal } from "../Common Models/CustomModal"
 
 //instruction section stuff
 export const InstructionSection = ( {title, startNum, endNum}) => {

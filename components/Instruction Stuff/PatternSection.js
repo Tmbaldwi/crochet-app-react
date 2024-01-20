@@ -1,10 +1,10 @@
 import React, {useState } from "react";
-import { View, Button, ScrollView, StyleSheet, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Button, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "./InstructionSection";
-import {CustomModal} from "../CustomModal";
+import {CustomModal} from "../Common Models/CustomModal";
 
-export const PatternSection = () => {
+export const PatternSection = ({sectionTitle}) => {
     const [sections, setSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -39,7 +39,7 @@ export const PatternSection = () => {
                 <TouchableOpacity onPress={toggleSection}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
                         <View style={patternSectionStyling.headerTextContainer}>
-                            <Text>SECTION</Text>
+                            <Text>{sectionTitle}</Text>
                         </View>
                         <View style={patternSectionStyling.toggleIconContainer}>
                             <Text>{isCollapsed ? '^' : '-'}</Text>
