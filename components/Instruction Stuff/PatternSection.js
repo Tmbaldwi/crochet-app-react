@@ -2,6 +2,7 @@ import React, {useState } from "react";
 import { View, Button, ScrollView, StyleSheet, Text, TouchableOpacity, Modal, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "./InstructionSection";
+import {CustomModal} from "../CustomModal";
 
 export const PatternSection = () => {
     const [sections, setSections] = useState([]);
@@ -61,54 +62,36 @@ export const PatternSection = () => {
                 </Collapsible>
             </View>
 
-            <Modal
-                visible={isModalVisible}
-                onRequestClose={onCloseModal}
-                animationType="slide"
-                transparent={true} // Make the modal's background transparent
-                >
-                <View style={patternSectionStyling.modalOuter}>
-                    <View style={patternSectionStyling.modalInner}>
-                        <View style={patternSectionStyling.modalContent}>
-                            <View>
-                                <Text style={patternSectionStyling.modalContentHeaderText}>Add New Instruction:</Text>
-                            </View>
-                            <View style={patternSectionStyling.modalBody}>
-                                <View style={patternSectionStyling.modalTextInputContainer}>
-                                    <Text>Round Start: </Text>
-                                    <TextInput 
-                                        style={patternSectionStyling.modalTextInput}
-                                        value={roundStartNum}
-                                        onChangeText={setRoundStartNum}
-                                        placeholder={"ex: 3"} 
-                                        placeholderTextColor={"lightgrey"}
-                                        keyboardType="numeric"
-                                    />
-                                </View>
-                                <View style={patternSectionStyling.modalTextInputContainer}>
-                                    <Text>Round End: </Text>
-                                    <TextInput 
-                                        style={patternSectionStyling.modalTextInput}
-                                        value={roundEndNum}
-                                        onChangeText={setRoundEndNum}
-                                        placeholder={"ex: 4"} 
-                                        placeholderTextColor={"lightgrey"}
-                                        keyboardType="numeric"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                        <View style={patternSectionStyling.modalButtonContainer}>
-                            <TouchableOpacity onPress={onCloseModal} style={patternSectionStyling.modalButtons}> 
-                                <Text>Close</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={onSubmitModal} style={patternSectionStyling.modalButtons}>
-                                <Text>Submit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+
+            <CustomModal
+                isVisible={isModalVisible}
+                headerText={"Add New Section:"}
+                onClose={onCloseModal}
+                onSubmit={onSubmitModal}
+            >
+                <View style={patternSectionStyling.modalTextInputContainer}>
+                    <Text>Round Start: </Text>
+                    <TextInput 
+                        style={patternSectionStyling.modalTextInput}
+                        value={roundStartNum}
+                        onChangeText={setRoundStartNum}
+                        placeholder={"ex: 3"} 
+                        placeholderTextColor={"lightgrey"}
+                        keyboardType="numeric"
+                    />
                 </View>
-            </Modal>
+                <View style={patternSectionStyling.modalTextInputContainer}>
+                    <Text>Round End: </Text>
+                    <TextInput 
+                        style={patternSectionStyling.modalTextInput}
+                        value={roundEndNum}
+                        onChangeText={setRoundEndNum}
+                        placeholder={"ex: 4"} 
+                        placeholderTextColor={"lightgrey"}
+                        keyboardType="numeric"
+                    />
+                </View>
+            </CustomModal>
         </ScrollView>
     );
 };
@@ -134,50 +117,6 @@ const patternSectionStyling = StyleSheet.create({
     sectionContent: {
         margin: 5,
         borderWidth: 2,
-    },
-    modalOuter: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-    },
-    modalInner: {
-        width: '80%',
-        height: '50%',
-        backgroundColor: 'white',
-        padding: 20,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    modalContent: {
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        flex: 1,
-        width: '100%',
-    },
-    modalContentHeaderText: {
-        fontWeight: 'bold',
-    },
-    modalButtonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        height: 40,
-        columnGap: 10,
-        width: '100%',
-    },
-    modalButtons:{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'lightblue',
-        borderWidth: 1,
-        borderRadius: 8,
-    },
-    modalBody: {
-        padding: 10,
-        gap: 10,
-        width: '100%',
-        maxWidth: 300,
     },
     modalTextInputContainer:{
         flexDirection: "row",

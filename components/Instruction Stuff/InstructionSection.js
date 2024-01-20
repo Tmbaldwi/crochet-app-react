@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Button, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
+import { CustomModal } from "../CustomModal"
 
 //instruction section stuff
 export const InstructionSection = ( {title, startNum, endNum}) => {
@@ -65,20 +66,13 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
         </View>
       </Collapsible>
 
-      <Modal
-          visible={isModalVisible}
-          onRequestClose={onCloseModal}
-          animationType="slide"
-          transparent={true} // Make the modal's background transparent
-        >
-          <View style={sectionStyles.modalOuter}>
-            <View style={sectionStyles.modalInner}>
-              <View style={sectionStyles.modalContent}>
-                <View>
-                  <Text style={sectionStyles.modalContentHeaderText}>Add New Instruction:</Text>
-                </View>
-                <View style={sectionStyles.modalBody}>
-                  <View style={sectionStyles.modalTextInputContainer}>
+      <CustomModal
+        isVisible={isModalVisible}
+        headerText={"Add New Instruction:"}
+        onClose={onCloseModal}
+        onSubmit={onSubmitModal}
+      >
+        <View style={sectionStyles.modalTextInputContainer}>
                     <Text>Instruction: </Text>
                     <TextInput 
                       style={sectionStyles.modalTextInput}
@@ -109,19 +103,7 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
                       placeholderTextColor={"lightgrey"}
                     />
                   </View>
-                </View>
-              </View>
-              <View style={sectionStyles.modalButtonContainer}>
-                <TouchableOpacity onPress={onCloseModal} style={sectionStyles.modalButtons}>
-                  <Text>Close</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={onSubmitModal} style={sectionStyles.modalButtons}>
-                  <Text>Submit</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+      </CustomModal>
     </View>
   );
 };
@@ -147,50 +129,6 @@ const sectionStyles = StyleSheet.create({
     borderLeftWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  modalOuter: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-  },
-  modalInner: {
-    width: '80%',
-    height: '50%',
-    backgroundColor: 'white',
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-    width: '100%',
-  },
-  modalContentHeaderText: {
-    fontWeight: 'bold',
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    height: 40,
-    columnGap: 10,
-    width: '100%',
-  },
-  modalButtons:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'lightblue',
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  modalBody: {
-    padding: 10,
-    gap: 10,
-    width: '100%',
-    maxWidth: 300,
   },
   modalTextInputContainer:{
     flexDirection: "row",
