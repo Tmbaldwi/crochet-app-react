@@ -33,14 +33,6 @@ const rowStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  topContainerDeleteButton: {
-    width: 60,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: 'red',
-  },
   topContainerInstruction: {
     flex: 1,
     alignSelf: 'stretch',
