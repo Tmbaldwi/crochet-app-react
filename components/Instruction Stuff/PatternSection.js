@@ -16,6 +16,11 @@ export const PatternSection = ({sectionTitle}) => {
         setSections(prevSections => [...prevSections, newSec]);
     };
 
+    const removeInstSec = (index) => {
+        const newSecs = sections.filter((_, i) => i !== index);
+        setSections(newSecs);
+    }
+
     const toggleSection = () => {
         setIsCollapsed(!isCollapsed);
     };

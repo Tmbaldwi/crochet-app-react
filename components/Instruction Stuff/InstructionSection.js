@@ -58,6 +58,7 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
               instruction={row.instruction}
               repetition={row.repetition}
               color={row.color}
+              deleteFunc={() => removeInstRow(index)}
             />
           </View>
         ))}
