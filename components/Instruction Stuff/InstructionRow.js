@@ -1,15 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { DeleteButton } from "../Common Models/DeleteButton";
 
 //instruction row stuff
 
-export const InstructionRow = ({ instruction, repetition, color, deleteFunc }) => {
+export const InstructionRow = ({ instruction, repetition, color, deleteInstructionRowFunc }) => {
   return (
     <View style={rowStyles.rowContainer}>
       <View style={rowStyles.topContainer}>
-        <TouchableOpacity onPress={deleteFunc} style={rowStyles.topContainerDeleteButton}>
-          <Text>X</Text>
-        </TouchableOpacity>
+        <DeleteButton deleteFunc={deleteInstructionRowFunc}/>
         <View style={rowStyles.topContainerInstruction}>
           <InstructionSubBox text={instruction} />
         </View>

@@ -11,7 +11,12 @@ function CreatePatternScreen(){
   const addPatternSec = (sectionTitle) => {
     const newSec = {sectionTitle: sectionTitle};
     setSections(prevSections => [...prevSections, newSec]);
-};
+  };
+
+  const deletePatternSec = (index) => {
+    const newSecs = sections.filter((_, i) => i !== index);
+    setSections(newSecs);
+  }
 
 const onCloseModal = () =>{
   setPatSecName("");
@@ -30,7 +35,10 @@ const onSubmitModal = () =>{
       <ScrollView style={patternScreenStyling.contentBody}>
         {sections.map((sec, index) => (
                             <View key={index}>
-                                <PatternSection sectionTitle={sec.sectionTitle}/>
+                                <PatternSection 
+                                  sectionTitle={sec.sectionTitle}
+                                  deletePatternSectionFunc={() => deletePatternSec(index)}
+                                />
                             </View>
                         ))}
       </ScrollView>

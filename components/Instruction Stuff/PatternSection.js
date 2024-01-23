@@ -1,10 +1,11 @@
 import React, {useState } from "react";
-import { View, Button, ScrollView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Button, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "./InstructionSection";
 import {CustomModal} from "../Common Models/CustomModal";
+import { DeleteButton } from "../Common Models/DeleteButton";
 
-export const PatternSection = ({sectionTitle}) => {
+export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
     const [sections, setSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,16 +42,17 @@ export const PatternSection = ({sectionTitle}) => {
     return(
         <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
-                <TouchableOpacity onPress={toggleSection}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-                        <View style={patternSectionStyling.headerTextContainer}>
-                            <Text>{sectionTitle}</Text>
-                        </View>
-                        <View style={patternSectionStyling.toggleIconContainer}>
-                            <Text>{isCollapsed ? '^' : '-'}</Text>
-                        </View>
+                        <DeleteButton deleteFunc={deletePatternSectionFunc}/>
+                        <TouchableOpacity onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
+                            <View style={patternSectionStyling.headerTextContainer}>
+                                <Text>{sectionTitle}</Text>
+                            </View>
+                            <View style={patternSectionStyling.toggleIconContainer}>
+                                <Text>{isCollapsed ? '^' : '-'}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
                 <Collapsible collapsed={isCollapsed}>
                     {sections.map((sec, index) => (
                         <View key={index}>
@@ -58,6 +60,7 @@ export const PatternSection = ({sectionTitle}) => {
                                 title={sec.title}
                                 startNum = {sec.startNum}
                                 endNum = {sec.endNum}
+                                deleteInstructionSectionFunc={() => removeInstSec(index)}
                             />
                         </View>
                     ))}
@@ -106,6 +109,14 @@ const patternSectionStyling = StyleSheet.create({
         height: 60,
         backgroundColor: 'darkorange',
         flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    headerTextAndToggleContainer:{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'stretch',
     },
     headerTextContainer: {
         flex: 1,
@@ -118,6 +129,7 @@ const patternSectionStyling = StyleSheet.create({
         borderLeftWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'stretch',
     },
     sectionContent: {
         margin: 5,

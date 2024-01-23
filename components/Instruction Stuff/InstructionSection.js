@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, Button, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
+import { View, Button, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
 import { CustomModal } from "../Common Models/CustomModal"
+import { DeleteButton } from "../Common Models/DeleteButton";
 
 //instruction section stuff
-export const InstructionSection = ( {title, startNum, endNum}) => {
+export const InstructionSection = ( {title, startNum, endNum, deleteInstructionSectionFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [rows, setRows] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,16 +42,17 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
 
   return (
     <View style={sectionStyles.container}>
-      <TouchableOpacity onPress={toggleSection}>
-        <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+      <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+        <DeleteButton deleteFunc={deleteInstructionSectionFunc}/>
+        <TouchableOpacity onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
             <Text>{title + ": " + startNum + "-" + endNum}</Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
             <Text>{isCollapsed ? '^' : '-'}</Text>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
       <Collapsible collapsed={isCollapsed}>
         {rows.map((row, index) => (
           <View key={index}>
@@ -58,7 +60,7 @@ export const InstructionSection = ( {title, startNum, endNum}) => {
               instruction={row.instruction}
               repetition={row.repetition}
               color={row.color}
-              deleteFunc={() => removeInstRow(index)}
+              deleteInstructionRowFunc={() => removeInstRow(index)}
             />
           </View>
         ))}
@@ -118,7 +120,15 @@ const sectionStyles = StyleSheet.create({
     height: 60,
     backgroundColor: 'orange',
     flexDirection: 'row',
-  },
+    alignItems: 'center',
+    justifyContent: 'space-between',
+},
+headerTextAndToggleContainer:{
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+},
   headerTextContainer: {
     flex: 1,
     alignItems: 'center',
