@@ -27,7 +27,7 @@ const rowStyles = StyleSheet.create({
     borderWidth: 2,
   },
   topContainer: {
-    height: 60,
+    minHeight: 60,
     backgroundColor: 'lightblue',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -50,7 +50,9 @@ const rowStyles = StyleSheet.create({
 export const InstructionSubBox = ({ text }) => {
   return (
     <View style={subBoxStyles.subBoxContainer}>
-      <Text>{text}</Text>
+      <Text style={subBoxStyles.subBoxText}>
+        {text}
+      </Text>
     </View>
   );
 };
@@ -62,4 +64,8 @@ const subBoxStyles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'stretch',
   },
+  subBoxText:{
+    margin: 10,
+    textAlign: 'center',
+  }
 });
