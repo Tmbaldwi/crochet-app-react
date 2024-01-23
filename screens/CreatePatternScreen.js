@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/PatternSection';
 import { CustomModal } from '../components/Common Models/CustomModal'
 
@@ -27,13 +27,13 @@ const onSubmitModal = () =>{
 
   return (
     <View style={patternScreenStyling.pageContentContainer}>
-      <View style={patternScreenStyling.contentBody}>
+      <ScrollView style={patternScreenStyling.contentBody}>
         {sections.map((sec, index) => (
                             <View key={index}>
                                 <PatternSection sectionTitle={sec.sectionTitle}/>
                             </View>
                         ))}
-      </View>
+      </ScrollView>
       <View style={patternScreenStyling.addSectionButtonContainer}>
         <TouchableOpacity 
           style={patternScreenStyling.addSectionButton}

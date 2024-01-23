@@ -34,7 +34,7 @@ export const PatternSection = ({sectionTitle}) => {
     }
 
     return(
-        <ScrollView style={{width: '100%'}}>
+        <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
                 <TouchableOpacity onPress={toggleSection}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
@@ -92,7 +92,7 @@ export const PatternSection = ({sectionTitle}) => {
                     />
                 </View>
             </CustomModal>
-        </ScrollView>
+        </View>
     );
 };
 
