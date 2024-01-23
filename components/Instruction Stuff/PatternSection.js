@@ -145,4 +145,4 @@ const patternSectionStyling = StyleSheet.create({
         borderRadius: 2,
         textAlign: 'center',
     },
-})
+});
