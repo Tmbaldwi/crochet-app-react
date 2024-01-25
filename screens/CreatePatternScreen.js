@@ -3,32 +3,41 @@ import { View, StyleSheet, Text, TouchableOpacity, TextInput, ScrollView } from 
 import { PatternSection } from '../components/Instruction Stuff/PatternSection';
 import { CustomModal } from '../components/Common Models/CustomModal'
 
+// Create Pattern Screen
+// Description:
+// Hosts all the pattern sections for pattern creation
+// Allows user to add pattern sections, prompts user with a modal to give the pattern section a name
+//
+// TODO: 
+// Allow savability of patterns, and pattern finalization
 function CreatePatternScreen(){
   const [sections, setSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [patSecName, setPatSecName] = useState("");
 
+  // adds pattern sections to the page
   const addPatternSec = (sectionTitle) => {
     const newSec = {sectionTitle: sectionTitle};
     setSections(prevSections => [...prevSections, newSec]);
   };
 
+  // deletes pattern sections, passed to the pattern section so it can remove itself
   const deletePatternSec = (index) => {
     const newSecs = sections.filter((_, i) => i !== index);
     setSections(newSecs);
   }
 
-const onCloseModal = () =>{
-  setPatSecName("");
-  
-  setIsModalVisible(false);
-}
+  const onCloseModal = () =>{
+    setPatSecName("");
+    
+    setIsModalVisible(false);
+  }
 
-const onSubmitModal = () =>{
-  addPatternSec(patSecName)
+  const onSubmitModal = () =>{
+    addPatternSec(patSecName)
 
-  onCloseModal();
-}
+    onCloseModal();
+  }
 
   return (
     <View style={patternScreenStyling.pageContentContainer}>
@@ -51,13 +60,17 @@ const onSubmitModal = () =>{
         </TouchableOpacity>
       </View>
 
+      {/* 
+        Modal for adding pattern sections
+        Prompts user for section name 
+      */}
       <CustomModal
         isVisible={isModalVisible}
         headerText={"Add New Section:"}
         onClose={onCloseModal}
         onSubmit={onSubmitModal}
       >
-        <View style={patternScreenStyling.modalTextInputContainer}>
+        <View style={patternScreenStyling.modalTextInputContainer}> {/* Input for section name */}
           <Text>Section Name: </Text>
           <TextInput 
             style={patternScreenStyling.modalTextInput}

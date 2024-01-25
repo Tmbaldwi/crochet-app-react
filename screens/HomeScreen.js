@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
+// Home screen
+// TODO: Add pattern navigations for saved patterns
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>My Screen Content</Text>
-      
-      <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>   {/* navigates to the create pattern screen */}
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Create Pattern')}>
           <Text>+</Text>
         </TouchableOpacity>

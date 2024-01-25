@@ -5,24 +5,40 @@ import { InstructionRow } from "./InstructionRow";
 import { CustomModal } from "../Common Models/CustomModal"
 import { DeleteButton } from "../Common Models/DeleteButton";
 
-//instruction section stuff
+// Instruction Section
+//
+// Descripton:
+// Contains groups of individual instructions that may make up a round/row
+// User can add instructions, when doing so they open a modal to input the instruction, repetitions, and yarn color
+// User can collapse the instruction section
+// User can delete the instruction section, will also delete nested instructions
+// 
+// Usage:
+// Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
+//
+// TODO: 
+// Overhaul modal to build instructions, rather than allow any text. Also add additional instruction input
 export const InstructionSection = ( {title, startNum, endNum, deleteInstructionSectionFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]); //contains instruction rows
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [instructionText, setInstructionText] = useState("");
   const [repetitionsNum, setRepetitionsNum] = useState("");
   const [colorText, setColorText] = useState("");
 
+  //toggles collapse on instruction section
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  //adds instruction row based on input of instruction, repetitions, and yarn color
   const addInstRow = (inst, rep, color) => {
     const newRow = { instruction: inst, repetition: Number(rep), color: color };
     setRows([...rows, newRow]);
   };
 
+  // removes given instruction row
+  // passed to the instruction row so that internal delete button deletes itself
   const removeInstRow = (index) => {
     const newRows = rows.filter((_, i) => i !== index);
     setRows(newRows);
@@ -68,44 +84,48 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
           <Button title="Add Instruction" onPress={() => setIsModalVisible(true)} />
         </View>
       </Collapsible>
-
+      
+      {/* 
+        Modal for adding instructions
+        Prompts user for instruction, number of repetitions and yarn color  
+      */}
       <CustomModal
         isVisible={isModalVisible}
         headerText={"Add New Instruction:"}
         onClose={onCloseModal}
         onSubmit={onSubmitModal}
       >
-        <View style={sectionStyles.modalTextInputContainer}>
-                    <Text>Instruction: </Text>
-                    <TextInput 
-                      style={sectionStyles.modalTextInput}
-                      value={instructionText}
-                      onChangeText={setInstructionText}
-                      placeholder={"ex: [1 inc, 2 dec]"} 
-                      placeholderTextColor={"lightgrey"}
-                    />
-                  </View>
-                  <View style={sectionStyles.modalTextInputContainer}>
-                    <Text>Repetitions: </Text>
-                    <TextInput 
-                      style={sectionStyles.modalTextInput} 
-                      value={repetitionsNum}
-                      onChangeText={setRepetitionsNum}
-                      placeholder={"ex: 3"} 
-                      placeholderTextColor={"lightgrey"}
-                      keyboardType="numeric"
-                    />
-                  </View>
-                  <View style={sectionStyles.modalTextInputContainer}>
-                    <Text>Yarn Color: </Text>
-                    <TextInput 
-                      style={sectionStyles.modalTextInput}
-                      value={colorText}
-                      onChangeText={setColorText}
-                      placeholder={"ex: blue"} 
-                      placeholderTextColor={"lightgrey"}
-                    />
-                  </View>
+        <View style={sectionStyles.modalTextInputContainer}> {/* Input for instruction */}
+          <Text>Instruction: </Text>
+          <TextInput 
+            style={sectionStyles.modalTextInput}
+            value={instructionText}
+            onChangeText={setInstructionText}
+            placeholder={"ex: [1 inc, 2 dec]"} 
+            placeholderTextColor={"lightgrey"}
+          />
+        </View>
+        <View style={sectionStyles.modalTextInputContainer}> {/* Input for reptitions */}
+          <Text>Repetitions: </Text>
+          <TextInput 
+            style={sectionStyles.modalTextInput} 
+            value={repetitionsNum}
+            onChangeText={setRepetitionsNum}
+            placeholder={"ex: 3"} 
+            placeholderTextColor={"lightgrey"}
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={sectionStyles.modalTextInputContainer}> {/* Input for yarn color */}
+          <Text>Yarn Color: </Text>
+          <TextInput 
+            style={sectionStyles.modalTextInput}
+            value={colorText}
+            onChangeText={setColorText}
+            placeholder={"ex: blue"} 
+            placeholderTextColor={"lightgrey"}
+          />
+        </View>
       </CustomModal>
     </View>
   );

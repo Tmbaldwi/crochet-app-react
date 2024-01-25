@@ -1,13 +1,16 @@
 import React from 'react';
 import {Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
+// Custom modal for use in creating instructions
+// Allows for a custom header and body 
+// TODO: Maybe custom close/submit text?
 export const CustomModal = ({isVisible, headerText, onClose, onSubmit, children}) => {
     return (
     <Modal
         visible={isVisible}
         onRequestClose={onClose}
         animationType="slide"
-        transparent={true} // Make the modal's background transparent
+        transparent={true}
     >
         <View style={modalStyles.modalOuter}>
           <View style={modalStyles.modalInner}>
@@ -38,7 +41,7 @@ const modalStyles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalInner: {
       width: '80%',

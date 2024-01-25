@@ -5,6 +5,21 @@ import {InstructionSection} from "./InstructionSection";
 import {CustomModal} from "../Common Models/CustomModal";
 import { DeleteButton } from "../Common Models/DeleteButton";
 
+// Pattern section
+//
+// Description:
+// Contains groups of individual instruction sections that make up a larger section (such as the head, sleeve, etc.)
+// User can add instruction sections with the add button, this will open a modal that prompts the number of rounds they want
+// User can collapse the pattern section
+// User can delete the pattern section, will also delete nested instruction sections
+//
+// Usage:
+// Must be passed its title, and a function to delete itself from the list
+//
+// TODO: 
+// Allow created instruction sections to be named 'Round' or 'Row'
+// Overhaul modal to allow either range or individual round/row numbers
+// Disallow duplicate rounds, and add prompt to handle such cases (such as moving the other part down)
 export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
     const [sections, setSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -12,16 +27,19 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
     const [roundStartNum, setRoundStartNum] = useState("");
     const [roundEndNum, setRoundEndNum] = useState("");
 
+    //creates instruction sections with inputted range
     const addInstSec = (startNum, endNum) => {
         const newSec = { title: "Round", startNum: startNum, endNum: endNum};
         setSections(prevSections => [...prevSections, newSec]);
     };
 
+    //removes instruction section, passed into the instruction section so it can remove itself
     const removeInstSec = (index) => {
         const newSecs = sections.filter((_, i) => i !== index);
         setSections(newSecs);
     }
 
+    //toggles the collapsable part of the pattern section
     const toggleSection = () => {
         setIsCollapsed(!isCollapsed);
     };
@@ -70,14 +88,17 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
                 </Collapsible>
             </View>
 
-
+            {/* 
+                Modal for adding instruction sections
+                Prompts user for round range  
+            */}
             <CustomModal
                 isVisible={isModalVisible}
                 headerText={"Add New Section:"}
                 onClose={onCloseModal}
                 onSubmit={onSubmitModal}
             >
-                <View style={patternSectionStyling.modalTextInputContainer}>
+                <View style={patternSectionStyling.modalTextInputContainer}> {/* Input for round range start */}
                     <Text>Round Start: </Text>
                     <TextInput 
                         style={patternSectionStyling.modalTextInput}
@@ -88,7 +109,7 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
                         keyboardType="numeric"
                     />
                 </View>
-                <View style={patternSectionStyling.modalTextInputContainer}>
+                <View style={patternSectionStyling.modalTextInputContainer}> {/* Input for round range end */}
                     <Text>Round End: </Text>
                     <TextInput 
                         style={patternSectionStyling.modalTextInput}

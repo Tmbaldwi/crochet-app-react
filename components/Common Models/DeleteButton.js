@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+// Custom model for delete buttons
+// TODO: Make hideable for edit/view pattern modes
 export const DeleteButton = ({deleteFunc}) => {
     return(
         <TouchableOpacity onPress={deleteFunc} style={deleteButtonStyling.deleteButton}>
