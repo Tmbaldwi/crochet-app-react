@@ -12,8 +12,8 @@ export const CustomModal = ({isVisible, headerText, onClose, onSubmit, children}
         <View style={modalStyles.modalOuter}>
           <View style={modalStyles.modalInner}>
             <View style={modalStyles.modalContent}>
-              <View>
-                <Text style={modalStyles.modalContentHeaderText}>{headerText}</Text>
+              <View style={modalStyles.modalHeader}>
+                <Text style={modalStyles.modalHeaderText}>{headerText}</Text>
               </View>
               <View style={modalStyles.modalBody}>
                 {children}
@@ -47,6 +47,7 @@ const modalStyles = StyleSheet.create({
       padding: 20,
       alignItems: 'center',
       justifyContent: 'flex-end',
+      borderRadius: 10,
     },
     modalContent: {
       alignItems: 'center',
@@ -54,8 +55,17 @@ const modalStyles = StyleSheet.create({
       flex: 1,
       width: '100%',
     },
-    modalContentHeaderText: {
+    modalHeader: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      borderBottomWidth: 2,
+    },
+    modalHeaderText: {
       fontWeight: 'bold',
+      marginLeft: 20,
+      marginRight: 20,
+      marginBottom: 10,
     },
     modalButtonContainer: {
       flexDirection: 'row',

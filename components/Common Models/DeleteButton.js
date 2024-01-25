@@ -12,7 +12,7 @@ export const DeleteButton = ({deleteFunc}) => {
 const deleteButtonStyling = StyleSheet.create({
     deleteButton: {
         width: 60,
-        borderWidth: 1,
+        borderRightWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
