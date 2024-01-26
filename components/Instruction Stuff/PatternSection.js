@@ -1,5 +1,5 @@
 import React, {useState } from "react";
-import { View, Button, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Button, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "./InstructionSection";
 import {CustomModal} from "../Common Models/CustomModal";
@@ -21,7 +21,7 @@ import { DeleteButton } from "../Common Models/DeleteButton";
 // Overhaul modal to allow either range or individual round/row numbers
 // Disallow duplicate rounds, and add prompt to handle such cases (such as moving the other part down)
 export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
-    const [sections, setSections] = useState([]);
+    const [sections, setSections] = useState([{title: "Round", startNum: 1, endNum: 2}]); //REMOVE
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [roundStartNum, setRoundStartNum] = useState("");
@@ -62,14 +62,14 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
             <View style={patternSectionStyling.sectionContent}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
                         <DeleteButton deleteFunc={deletePatternSectionFunc}/>
-                        <TouchableOpacity onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
+                        <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
                                 <Text>{sectionTitle}</Text>
                             </View>
                             <View style={patternSectionStyling.toggleIconContainer}>
                                 <Text>{isCollapsed ? '^' : '-'}</Text>
                             </View>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 <Collapsible collapsed={isCollapsed}>
                     {sections.map((sec, index) => (
@@ -87,38 +87,35 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
                     </View>
                 </Collapsible>
             </View>
-
-            {/* 
-                Modal for adding instruction sections
-                Prompts user for round range  
-            */}
             <CustomModal
                 isVisible={isModalVisible}
                 headerText={"Add New Section:"}
                 onClose={onCloseModal}
                 onSubmit={onSubmitModal}
             >
-                <View style={patternSectionStyling.modalTextInputContainer}> {/* Input for round range start */}
-                    <Text>Round Start: </Text>
-                    <TextInput 
-                        style={patternSectionStyling.modalTextInput}
-                        value={roundStartNum}
-                        onChangeText={setRoundStartNum}
-                        placeholder={"ex: 3"} 
-                        placeholderTextColor={"lightgrey"}
-                        keyboardType="numeric"
-                    />
-                </View>
-                <View style={patternSectionStyling.modalTextInputContainer}> {/* Input for round range end */}
-                    <Text>Round End: </Text>
-                    <TextInput 
-                        style={patternSectionStyling.modalTextInput}
-                        value={roundEndNum}
-                        onChangeText={setRoundEndNum}
-                        placeholder={"ex: 4"} 
-                        placeholderTextColor={"lightgrey"}
-                        keyboardType="numeric"
-                    />
+                <View style={patternSectionStyling.modalBody}>
+                    <View style={patternSectionStyling.modalTextInputContainer}>
+                        <Text>Round Start: </Text>
+                        <TextInput 
+                            style={patternSectionStyling.modalTextInput}
+                            value={roundStartNum}
+                            onChangeText={setRoundStartNum}
+                            placeholder={"ex: 3"} 
+                            placeholderTextColor={"lightgrey"}
+                            keyboardType="numeric"
+                        />
+                    </View>
+                    <View style={patternSectionStyling.modalTextInputContainer}>
+                        <Text>Round End: </Text>
+                        <TextInput 
+                            style={patternSectionStyling.modalTextInput}
+                            value={roundEndNum}
+                            onChangeText={setRoundEndNum}
+                            placeholder={"ex: 4"} 
+                            placeholderTextColor={"lightgrey"}
+                            keyboardType="numeric"
+                        />
+                    </View>
                 </View>
             </CustomModal>
         </View>
@@ -156,14 +153,17 @@ const patternSectionStyling = StyleSheet.create({
         margin: 5,
         borderWidth: 2,
     },
-    modalTextInputContainer:{
-        flexDirection: "row",
+    modalBody: {
         gap: 5,
     },
-    modalTextInput:{
-        flex: 1,
+    modalTextInputContainer:{
+        flexDirection: "row",
+        justifyContent: 'center',
+        gap: 5,
+      },
+      modalTextInput:{
         borderWidth: 1,
         borderRadius: 2,
         textAlign: 'center',
-    },
+      },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Button, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Button, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
 import { CustomModal } from "../Common Models/CustomModal"
@@ -60,14 +60,14 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
     <View style={sectionStyles.container}>
       <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
         <DeleteButton deleteFunc={deleteInstructionSectionFunc}/>
-        <TouchableOpacity onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
+        <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
             <Text>{title + ": " + startNum + "-" + endNum}</Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
             <Text>{isCollapsed ? '^' : '-'}</Text>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <Collapsible collapsed={isCollapsed}>
         {rows.map((row, index) => (
@@ -85,46 +85,61 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
         </View>
       </Collapsible>
       
-      {/* 
-        Modal for adding instructions
-        Prompts user for instruction, number of repetitions and yarn color  
-      */}
       <CustomModal
         isVisible={isModalVisible}
         headerText={"Add New Instruction:"}
         onClose={onCloseModal}
         onSubmit={onSubmitModal}
+        height={'80%'}
       >
-        <View style={sectionStyles.modalTextInputContainer}> {/* Input for instruction */}
-          <Text>Instruction: </Text>
-          <TextInput 
-            style={sectionStyles.modalTextInput}
-            value={instructionText}
-            onChangeText={setInstructionText}
-            placeholder={"ex: [1 inc, 2 dec]"} 
-            placeholderTextColor={"lightgrey"}
-          />
-        </View>
-        <View style={sectionStyles.modalTextInputContainer}> {/* Input for reptitions */}
-          <Text>Repetitions: </Text>
-          <TextInput 
-            style={sectionStyles.modalTextInput} 
-            value={repetitionsNum}
-            onChangeText={setRepetitionsNum}
-            placeholder={"ex: 3"} 
-            placeholderTextColor={"lightgrey"}
-            keyboardType="numeric"
-          />
-        </View>
-        <View style={sectionStyles.modalTextInputContainer}> {/* Input for yarn color */}
-          <Text>Yarn Color: </Text>
-          <TextInput 
-            style={sectionStyles.modalTextInput}
-            value={colorText}
-            onChangeText={setColorText}
-            placeholder={"ex: blue"} 
-            placeholderTextColor={"lightgrey"}
-          />
+        <View style={sectionStyles.modalBody}>
+          <Text style={{fontWeight: 'bold'}}>Preview Instruction:</Text>
+          <Text>{"[1 inc, 2 dec]"}</Text>
+          <View style={sectionStyles.instructionCreationContainer}>
+            <View style={sectionStyles.instructionCreationHeader}>
+              <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
+                <Text style={sectionStyles.instrutionCreationHeaderText}>Repetition</Text>
+              </View>
+              <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
+                <Text style={sectionStyles.instrutionCreationHeaderText}>Stitch Type</Text>
+              </View>
+            </View>
+            <ScrollView contentContainerStyle={{alignItems: 'center'}} style={sectionStyles.instrutionCreationContent}>
+              <Text>Add instruction input here</Text>
+            </ScrollView>
+          </View>
+
+          <View style={sectionStyles.modalExtraInputsContainer}>
+              <View style={sectionStyles.modalTextInputContainer}>
+                <Text>Repetitions: </Text>
+                <TextInput 
+                  style={sectionStyles.modalTextInput} 
+                  value={repetitionsNum}
+                  onChangeText={setRepetitionsNum}
+                  placeholder={"ex: 3"} 
+                  placeholderTextColor={"lightgrey"}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={sectionStyles.modalTextInputContainer}>
+                <Text>Yarn Color: </Text>
+                <TextInput 
+                  style={sectionStyles.modalTextInput}
+                  value={colorText}
+                  onChangeText={setColorText}
+                  placeholder={"ex: blue"} 
+                  placeholderTextColor={"lightgrey"}
+                />
+              </View>
+              <View style={sectionStyles.modalTextInputContainer}>
+                <Text>Special Instructions: </Text>
+                <TextInput 
+                  style={sectionStyles.modalTextInput}
+                  placeholder={"..."} 
+                  placeholderTextColor={"lightgrey"}
+                />
+              </View>
+          </View>
         </View>
       </CustomModal>
     </View>
@@ -160,9 +175,15 @@ headerTextAndToggleContainer:{
     borderLeftWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'stretch',
+  },
+  modalBody: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   modalTextInputContainer:{
-    flexDirection: "row",
+    alignItems: 'center',
     gap: 5,
   },
   modalTextInput:{
@@ -170,5 +191,38 @@ headerTextAndToggleContainer:{
     borderWidth: 1,
     borderRadius: 2,
     textAlign: 'center',
+  },
+  instructionCreationContainer: {
+    alignItems: 'center',
+    width: '80%',
+    flex: 1,
+    margin: 10,
+    borderWidth: 2,
+  },
+  instructionCreationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    borderWidth: 1,
+  },
+  instrutionCreationHeaderTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  instrutionCreationHeaderText: {
+    fontWeight: 'bold'
+  },
+  instrutionCreationContent: {
+    flex: 1,
+    alignSelf: 'stretch',
+    borderWidth: 1,
+  },
+  modalExtraInputsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 5,
+    width: '100%',
+    marginBottom: 10,
   },
 });

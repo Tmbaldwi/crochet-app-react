@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/PatternSection';
 import { CustomModal } from '../components/Common Models/CustomModal'
 
@@ -11,7 +11,7 @@ import { CustomModal } from '../components/Common Models/CustomModal'
 // TODO: 
 // Allow savability of patterns, and pattern finalization
 function CreatePatternScreen(){
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState([{sectionTitle: "Test Section"}]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [patSecName, setPatSecName] = useState("");
 
@@ -52,12 +52,12 @@ function CreatePatternScreen(){
                         ))}
       </ScrollView>
       <View style={patternScreenStyling.addSectionButtonContainer}>
-        <TouchableOpacity 
+        <Pressable 
           style={patternScreenStyling.addSectionButton}
           onPress={() => {setIsModalVisible(true)}}
         >
           <Text>+</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* 
@@ -70,7 +70,7 @@ function CreatePatternScreen(){
         onClose={onCloseModal}
         onSubmit={onSubmitModal}
       >
-        <View style={patternScreenStyling.modalTextInputContainer}> {/* Input for section name */}
+        <View style={patternScreenStyling.modalTextInputContainer}>
           <Text>Section Name: </Text>
           <TextInput 
             style={patternScreenStyling.modalTextInput}
@@ -115,10 +115,10 @@ const patternScreenStyling = StyleSheet.create({
   },
   modalTextInputContainer:{
     flexDirection: "row",
+    justifyContent: 'center',
     gap: 5,
   },
   modalTextInput:{
-    flex: 1,
     borderWidth: 1,
     borderRadius: 2,
     textAlign: 'center',

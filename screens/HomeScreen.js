@@ -7,7 +7,7 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>My Screen Content</Text>
-      <View style={styles.buttonContainer}>   {/* navigates to the create pattern screen */}
+      <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Create Pattern')}>
           <Text>+</Text>
         </TouchableOpacity>
