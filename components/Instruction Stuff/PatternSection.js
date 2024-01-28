@@ -15,11 +15,6 @@ import { DeleteButton } from "../Common Models/DeleteButton";
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-//
-// TODO: 
-// Allow created instruction sections to be named 'Round' or 'Row'
-// Overhaul modal to allow either range or individual round/row numbers
-// Disallow duplicate rounds, and add prompt to handle such cases (such as moving the other part down)
 export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
     const [sections, setSections] = useState([{title: "Round", startNum: 1, endNum: 2}]); //REMOVE
     const [isCollapsed, setIsCollapsed] = useState(false);

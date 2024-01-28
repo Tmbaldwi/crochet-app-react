@@ -15,9 +15,6 @@ import { DeleteButton } from "../Common Models/DeleteButton";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-//
-// TODO: 
-// Overhaul modal to build instructions, rather than allow any text. Also add additional instruction input
 export const InstructionSection = ( {title, startNum, endNum, deleteInstructionSectionFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [rows, setRows] = useState([]); //contains instruction rows
@@ -104,7 +101,10 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                 <Text style={sectionStyles.instrutionCreationHeaderText}>Stitch Type</Text>
               </View>
             </View>
-            <ScrollView contentContainerStyle={{alignItems: 'center'}} style={sectionStyles.instrutionCreationContent}>
+            <ScrollView 
+              contentContainerStyle={sectionStyles.instrutionCreationContentContainerStyle} 
+              style={sectionStyles.instrutionCreationContent}
+            >
               <Text>Add instruction input here</Text>
             </ScrollView>
           </View>
@@ -217,6 +217,9 @@ headerTextAndToggleContainer:{
     flex: 1,
     alignSelf: 'stretch',
     borderWidth: 1,
+  },
+  instrutionCreationContentContainerStyle: {
+    alignItems: 'center',
   },
   modalExtraInputsContainer: {
     flexDirection: 'row',

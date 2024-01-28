@@ -7,9 +7,6 @@ import { CustomModal } from '../components/Common Models/CustomModal'
 // Description:
 // Hosts all the pattern sections for pattern creation
 // Allows user to add pattern sections, prompts user with a modal to give the pattern section a name
-//
-// TODO: 
-// Allow savability of patterns, and pattern finalization
 function CreatePatternScreen(){
   const [sections, setSections] = useState([{sectionTitle: "Test Section"}]);
   const [isModalVisible, setIsModalVisible] = useState(false);
