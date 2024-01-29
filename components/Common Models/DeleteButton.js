@@ -13,8 +13,11 @@ export const DeleteButton = ({deleteFunc}) => {
 
 const deleteButtonStyling = StyleSheet.create({
     deleteButton: {
-        width: 60,
-        borderRightWidth: 1,
+        width: 60, //50
+        // height: 50,
+        // margin: 5,
+        // borderWidth: 2,
+        borderRightWidth: 1, //remove
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',

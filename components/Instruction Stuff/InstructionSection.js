@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Button, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
@@ -17,11 +17,12 @@ import { DeleteButton } from "../Common Models/DeleteButton";
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
 export const InstructionSection = ( {title, startNum, endNum, deleteInstructionSectionFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [rows, setRows] = useState([]); //contains instruction rows
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [instructionText, setInstructionText] = useState("");
+  const [rows, setRows] = useState([]); //contains instruction rows
   const [repetitionsNum, setRepetitionsNum] = useState("");
   const [colorText, setColorText] = useState("");
+  const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
+  const [instPreview, setInstPreview] = useState("[]");
 
   //toggles collapse on instruction section
   const toggleSection = () => {
@@ -42,16 +43,48 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   };
 
   const onCloseModal = () =>{
-    setInstructionText("");
+    setInstSteps([{rep: "", stitch: ""}]);
+    setInstPreview("");
     setRepetitionsNum("");
     setColorText("");
     setIsModalVisible(false);
   }
 
   const onSubmitModal = () =>{
-    addInstRow(instructionText, repetitionsNum ? repetitionsNum : 1, colorText);
+    addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText);
     onCloseModal();
   }
+
+  // updates instruction steps array with new instruction when changed
+  const handleNewStepChange = (index, field, newText) => {
+    const newInstSteps = instSteps.map((step, idx) => {
+      if (idx === index) {
+        return {...step, [field]: newText};
+      }
+      return step;
+    });
+    setInstSteps(newInstSteps);
+  };
+
+  // updates the instruction preview with all existing instructions
+  const updateInstrucitonPreview = () => {
+    let preview = "[";
+
+    instSteps.forEach((step) => {
+        preview += " " + step.rep + " " + step.stitch + ",";
+    });
+
+    setInstPreview(preview.substring(0, preview.length-1) + " ]");
+  };
+
+  useEffect(() => {
+    updateInstrucitonPreview();
+  }, [instSteps]);
+
+
+  const addNewStep = () => {
+    setInstSteps([...instSteps, {rep: "", stitch: ""}])
+  };
 
   return (
     <View style={sectionStyles.container}>
@@ -91,7 +124,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
       >
         <View style={sectionStyles.modalBody}>
           <Text style={{fontWeight: 'bold'}}>Preview Instruction:</Text>
-          <Text>{"[1 inc, 2 dec]"}</Text>
+          <Text>{instPreview}</Text>
           <View style={sectionStyles.instructionCreationContainer}>
             <View style={sectionStyles.instructionCreationHeader}>
               <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
@@ -105,7 +138,31 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
               contentContainerStyle={sectionStyles.instrutionCreationContentContainerStyle} 
               style={sectionStyles.instrutionCreationContent}
             >
-              <Text>Add instruction input here</Text>
+              {instSteps.map((step, index) => (
+                <View style={sectionStyles.instructionInputContainer} key={index}>
+                  <TextInput 
+                    style={sectionStyles.modalTextInput} 
+                    value={step.rep}
+                    onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
+                    placeholder={"repetitions"} 
+                    placeholderTextColor={"lightgrey"}
+                    inputMode="numeric"
+                  />
+                  <TextInput 
+                    style={sectionStyles.modalTextInput} 
+                    value={step.stitch}
+                    onChangeText={(text) => handleNewStepChange(index, 'stitch', text)}
+                    placeholder={"stitch"} 
+                    placeholderTextColor={"lightgrey"}
+                  />
+                </View>
+              ))}
+              <Pressable 
+                style={{borderWidth: 1,}}
+                onPress={() => addNewStep()}
+              >
+                <Text>Add Instruction</Text>
+              </Pressable>
             </ScrollView>
           </View>
 
@@ -187,10 +244,11 @@ headerTextAndToggleContainer:{
     gap: 5,
   },
   modalTextInput:{
-    flex: 1,
     borderWidth: 1,
     borderRadius: 2,
     textAlign: 'center',
+    width: 200,
+    height: 30,
   },
   instructionCreationContainer: {
     alignItems: 'center',
@@ -216,10 +274,16 @@ headerTextAndToggleContainer:{
   instrutionCreationContent: {
     flex: 1,
     alignSelf: 'stretch',
-    borderWidth: 1,
   },
   instrutionCreationContentContainerStyle: {
     alignItems: 'center',
+  },
+  instructionInputContainer:{
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    gap: 5,
+    margin: 10,
+    justifyContent: 'space-evenly',
   },
   modalExtraInputsContainer: {
     flexDirection: 'row',
