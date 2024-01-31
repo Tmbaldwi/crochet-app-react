@@ -165,8 +165,11 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
               </Pressable>
             </ScrollView>
           </View>
-
-          <View style={sectionStyles.modalExtraInputsContainer}>
+          
+          <ScrollView 
+            style={sectionStyles.modalExtraInputsContainer}
+            contentContainerStyle={sectionStyles.modalExtraInputsContainerContentContainerStyle}
+          >
               <View style={sectionStyles.modalTextInputContainer}>
                 <Text>Repetitions: </Text>
                 <TextInput 
@@ -191,12 +194,13 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
               <View style={sectionStyles.modalTextInputContainer}>
                 <Text>Special Instructions: </Text>
                 <TextInput 
-                  style={sectionStyles.modalTextInput}
+                  style={[sectionStyles.modalTextInput, {flex: 1}]}
                   placeholder={"..."} 
                   placeholderTextColor={"lightgrey"}
+                  multiline={true}
                 />
               </View>
-          </View>
+          </ScrollView>
         </View>
       </CustomModal>
     </View>
@@ -214,82 +218,87 @@ const sectionStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-},
-headerTextAndToggleContainer:{
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-},
-  headerTextContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
   },
-  toggleIconContainer: {
-    width: 60,
-    borderLeftWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
+  headerTextAndToggleContainer:{
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'stretch',
   },
-  modalBody: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  modalTextInputContainer:{
-    alignItems: 'center',
-    gap: 5,
-  },
-  modalTextInput:{
-    borderWidth: 1,
-    borderRadius: 2,
-    textAlign: 'center',
-    width: 200,
-    height: 30,
-  },
-  instructionCreationContainer: {
-    alignItems: 'center',
-    width: '80%',
-    flex: 1,
-    margin: 10,
-    borderWidth: 2,
-  },
-  instructionCreationHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    width: '100%',
-    borderWidth: 1,
-  },
-  instrutionCreationHeaderTextContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-  },
-  instrutionCreationHeaderText: {
-    fontWeight: 'bold'
-  },
-  instrutionCreationContent: {
-    flex: 1,
-    alignSelf: 'stretch',
-  },
-  instrutionCreationContentContainerStyle: {
-    alignItems: 'center',
-  },
-  instructionInputContainer:{
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    gap: 5,
-    margin: 10,
-    justifyContent: 'space-evenly',
-  },
-  modalExtraInputsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 5,
-    width: '100%',
-    marginBottom: 10,
-  },
+    headerTextContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'stretch',
+    },
+    toggleIconContainer: {
+      width: 60,
+      borderLeftWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'stretch',
+    },
+    modalBody: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    modalTextInputContainer:{
+      alignItems: 'center',
+      gap: 5,
+    },
+    modalTextInput:{
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
+      width: '80%',
+      maxWidth: 200,
+      minHeight: 30,
+    },
+    instructionCreationContainer: {
+      alignItems: 'center',
+      width: '95%',
+      flex: 2,
+      margin: 10,
+      borderWidth: 2,
+    },
+    instructionCreationHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      width: '100%',
+      borderWidth: 1,
+    },
+    instrutionCreationHeaderTextContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 10,
+    },
+    instrutionCreationHeaderText: {
+      fontWeight: 'bold'
+    },
+    instrutionCreationContent: {
+      flex: 1,
+      alignSelf: 'stretch',
+    },
+    instrutionCreationContentContainerStyle: {
+      alignItems: 'center',
+    },
+    instructionInputContainer:{
+      flexDirection: 'row',
+      alignSelf: 'stretch',
+      gap: 5,
+      margin: 10,
+      justifyContent: 'space-evenly',
+    },
+    modalExtraInputsContainer: {
+      flex: 1,
+      width: '100%',
+      marginBottom: 10,
+      borderWidth: 1,
+      padding: 10,
+    },
+    modalExtraInputsContainerContentContainerStyle: {
+      justifyContent: 'center',
+      gap: 5,
+    },
 });
