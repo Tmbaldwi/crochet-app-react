@@ -37,47 +37,49 @@ function CreatePatternScreen(){
   }
 
   return (
-    <View style={patternScreenStyling.pageContentContainer}>
-      <ScrollView style={patternScreenStyling.contentBody}>
-        {sections.map((sec, index) => (
-                            <View key={index}>
-                                <PatternSection 
-                                  sectionTitle={sec.sectionTitle}
-                                  deletePatternSectionFunc={() => deletePatternSec(index)}
-                                />
-                            </View>
-                        ))}
-      </ScrollView>
-      <View style={patternScreenStyling.addSectionButtonContainer}>
-        <Pressable 
-          style={patternScreenStyling.addSectionButton}
-          onPress={() => {setIsModalVisible(true)}}
-        >
-          <Text>+</Text>
-        </Pressable>
-      </View>
-
-      {/* 
-        Modal for adding pattern sections
-        Prompts user for section name 
-      */}
-      <CustomModal
-        isVisible={isModalVisible}
-        headerText={"Add New Section:"}
-        onClose={onCloseModal}
-        onSubmit={onSubmitModal}
-      >
-        <View style={patternScreenStyling.modalTextInputContainer}>
-          <Text>Section Name: </Text>
-          <TextInput 
-            style={patternScreenStyling.modalTextInput}
-            value={patSecName}
-            onChangeText={setPatSecName}
-            placeholder={"ex: Head"} 
-            placeholderTextColor={"lightgrey"}
-          />
+    <View style={{alignItems: 'center'}}>
+      <View style={patternScreenStyling.pageContentContainer}>
+        <ScrollView style={patternScreenStyling.contentBody}>
+          {sections.map((sec, index) => (
+                              <View key={index}>
+                                  <PatternSection 
+                                    sectionTitle={sec.sectionTitle}
+                                    deletePatternSectionFunc={() => deletePatternSec(index)}
+                                  />
+                              </View>
+                          ))}
+        </ScrollView>
+        <View style={patternScreenStyling.addSectionButtonContainer}>
+          <Pressable 
+            style={patternScreenStyling.addSectionButton}
+            onPress={() => {setIsModalVisible(true)}}
+          >
+            <Text>+</Text>
+          </Pressable>
         </View>
-      </CustomModal>
+
+        {/* 
+          Modal for adding pattern sections
+          Prompts user for section name 
+        */}
+        <CustomModal
+          isVisible={isModalVisible}
+          headerText={"Add New Section:"}
+          onClose={onCloseModal}
+          onSubmit={onSubmitModal}
+        >
+          <View style={patternScreenStyling.modalTextInputContainer}>
+            <Text>Section Name: </Text>
+            <TextInput 
+              style={patternScreenStyling.modalTextInput}
+              value={patSecName}
+              onChangeText={setPatSecName}
+              placeholder={"ex: Head"} 
+              placeholderTextColor={"lightgrey"}
+            />
+          </View>
+        </CustomModal>
+      </View>
     </View>
   );
 };
@@ -87,6 +89,7 @@ const patternScreenStyling = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     width: '100%',
+    maxWidth: 1400,
     height: '100%',
   },
   contentBody: {

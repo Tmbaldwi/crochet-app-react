@@ -44,7 +44,7 @@ const modalStyles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalInner: {
-      width: '80%',
+      maxWidth: '90%',
       backgroundColor: 'white',
       padding: 20,
       borderRadius: 10,
@@ -52,12 +52,10 @@ const modalStyles = StyleSheet.create({
     modalContent: {
       justifyContent: 'flex-start',
       flex: 1,
-      width: '100%',
     },
     modalHeader: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: '100%',
       paddingVertical: 10,
       borderBottomWidth: 2,
     },
@@ -70,7 +68,6 @@ const modalStyles = StyleSheet.create({
       justifyContent: 'space-around',
       height: 40,
       columnGap: 10,
-      width: '100%',
     },
     modalButtons:{
       flex: 1,
@@ -82,7 +79,6 @@ const modalStyles = StyleSheet.create({
     },
     modalBody: {
       flex: 1,
-      width: '100%',
       paddingTop: 10,
       paddingBottom: 10,
     },
