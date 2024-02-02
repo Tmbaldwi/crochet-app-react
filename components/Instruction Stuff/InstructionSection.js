@@ -141,7 +141,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
               {instSteps.map((step, index) => (
                 <View style={sectionStyles.instructionInputContainer} key={index}>
                   <TextInput 
-                    style={sectionStyles.modalTextInput} 
+                    style={sectionStyles.modalTextInputInstruction} 
                     value={step.rep}
                     onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
                     placeholder={"repetitions"} 
@@ -149,7 +149,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                     inputMode="numeric"
                   />
                   <TextInput 
-                    style={sectionStyles.modalTextInput} 
+                    style={sectionStyles.modalTextInputInstruction} 
                     value={step.stitch}
                     onChangeText={(text) => handleNewStepChange(index, 'stitch', text)}
                     placeholder={"stitch"} 
@@ -170,31 +170,33 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
             style={sectionStyles.modalExtraInputsContainer}
             contentContainerStyle={sectionStyles.modalExtraInputsContainerContentContainerStyle}
           >
-              <View style={sectionStyles.modalTextInputContainer}>
-                <Text>Repetitions: </Text>
-                <TextInput 
-                  style={sectionStyles.modalTextInput} 
-                  value={repetitionsNum}
-                  onChangeText={setRepetitionsNum}
-                  placeholder={"ex: 3"} 
-                  placeholderTextColor={"lightgrey"}
-                  keyboardType="numeric"
-                />
-              </View>
-              <View style={sectionStyles.modalTextInputContainer}>
-                <Text>Yarn Color: </Text>
-                <TextInput 
-                  style={sectionStyles.modalTextInput}
-                  value={colorText}
-                  onChangeText={setColorText}
-                  placeholder={"ex: blue"} 
-                  placeholderTextColor={"lightgrey"}
-                />
+              <View style={sectionStyles.modalExtraInputsTopRow}>
+                <View style={sectionStyles.modalTextInputContainer}>
+                  <Text>Repetitions: </Text>
+                  <TextInput 
+                    style={sectionStyles.modalTextInput} 
+                    value={repetitionsNum}
+                    onChangeText={setRepetitionsNum}
+                    placeholder={"ex: 3"} 
+                    placeholderTextColor={"lightgrey"}
+                    keyboardType="numeric"
+                  />
+                </View>
+                <View style={sectionStyles.modalTextInputContainer}>
+                  <Text>Yarn Color: </Text>
+                  <TextInput 
+                    style={sectionStyles.modalTextInput}
+                    value={colorText}
+                    onChangeText={setColorText}
+                    placeholder={"ex: blue"} 
+                    placeholderTextColor={"lightgrey"}
+                  />
+                </View>
               </View>
               <View style={sectionStyles.modalTextInputContainer}>
                 <Text>Special Instructions: </Text>
                 <TextInput 
-                  style={[sectionStyles.modalTextInput, {flex: 1}]}
+                  style={sectionStyles.modalTextInput}
                   placeholder={"..."} 
                   placeholderTextColor={"lightgrey"}
                   multiline={true}
@@ -243,21 +245,8 @@ const sectionStyles = StyleSheet.create({
       justifyContent: 'flex-end',
       alignItems: 'center',
     },
-    modalTextInputContainer:{
-      alignItems: 'center',
-      gap: 5,
-    },
-    modalTextInput:{
-      borderWidth: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      width: '80%',
-      maxWidth: 200,
-      minHeight: 30,
-    },
     instructionCreationContainer: {
       alignItems: 'center',
-      width: '95%',
       flex: 2,
       margin: 10,
       borderWidth: 2,
@@ -285,20 +274,44 @@ const sectionStyles = StyleSheet.create({
     },
     instructionInputContainer:{
       flexDirection: 'row',
-      alignSelf: 'stretch',
       gap: 5,
       margin: 10,
       justifyContent: 'space-evenly',
     },
+    modalTextInputInstruction:{
+      flex: 1,
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
+      minHeight: 30,
+    },
     modalExtraInputsContainer: {
       flex: 1,
-      width: '100%',
-      marginBottom: 10,
+      margin: 10,
       borderWidth: 1,
       padding: 10,
     },
     modalExtraInputsContainerContentContainerStyle: {
       justifyContent: 'center',
+      gap: 10,
+    },
+    modalExtraInputsTopRow: {
+      width: '100%',
+      flexDirection: 'row',
       gap: 5,
+      justifyContent: 'space-evenly',
+    },
+    modalTextInputContainer:{
+      flex: 1,
+      alignItems: 'center',
+      gap: 5,
+    },
+    modalTextInput:{
+      flex: 1,
+      alignSelf: 'stretch',
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
+      minHeight: 30,
     },
 });
