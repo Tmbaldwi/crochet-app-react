@@ -1,6 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, {useState} from "react";
+import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { DeleteButton } from "../Common Models/DeleteButton";
+import { CustomModal } from "../Common Models/CustomModal";
 
 // Instruction Row
 //
@@ -14,20 +15,43 @@ import { DeleteButton } from "../Common Models/DeleteButton";
 //
 // TODO:
 // add info button functionality, make button greyed out or active
-export const InstructionRow = ({ instruction, repetition, color, deleteInstructionRowFunc }) => {
+export const InstructionRow = ({ instruction, repetition, color, specialInstructions, deleteInstructionRowFunc }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  let isInfoDisabled = !(specialInstructions.trim() && specialInstructions.trim().length > 0);
+
   return (
-    <View style={rowStyles.rowContainer}>
-      <View style={rowStyles.topContainer}>
-        <DeleteButton deleteFunc={deleteInstructionRowFunc}/> 
-        <View style={rowStyles.topContainerInstruction}>
-          <InstructionSubBox text={instruction} />
+    <View>
+      <View style={rowStyles.rowContainer}>
+        <View style={rowStyles.topContainer}>
+          <DeleteButton deleteFunc={deleteInstructionRowFunc}/> 
+          <View style={rowStyles.topContainerInstruction}>
+            <InstructionSubBox text={instruction} />
+          </View>
+        </View>
+        <View style={rowStyles.bottomContainer}>
+          <InstructionSubBox text={"x" + repetition} />
+          <InstructionSubBox text={color} flex={2}/>
+          <Pressable
+            style={rowStyles.infoPressable}
+            onPress={() => setIsModalVisible(true)}
+            disabled={isInfoDisabled}
+          >
+            <InstructionSubBox text={"Info"} textColor={isInfoDisabled ? 'grey' : 'black'}/>
+          </Pressable>
         </View>
       </View>
-      <View style={rowStyles.bottomContainer}>
-        <InstructionSubBox text={"x" + repetition} />
-        <InstructionSubBox text={color} flex={2}/>
-        <InstructionSubBox text={"Info"}/>
-      </View>
+
+      <CustomModal
+        isVisible={isModalVisible}
+        headerText={"Special Instructions:"}
+        onClose={ () => setIsModalVisible(false)}
+      >
+      <ScrollView>
+        <Text style={rowStyles.modalText}>
+            {specialInstructions}
+        </Text>
+      </ScrollView>
+      </CustomModal>
     </View>
   );
 };
@@ -54,15 +78,22 @@ const rowStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  infoPressable: {
+    flex: 1,
+    height: '100%',
+  },
+  modalText: {
+    textAlign: 'center',
+  },
 });
 
 // Instructions subboxes
 // Blocks of information used for the instruction rows
 // Allows for custom text, and flex for sizing
-export const InstructionSubBox = ({ text, flex }) => {
+export const InstructionSubBox = ({ text, textColor, flex }) => {
   return (
     <View style={[subBoxStyles.subBoxContainer, {flex: flex ? flex : 1}]}>
-      <Text style={subBoxStyles.subBoxText}>
+      <Text style={[subBoxStyles.subBoxText, {color: textColor}]}>
         {text}
       </Text>
     </View>
@@ -79,5 +110,6 @@ const subBoxStyles = StyleSheet.create({
   subBoxText:{
     margin: 10,
     textAlign: 'center',
+    fontWeight: 'bold',
   }
 });

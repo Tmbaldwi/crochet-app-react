@@ -59,7 +59,7 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
                         <DeleteButton deleteFunc={deletePatternSectionFunc}/>
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
-                                <Text>{sectionTitle}</Text>
+                                <Text style={patternSectionStyling.headerText}>{sectionTitle}</Text>
                             </View>
                             <View style={patternSectionStyling.toggleIconContainer}>
                                 <Text>{isCollapsed ? '^' : '-'}</Text>
@@ -136,6 +136,10 @@ const patternSectionStyling = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
+    },
+    headerText: {
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     toggleIconContainer: {
         width: 60,

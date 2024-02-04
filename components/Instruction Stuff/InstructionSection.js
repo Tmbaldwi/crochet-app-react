@@ -34,8 +34,8 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   };
 
   //adds instruction row based on input of instruction, repetitions, and yarn color
-  const addInstRow = (inst, rep, color) => {
-    const newRow = { instruction: inst, repetition: Number(rep), color: color };
+  const addInstRow = (inst, rep, color, specialInst) => {
+    const newRow = { instruction: inst, repetition: Number(rep), color: color, specialInst: specialInst};
     setRows([...rows, newRow]);
   };
 
@@ -57,7 +57,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   }
 
   const onSubmitModal = () =>{
-    addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText);
+    addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
     onCloseModal();
   }
 
@@ -98,7 +98,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
         <DeleteButton deleteFunc={deleteInstructionSectionFunc}/>
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
-            <Text>{title + ": " + startNum + "-" + endNum}</Text>
+            <Text style={sectionStyles.headerText}>{title + ": " + startNum + "-" + endNum}</Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
             <Text>{isCollapsed ? '^' : '-'}</Text>
@@ -112,6 +112,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
               instruction={row.instruction}
               repetition={row.repetition}
               color={row.color}
+              specialInstructions={row.specialInst}
               deleteInstructionRowFunc={() => removeInstRow(index)}
             />
           </View>
@@ -128,13 +129,15 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
         onSubmit={onSubmitModal}
         height={'80%'}
       >
+        <View style={sectionStyles.modalSubheaderPreviewInstruction}>
+          <Text style={sectionStyles.modalSubheaderText}>Preview Instruction:</Text>
+          <Text style={sectionStyles.modalPreviewInstructionText}>{instPreview}</Text>
+        </View>
         <ScrollView 
           style={sectionStyles.modalBody} 
+          contentContainerStyle={sectionStyles.modalBodyContainerStyle}
           automaticallyAdjustKeyboardInsets={true}
-          contentContainerStyle={{      justifyContent: 'flex-end',
-      alignItems: 'center',}}>
-          <Text style={{fontWeight: 'bold'}}>Preview Instruction:</Text>
-          <Text>{instPreview}</Text>
+        >
           <View style={sectionStyles.instructionCreationContainer}>
             <View style={sectionStyles.instructionCreationHeader}>
               <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
@@ -144,12 +147,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                 <Text style={sectionStyles.modalSubheaderText}>Stitch Type</Text>
               </View>
             </View>
-            <ScrollView 
-              contentContainerStyle={sectionStyles.instrutionCreationContentContainerStyle} 
-              style={sectionStyles.instrutionCreationContent}
-              ref={instructionCreationScrollViewRef}
-              onContentSizeChange={() => instructionCreationScrollViewRef.current.scrollToEnd({ animated: true})}
-            >
+            <View style={sectionStyles.instrutionCreationContent}>
               {instSteps.map((step, index) => (
                 <View style={sectionStyles.instructionInputContainer} key={index}>
                   <TextInput 
@@ -173,17 +171,12 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                 style={sectionStyles.instructionCreationAddButton}
                 onPress={() => addNewStep()}
               >
-                <Text>Add Instruction</Text>
+                <Text style={sectionStyles.instructionCreationAddButtonText}>Add Instruction</Text>
               </Pressable>
-            </ScrollView>
+            </View>
           </View>
           
-          <ScrollView 
-            style={sectionStyles.modalExtraInputsContainer}
-            contentContainerStyle={sectionStyles.modalExtraInputsContainerContentContainerStyle}
-            ref={extraInputScrollViewRef}
-            onContentSizeChange={() => extraInputScrollViewRef.current.scrollToEnd({ animated: true})}
-          >
+          <View style={sectionStyles.modalExtraInputsContainer}>
               <View style={sectionStyles.modalExtraInputsTopRow}>
                 <View style={sectionStyles.modalTextInputContainer}>
                   <Text style={sectionStyles.modalSubheaderText}>Repetitions: </Text>
@@ -216,12 +209,11 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                   placeholder={"..."} 
                   placeholderTextColor={"lightgrey"}
                   multiline={true}
-                  onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)
-                  }
+                  onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
                   scrollEnabled={false}
                 />
               </View>
-          </ScrollView>
+          </View>
         </ScrollView>
       </CustomModal>
     </View>
@@ -252,6 +244,10 @@ const sectionStyles = StyleSheet.create({
       justifyContent: 'center',
       alignSelf: 'stretch',
     },
+    headerText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
     toggleIconContainer: {
       width: 60,
       borderLeftWidth: 1,
@@ -260,12 +256,20 @@ const sectionStyles = StyleSheet.create({
       alignSelf: 'stretch',
     },
     modalBody: {
-      flex: 1,
-
+    },
+    modalBodyContainerStyle: {
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    modalSubheaderPreviewInstruction: {
+      alignItems: 'center',
+      paddingBottom: 10,
+    },
+    modalPreviewInstructionText: {
+      textAlign: 'center',
     },
     instructionCreationContainer: {
       alignItems: 'center',
-      flex: 2,
       margin: 10,
       borderWidth: 2,
     },
@@ -281,13 +285,11 @@ const sectionStyles = StyleSheet.create({
       padding: 10,
     },
     modalSubheaderText: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
     instrutionCreationContent: {
-      flex: 1,
       alignSelf: 'stretch',
-    },
-    instrutionCreationContentContainerStyle: {
       alignItems: 'center',
     },
     instructionInputContainer:{
@@ -305,15 +307,19 @@ const sectionStyles = StyleSheet.create({
     },
     instructionCreationAddButton: {
       marginBottom: 10,
-      borderWidth: 1,
+      padding: 5,
+      borderWidth: 2,
+      borderRadius: 8,
+      backgroundColor: 'lightblue'
+    },
+    instructionCreationAddButtonText: {
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
     modalExtraInputsContainer: {
-      flex: 1,
       margin: 10,
       borderWidth: 1,
       padding: 10,
-    },
-    modalExtraInputsContainerContentContainerStyle: {
       justifyContent: 'center',
       gap: 10,
     },
@@ -329,7 +335,6 @@ const sectionStyles = StyleSheet.create({
       gap: 5,
     },
     modalTextInput:{
-      flex: 1,
       alignSelf: 'stretch',
       borderWidth: 1,
       borderRadius: 2,
@@ -337,12 +342,10 @@ const sectionStyles = StyleSheet.create({
       minHeight: 30,
     },
     modalSpecialInstructionTextInputContainer:{
-      flex: 1,
       alignItems: 'center',
       gap: 5,
     },
     modalSpecialInstructionTextInput:{
-      flex: 1,
       alignSelf: 'stretch',
       borderWidth: 1,
       borderRadius: 2,
