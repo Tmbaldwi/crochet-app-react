@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Button, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "./InstructionRow";
@@ -23,6 +23,10 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   const [colorText, setColorText] = useState("");
   const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
   const [instPreview, setInstPreview] = useState("[]");
+  const [specialInst, setSpecialInst] = useState("");
+  const [specialInstHeight, setSpecialInstHeight] = useState(0);
+  const extraInputScrollViewRef = useRef();
+  const instructionCreationScrollViewRef = useRef();
 
   //toggles collapse on instruction section
   const toggleSection = () => {
@@ -47,6 +51,8 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
     setInstPreview("");
     setRepetitionsNum("");
     setColorText("");
+    setSpecialInst("");
+    setSpecialInstHeight(0);
     setIsModalVisible(false);
   }
 
@@ -122,21 +128,27 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
         onSubmit={onSubmitModal}
         height={'80%'}
       >
-        <View style={sectionStyles.modalBody}>
+        <ScrollView 
+          style={sectionStyles.modalBody} 
+          automaticallyAdjustKeyboardInsets={true}
+          contentContainerStyle={{      justifyContent: 'flex-end',
+      alignItems: 'center',}}>
           <Text style={{fontWeight: 'bold'}}>Preview Instruction:</Text>
           <Text>{instPreview}</Text>
           <View style={sectionStyles.instructionCreationContainer}>
             <View style={sectionStyles.instructionCreationHeader}>
               <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
-                <Text style={sectionStyles.instrutionCreationHeaderText}>Repetition</Text>
+                <Text style={sectionStyles.modalSubheaderText}>Repetition</Text>
               </View>
               <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
-                <Text style={sectionStyles.instrutionCreationHeaderText}>Stitch Type</Text>
+                <Text style={sectionStyles.modalSubheaderText}>Stitch Type</Text>
               </View>
             </View>
             <ScrollView 
               contentContainerStyle={sectionStyles.instrutionCreationContentContainerStyle} 
               style={sectionStyles.instrutionCreationContent}
+              ref={instructionCreationScrollViewRef}
+              onContentSizeChange={() => instructionCreationScrollViewRef.current.scrollToEnd({ animated: true})}
             >
               {instSteps.map((step, index) => (
                 <View style={sectionStyles.instructionInputContainer} key={index}>
@@ -158,7 +170,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                 </View>
               ))}
               <Pressable 
-                style={{borderWidth: 1,}}
+                style={sectionStyles.instructionCreationAddButton}
                 onPress={() => addNewStep()}
               >
                 <Text>Add Instruction</Text>
@@ -169,10 +181,12 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
           <ScrollView 
             style={sectionStyles.modalExtraInputsContainer}
             contentContainerStyle={sectionStyles.modalExtraInputsContainerContentContainerStyle}
+            ref={extraInputScrollViewRef}
+            onContentSizeChange={() => extraInputScrollViewRef.current.scrollToEnd({ animated: true})}
           >
               <View style={sectionStyles.modalExtraInputsTopRow}>
                 <View style={sectionStyles.modalTextInputContainer}>
-                  <Text>Repetitions: </Text>
+                  <Text style={sectionStyles.modalSubheaderText}>Repetitions: </Text>
                   <TextInput 
                     style={sectionStyles.modalTextInput} 
                     value={repetitionsNum}
@@ -183,7 +197,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                   />
                 </View>
                 <View style={sectionStyles.modalTextInputContainer}>
-                  <Text>Yarn Color: </Text>
+                  <Text style={sectionStyles.modalSubheaderText}>Yarn Color: </Text>
                   <TextInput 
                     style={sectionStyles.modalTextInput}
                     value={colorText}
@@ -193,17 +207,22 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                   />
                 </View>
               </View>
-              <View style={sectionStyles.modalTextInputContainer}>
-                <Text>Special Instructions: </Text>
+              <View style={sectionStyles.modalSpecialInstructionTextInputContainer}>
+                <Text style={sectionStyles.modalSubheaderText}>Special Instructions: </Text>
                 <TextInput 
-                  style={sectionStyles.modalTextInput}
+                  style={[sectionStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+                  value={specialInst}
+                  onChangeText={setSpecialInst}
                   placeholder={"..."} 
                   placeholderTextColor={"lightgrey"}
                   multiline={true}
+                  onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)
+                  }
+                  scrollEnabled={false}
                 />
               </View>
           </ScrollView>
-        </View>
+        </ScrollView>
       </CustomModal>
     </View>
   );
@@ -242,8 +261,7 @@ const sectionStyles = StyleSheet.create({
     },
     modalBody: {
       flex: 1,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
+
     },
     instructionCreationContainer: {
       alignItems: 'center',
@@ -255,14 +273,14 @@ const sectionStyles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       width: '100%',
-      borderWidth: 1,
+      borderBottomWidth: 1,
     },
     instrutionCreationHeaderTextContainer: {
       alignItems: 'center',
       justifyContent: 'center',
       padding: 10,
     },
-    instrutionCreationHeaderText: {
+    modalSubheaderText: {
       fontWeight: 'bold'
     },
     instrutionCreationContent: {
@@ -284,6 +302,10 @@ const sectionStyles = StyleSheet.create({
       borderRadius: 2,
       textAlign: 'center',
       minHeight: 30,
+    },
+    instructionCreationAddButton: {
+      marginBottom: 10,
+      borderWidth: 1,
     },
     modalExtraInputsContainer: {
       flex: 1,
@@ -313,5 +335,17 @@ const sectionStyles = StyleSheet.create({
       borderRadius: 2,
       textAlign: 'center',
       minHeight: 30,
+    },
+    modalSpecialInstructionTextInputContainer:{
+      flex: 1,
+      alignItems: 'center',
+      gap: 5,
+    },
+    modalSpecialInstructionTextInput:{
+      flex: 1,
+      alignSelf: 'stretch',
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
     },
 });
