@@ -25,9 +25,6 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   const [instPreview, setInstPreview] = useState("[]");
   const [specialInst, setSpecialInst] = useState("");
   const [specialInstHeight, setSpecialInstHeight] = useState(0);
-  const extraInputScrollViewRef = useRef();
-  const instructionCreationScrollViewRef = useRef();
-
   //toggles collapse on instruction section
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
@@ -60,6 +57,11 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
     addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
     onCloseModal();
   }
+
+  const removeInstStep = (index) => {
+    const newSteps = instSteps.filter((_, i) => i !== index);
+    setInstSteps(newSteps);
+  };
 
   // updates instruction steps array with new instruction when changed
   const handleNewStepChange = (index, field, newText) => {
@@ -138,7 +140,8 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
           contentContainerStyle={sectionStyles.modalBodyContainerStyle}
           automaticallyAdjustKeyboardInsets={true}
         >
-          <View style={sectionStyles.instructionCreationContainer}>
+        <View>
+        <View style={sectionStyles.instructionCreationContainer}>
             <View style={sectionStyles.instructionCreationHeader}>
               <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
                 <Text style={sectionStyles.modalSubheaderText}>Repetition</Text>
@@ -150,6 +153,9 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
             <View style={sectionStyles.instrutionCreationContent}>
               {instSteps.map((step, index) => (
                 <View style={sectionStyles.instructionInputContainer} key={index}>
+                  <DeleteButton
+                    deleteFunc={() => removeInstStep(index)}
+                  />
                   <TextInput 
                     style={sectionStyles.modalTextInputInstruction} 
                     value={step.rep}
@@ -214,6 +220,8 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
                 />
               </View>
           </View>
+        </View>
+          
         </ScrollView>
       </CustomModal>
     </View>
