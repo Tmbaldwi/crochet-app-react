@@ -12,12 +12,13 @@ import { CustomModal } from "../Common Models/CustomModal";
 //
 // Usage:
 // MUST be passed a function to delete itself from a list
-//
-// TODO:
-// add info button functionality, make button greyed out or active
 export const InstructionRow = ({ instruction, repetition, color, specialInstructions, deleteInstructionRowFunc }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   let isInfoDisabled = !(specialInstructions.trim() && specialInstructions.trim().length > 0);
+
+  if(isInfoDisabled){
+    specialInstructions = "";
+  }
 
   return (
     <View>
