@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { CustomModal } from "../Common Models/CustomModal"
 import { DeleteButton } from "../Common Models/DeleteButton";
+import { DropdownComponent } from "../Common Models/Dropdown"
 
 // Add instruction modal
 // Description:
@@ -92,102 +93,102 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
             onSubmit={onSubmitInstructionModal}
             height={'80%'}
         >
-            <View style={sectionStyles.modalSubheaderPreviewInstruction}>
-            <Text style={sectionStyles.modalSubheaderText}>Preview Instruction:</Text>
-            <Text style={sectionStyles.modalPreviewInstructionText}>{instPreview}</Text>
+            <View style={modalStyles.modalSubheaderPreviewInstruction}>
+              <Text style={modalStyles.modalSubheaderText}>Preview Instruction:</Text>
+              <Text style={modalStyles.modalPreviewInstructionText}>{instPreview}</Text>
             </View>
             <ScrollView 
-                style={sectionStyles.modalBody} 
-                contentContainerStyle={sectionStyles.modalBodyContainerStyle}
+                style={modalStyles.modalBody} 
+                contentContainerStyle={modalStyles.modalBodyContainerStyle}
                 automaticallyAdjustKeyboardInsets={true}
             >
-            <View>
-                <View style={sectionStyles.instructionCreationContainer}>
-                    <View style={sectionStyles.instructionCreationHeader}>
-                    <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
-                        <Text style={sectionStyles.modalSubheaderText}>Repetition</Text>
-                    </View>
-                    <View style={sectionStyles.instrutionCreationHeaderTextContainer}>
-                        <Text style={sectionStyles.modalSubheaderText}>Stitch Type</Text>
-                    </View>
-                    </View>
-                    <View style={sectionStyles.instrutionCreationContent}>
-                    {instSteps.map((step, index) => (
-                        <View style={sectionStyles.instructionInputContainer} key={index}>
-                        <DeleteButton
-                            deleteFunc={() => removeInstStep(index)}
-                        />
-                        <TextInput 
-                            style={sectionStyles.modalTextInputInstruction} 
-                            value={step.rep}
-                            onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
-                            placeholder={"repetitions"} 
-                            placeholderTextColor={"lightgrey"}
-                            inputMode="numeric"
-                        />
-                        <TextInput 
-                            style={sectionStyles.modalTextInputInstruction} 
-                            value={step.stitch}
-                            onChangeText={(text) => handleNewStepChange(index, 'stitch', text)}
-                            placeholder={"stitch"} 
-                            placeholderTextColor={"lightgrey"}
-                        />
+              <View>
+                  <View style={modalStyles.instructionCreationContainer}>
+                      <View style={modalStyles.instructionCreationHeader}>
+                        <View style={modalStyles.instrutionCreationHeaderTextContainer}>
+                            <Text style={modalStyles.modalSubheaderText}>Repetition</Text>
                         </View>
-                    ))}
-                    <Pressable 
-                        style={sectionStyles.instructionCreationAddButton}
-                        onPress={() => addNewStep()}
-                    >
-                        <Text style={sectionStyles.instructionCreationAddButtonText}>Add Instruction</Text>
-                    </Pressable>
-                    </View>
-                </View>
-                
-                <View style={sectionStyles.modalExtraInputsContainer}>
-                    <View style={sectionStyles.modalExtraInputsTopRow}>
-                        <View style={sectionStyles.modalTextInputContainer}>
-                        <Text style={sectionStyles.modalSubheaderText}>Repetitions: </Text>
-                        <TextInput 
-                            style={sectionStyles.modalTextInput} 
-                            value={repetitionsNum}
-                            onChangeText={setRepetitionsNum}
-                            placeholder={"ex: 3"} 
-                            placeholderTextColor={"lightgrey"}
-                            keyboardType="numeric"
-                        />
+                        <View style={modalStyles.instrutionCreationHeaderTextContainer}>
+                            <Text style={modalStyles.modalSubheaderText}>Stitch Type</Text>
                         </View>
-                        <View style={sectionStyles.modalTextInputContainer}>
-                        <Text style={sectionStyles.modalSubheaderText}>Yarn Color: </Text>
-                        <TextInput 
-                            style={sectionStyles.modalTextInput}
-                            value={colorText}
-                            onChangeText={setColorText}
-                            placeholder={"ex: blue"} 
-                            placeholderTextColor={"lightgrey"}
-                        />
+                      </View>
+                      <View style={modalStyles.instrutionCreationContent}>
+                      {instSteps.map((step, index) => (
+                        <View style={modalStyles.instructionInputContainer} key={index}>
+                          <View style={modalStyles.modalTextInputInstructionContainer}>
+                            <DeleteButton
+                                deleteFunc={() => removeInstStep(index)}
+                            />
+                            <TextInput 
+                                  style={modalStyles.modalTextInputInstruction} 
+                                  value={step.rep}
+                                  onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
+                                  placeholder={"repetitions"} 
+                                  placeholderTextColor={"lightgrey"}
+                                  inputMode="numeric"
+                              />
+                          </View>
+                          <View style={modalStyles.instructionDropdown}>
+                            <DropdownComponent
+                              
+                            />
+                          </View>
                         </View>
-                    </View>
-                    <View style={sectionStyles.modalSpecialInstructionTextInputContainer}>
-                        <Text style={sectionStyles.modalSubheaderText}>Special Instructions: </Text>
-                        <TextInput 
-                        style={[sectionStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
-                        value={specialInst}
-                        onChangeText={setSpecialInst}
-                        placeholder={"..."} 
-                        placeholderTextColor={"lightgrey"}
-                        multiline={true}
-                        onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
-                        scrollEnabled={false}
-                        />
-                    </View>
-                </View>
-            </View>
+                      ))}
+                      <Pressable 
+                          style={modalStyles.instructionCreationAddButton}
+                          onPress={() => addNewStep()}
+                      >
+                          <Text style={modalStyles.instructionCreationAddButtonText}>Add Instruction</Text>
+                      </Pressable>
+                      </View>
+                  </View>
+                  
+                  <View style={modalStyles.modalExtraInputsContainer}>
+                      <View style={modalStyles.modalExtraInputsTopRow}>
+                          <View style={modalStyles.modalTextInputContainer}>
+                            <Text style={modalStyles.modalSubheaderText}>Repetitions: </Text>
+                            <TextInput 
+                                style={modalStyles.modalTextInput} 
+                                value={repetitionsNum}
+                                onChangeText={setRepetitionsNum}
+                                placeholder={"ex: 3"} 
+                                placeholderTextColor={"lightgrey"}
+                                keyboardType="numeric"
+                            />
+                          </View>
+                          <View style={modalStyles.modalTextInputContainer}>
+                            <Text style={modalStyles.modalSubheaderText}>Yarn Color: </Text>
+                            <TextInput 
+                                style={modalStyles.modalTextInput}
+                                value={colorText}
+                                onChangeText={setColorText}
+                                placeholder={"ex: blue"} 
+                                placeholderTextColor={"lightgrey"}
+                            />
+                          </View>
+                      </View>
+                      <View style={modalStyles.modalSpecialInstructionTextInputContainer}>
+                          <Text style={modalStyles.modalSubheaderText}>Special Instructions: </Text>
+                          <TextInput 
+                          style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+                          value={specialInst}
+                          onChangeText={setSpecialInst}
+                          placeholder={"..."} 
+                          placeholderTextColor={"lightgrey"}
+                          multiline={true}
+                          onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
+                          scrollEnabled={false}
+                          />
+                      </View>
+                  </View>
+              </View>
             </ScrollView>
         </CustomModal>
     )
 };
 
-const sectionStyles = StyleSheet.create({
+const modalStyles = StyleSheet.create({
       modalBody: {
       },
       modalBodyContainerStyle: {
@@ -229,14 +230,21 @@ const sectionStyles = StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
         margin: 10,
-        justifyContent: 'space-evenly',
+      },
+      modalTextInputInstructionContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        gap: 8,
       },
       modalTextInputInstruction:{
-        flex: 1,
         borderWidth: 1,
         borderRadius: 2,
         textAlign: 'center',
         minHeight: 30,
+        width: '100%',
+      },
+      instructionDropdown: {
+        flex: 1,
       },
       instructionCreationAddButton: {
         marginBottom: 10,
