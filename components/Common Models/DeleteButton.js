@@ -5,11 +5,9 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 // TODO: Make hideable for edit/view pattern modes
 export const DeleteButton = ({deleteFunc}) => {
     return(
-        <View style={deleteButtonStyling.deleteButton}>
-            <Pressable onPress={deleteFunc}>
-                <Text>X</Text>
-            </Pressable>
-        </View>
+        <Pressable onPress={deleteFunc} style={deleteButtonStyling.deleteButton}>
+            <Text>X</Text>
+        </Pressable>
     );
 };
 

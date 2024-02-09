@@ -73,11 +73,15 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
     const updateInstrucitonPreview = () => {
         let preview = "[";
 
-        instSteps.forEach((step) => {
+        if(instSteps.length > 0){
+          instSteps.forEach((step) => {
             preview += " " + step.rep + " " + step.stitch + ",";
-        });
+          });
 
-        setInstPreview(preview.substring(0, preview.length-1) + " ]");
+          preview = preview.substring(0, preview.length-1);
+        }
+
+        setInstPreview( preview + " ]");
     };
 
     // makes instruction row preview change whenvever steps change
@@ -130,13 +134,13 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                           </View>
                           <View style={modalStyles.instructionDropdown}>
                             <DropdownComponent
-                              
+                              callback={(text) => handleNewStepChange(index, 'stitch', text)}
                             />
                           </View>
                         </View>
                       ))}
                       <Pressable 
-                          style={modalStyles.instructionCreationAddButton}
+                          style={[modalStyles.instructionCreationAddButton, {marginTop: instSteps.length == 0 ? 10 : 0}]}
                           onPress={() => addNewStep()}
                       >
                           <Text style={modalStyles.instructionCreationAddButtonText}>Add Instruction</Text>

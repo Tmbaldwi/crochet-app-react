@@ -40,14 +40,14 @@ const data = [
   ];
   
 
-export const DropdownComponent = () => {
+export const DropdownComponent = ({callback}) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   return (
     <View style={styles.container}>
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+        style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
@@ -62,6 +62,7 @@ export const DropdownComponent = () => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
+          callback(item.label);
           setValue(item.value);
           setIsFocus(false);
         }}
