@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/PatternSection';
 import { CustomModal } from '../components/Common Models/CustomModal'
 
@@ -7,11 +7,8 @@ import { CustomModal } from '../components/Common Models/CustomModal'
 // Description:
 // Hosts all the pattern sections for pattern creation
 // Allows user to add pattern sections, prompts user with a modal to give the pattern section a name
-//
-// TODO: 
-// Allow savability of patterns, and pattern finalization
 function CreatePatternScreen(){
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState([{sectionTitle: "Test Section"}]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [patSecName, setPatSecName] = useState("");
 
@@ -40,47 +37,49 @@ function CreatePatternScreen(){
   }
 
   return (
-    <View style={patternScreenStyling.pageContentContainer}>
-      <ScrollView style={patternScreenStyling.contentBody}>
-        {sections.map((sec, index) => (
-                            <View key={index}>
-                                <PatternSection 
-                                  sectionTitle={sec.sectionTitle}
-                                  deletePatternSectionFunc={() => deletePatternSec(index)}
-                                />
-                            </View>
-                        ))}
-      </ScrollView>
-      <View style={patternScreenStyling.addSectionButtonContainer}>
-        <TouchableOpacity 
-          style={patternScreenStyling.addSectionButton}
-          onPress={() => {setIsModalVisible(true)}}
-        >
-          <Text>+</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* 
-        Modal for adding pattern sections
-        Prompts user for section name 
-      */}
-      <CustomModal
-        isVisible={isModalVisible}
-        headerText={"Add New Section:"}
-        onClose={onCloseModal}
-        onSubmit={onSubmitModal}
-      >
-        <View style={patternScreenStyling.modalTextInputContainer}> {/* Input for section name */}
-          <Text>Section Name: </Text>
-          <TextInput 
-            style={patternScreenStyling.modalTextInput}
-            value={patSecName}
-            onChangeText={setPatSecName}
-            placeholder={"ex: Head"} 
-            placeholderTextColor={"lightgrey"}
-          />
+    <View style={{alignItems: 'center'}}>
+      <View style={patternScreenStyling.pageContentContainer}>
+        <ScrollView style={patternScreenStyling.contentBody}>
+          {sections.map((sec, index) => (
+                              <View key={index}>
+                                  <PatternSection 
+                                    sectionTitle={sec.sectionTitle}
+                                    deletePatternSectionFunc={() => deletePatternSec(index)}
+                                  />
+                              </View>
+                          ))}
+        </ScrollView>
+        <View style={patternScreenStyling.addSectionButtonContainer}>
+          <Pressable 
+            style={patternScreenStyling.addSectionButton}
+            onPress={() => {setIsModalVisible(true)}}
+          >
+            <Text>+</Text>
+          </Pressable>
         </View>
-      </CustomModal>
+
+        {/* 
+          Modal for adding pattern sections
+          Prompts user for section name 
+        */}
+        <CustomModal
+          isVisible={isModalVisible}
+          headerText={"Add New Section:"}
+          onClose={onCloseModal}
+          onSubmit={onSubmitModal}
+        >
+          <View style={patternScreenStyling.modalTextInputContainer}>
+            <Text>Section Name: </Text>
+            <TextInput 
+              style={patternScreenStyling.modalTextInput}
+              value={patSecName}
+              onChangeText={setPatSecName}
+              placeholder={"ex: Head"} 
+              placeholderTextColor={"lightgrey"}
+            />
+          </View>
+        </CustomModal>
+      </View>
     </View>
   );
 };
@@ -90,6 +89,7 @@ const patternScreenStyling = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     width: '100%',
+    maxWidth: 1400,
     height: '100%',
   },
   contentBody: {
@@ -115,10 +115,10 @@ const patternScreenStyling = StyleSheet.create({
   },
   modalTextInputContainer:{
     flexDirection: "row",
+    justifyContent: 'center',
     gap: 5,
   },
   modalTextInput:{
-    flex: 1,
     borderWidth: 1,
     borderRadius: 2,
     textAlign: 'center',

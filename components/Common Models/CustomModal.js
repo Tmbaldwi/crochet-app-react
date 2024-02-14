@@ -1,10 +1,10 @@
 import React from 'react';
-import {Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 
 // Custom modal for use in creating instructions
 // Allows for a custom header and body 
 // TODO: Maybe custom close/submit text?
-export const CustomModal = ({isVisible, headerText, onClose, onSubmit, children}) => {
+export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, children}) => {
     return (
     <Modal
         visible={isVisible}
@@ -13,7 +13,7 @@ export const CustomModal = ({isVisible, headerText, onClose, onSubmit, children}
         transparent={true}
     >
         <View style={modalStyles.modalOuter}>
-          <View style={modalStyles.modalInner}>
+          <View style={[modalStyles.modalInner, {height: height ? height : '50%', maxWidth: maxWidth ? maxWidth : '90%'}]}>
             <View style={modalStyles.modalContent}>
               <View style={modalStyles.modalHeader}>
                 <Text style={modalStyles.modalHeaderText}>{headerText}</Text>
@@ -23,12 +23,12 @@ export const CustomModal = ({isVisible, headerText, onClose, onSubmit, children}
               </View>
             </View>
             <View style={modalStyles.modalButtonContainer}>
-              <TouchableOpacity onPress={onClose} style={modalStyles.modalButtons}>
-                <Text>Close</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onSubmit} style={modalStyles.modalButtons}>
-                <Text>Submit</Text>
-              </TouchableOpacity>
+              <Pressable onPress={onClose} style={modalStyles.modalButtons}>
+                <Text style={modalStyles.modalButtonText}>Close</Text>
+              </Pressable>
+              <Pressable onPress={onSubmit} style={[modalStyles.modalButtons, {display: onSubmit? 'flex' : 'none'}]}>
+                <Text style={modalStyles.modalButtonText}>Submit</Text>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -44,51 +44,46 @@ const modalStyles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalInner: {
-      width: '80%',
-      height: '50%',
+      minWidth: 300,
       backgroundColor: 'white',
       padding: 20,
-      alignItems: 'center',
-      justifyContent: 'flex-end',
       borderRadius: 10,
     },
     modalContent: {
-      alignItems: 'center',
       justifyContent: 'flex-start',
       flex: 1,
-      width: '100%',
     },
     modalHeader: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: '100%',
+      paddingVertical: 10,
       borderBottomWidth: 2,
     },
     modalHeaderText: {
       fontWeight: 'bold',
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 10,
+      fontSize: 20,
     },
     modalButtonContainer: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      height: 40,
+      height: 50,
       columnGap: 10,
-      width: '100%',
+      paddingTop: 10,
+      borderTopWidth: 2,
     },
     modalButtons:{
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: 'lightblue',
-      borderWidth: 1,
       borderRadius: 8,
+      borderWidth: 2,
+    },
+    modalButtonText:{
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
     modalBody: {
-      padding: 10,
-      gap: 10,
-      width: '100%',
-      maxWidth: 300,
+      flex: 1,
+      paddingTop: 10,
     },
 });

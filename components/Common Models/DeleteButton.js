@@ -1,20 +1,23 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 // Custom model for delete buttons
 // TODO: Make hideable for edit/view pattern modes
 export const DeleteButton = ({deleteFunc}) => {
     return(
-        <TouchableOpacity onPress={deleteFunc} style={deleteButtonStyling.deleteButton}>
+        <Pressable onPress={deleteFunc} style={deleteButtonStyling.deleteButton}>
             <Text>X</Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 
 const deleteButtonStyling = StyleSheet.create({
     deleteButton: {
-        width: 60,
-        borderRightWidth: 1,
+        width: 60, //50
+        // height: 50,
+        // margin: 5,
+        // borderWidth: 2,
+        borderRightWidth: 1, //remove
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
