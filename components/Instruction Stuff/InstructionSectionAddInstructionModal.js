@@ -120,9 +120,9 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                       {instSteps.map((step, index) => (
                         <View style={modalStyles.instructionInputContainer} key={index}>
                           <View style={modalStyles.modalTextInputInstructionContainer}>
-                            <DeleteButton
-                                deleteFunc={() => removeInstStep(index)}
-                            />
+                            <Pressable onPress={() => removeInstStep(index)} style={modalStyles.deleteButton}>
+                                <Text>X</Text>
+                            </Pressable>
                             <TextInput 
                                   style={modalStyles.modalTextInputInstruction} 
                                   value={step.rep}
@@ -232,15 +232,24 @@ const modalStyles = StyleSheet.create({
       },
       instructionInputContainer:{
         flexDirection: 'row',
-        gap: 5,
+        gap: 8,
         margin: 10,
       },
       modalTextInputInstructionContainer: {
         flex: 1,
         flexDirection: 'row',
-        gap: 8,
+        gap: 5,
+      },
+      deleteButton: {
+        flex: 1,
+        borderWidth: 1, //remove
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'stretch',
+        backgroundColor: 'red',
       },
       modalTextInputInstruction:{
+        flex: 3,
         borderWidth: 1,
         borderRadius: 2,
         textAlign: 'center',

@@ -13,7 +13,6 @@ export const DeleteButton = ({deleteFunc}) => {
 
 const deleteButtonStyling = StyleSheet.create({
     deleteButton: {
-        height: '100%',
         width: 60, //50
         // height: 50,
         // margin: 5,
