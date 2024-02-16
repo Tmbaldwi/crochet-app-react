@@ -120,16 +120,18 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                       {instSteps.map((step, index) => (
                         <View style={modalStyles.instructionInputContainer} key={index}>
                           <View style={modalStyles.modalTextInputInstructionContainer}>
-                            <Pressable onPress={() => removeInstStep(index)} style={modalStyles.deleteButton}>
-                                <Text>X</Text>
-                            </Pressable>
+                            <DeleteButton 
+                              onPress={() => removeInstStep(index)}
+                              extraStyle={{minHeight: 30, minWidth: 30}}
+                              />
                             <TextInput 
-                                  style={modalStyles.modalTextInputInstruction} 
-                                  value={step.rep}
-                                  onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
-                                  placeholder={"repetitions"} 
-                                  placeholderTextColor={"lightgrey"}
-                                  inputMode="numeric"
+                                style={modalStyles.modalTextInputInstruction} 
+                                value={step.rep}
+                                onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
+                                placeholder={"repetitions"} 
+                                placeholderTextColor={"lightgrey"}
+                                inputMode="numeric"
+                                maxLength={4}
                               />
                           </View>
                           <View style={modalStyles.instructionDropdown}>
@@ -159,6 +161,7 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                                 placeholder={"ex: 3"} 
                                 placeholderTextColor={"lightgrey"}
                                 keyboardType="numeric"
+                                maxLength={4}
                             />
                           </View>
                           <View style={modalStyles.modalTextInputContainer}>
@@ -169,20 +172,21 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                                 onChangeText={setColorText}
                                 placeholder={"ex: blue"} 
                                 placeholderTextColor={"lightgrey"}
+                                maxLength={100}
                             />
                           </View>
                       </View>
                       <View style={modalStyles.modalSpecialInstructionTextInputContainer}>
                           <Text style={modalStyles.modalSubheaderText}>Special Instructions: </Text>
                           <TextInput 
-                          style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
-                          value={specialInst}
-                          onChangeText={setSpecialInst}
-                          placeholder={"..."} 
-                          placeholderTextColor={"lightgrey"}
-                          multiline={true}
-                          onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
-                          scrollEnabled={false}
+                              style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+                              value={specialInst}
+                              onChangeText={setSpecialInst}
+                              placeholder={"..."} 
+                              placeholderTextColor={"lightgrey"}
+                              multiline={true}
+                              onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
+                              scrollEnabled={false}
                           />
                       </View>
                   </View>
@@ -240,16 +244,8 @@ const modalStyles = StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
       },
-      deleteButton: {
-        flex: 1,
-        borderWidth: 1, //remove
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'stretch',
-        backgroundColor: 'red',
-      },
       modalTextInputInstruction:{
-        flex: 3,
+        flex: 1,
         borderWidth: 1,
         borderRadius: 2,
         textAlign: 'center',
