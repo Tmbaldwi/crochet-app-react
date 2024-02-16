@@ -56,7 +56,7 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
         <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-                        <DeleteButton deleteFunc={deletePatternSectionFunc}/>
+                        <DeleteButton onPress={deletePatternSectionFunc}/>
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
                                 <Text style={patternSectionStyling.headerText}>{sectionTitle}</Text>

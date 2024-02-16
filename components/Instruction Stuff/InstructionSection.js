@@ -39,7 +39,7 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   return (
     <View style={sectionStyles.container}>
       <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-        <DeleteButton deleteFunc={deleteInstructionSectionFunc}/>
+        <DeleteButton onPress={deleteInstructionSectionFunc}/>
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
             <Text style={sectionStyles.headerText}>{title + ": " + startNum + "-" + endNum}</Text>

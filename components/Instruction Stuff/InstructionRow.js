@@ -24,7 +24,10 @@ export const InstructionRow = ({ instruction, repetition, color, specialInstruct
     <View>
       <View style={rowStyles.rowContainer}>
         <View style={rowStyles.topContainer}>
-          <DeleteButton deleteFunc={deleteInstructionRowFunc}/> 
+          <DeleteButton 
+            onPress={deleteInstructionRowFunc}
+            extraStyle={rowStyles.deleteButton}  
+          /> 
           <View style={rowStyles.topContainerInstruction}>
             <InstructionSubBox text={instruction} />
           </View>
@@ -67,6 +70,10 @@ const rowStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  deleteButton:{
+    maxHeight: 60,
+    maxWidth: 60,
   },
   topContainerInstruction: {
     flex: 1,
