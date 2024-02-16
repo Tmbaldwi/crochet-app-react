@@ -22,6 +22,8 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
     const [roundStartNum, setRoundStartNum] = useState("");
     const [roundEndNum, setRoundEndNum] = useState("");
 
+    let isViewMode = false; //Add conditional behavior for view/(edit/create)
+
     //creates instruction sections with inputted range
     const addInstSec = (startNum, endNum) => {
         const newSec = { title: "Round", startNum: startNum, endNum: endNum};
@@ -56,7 +58,10 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
         <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-                        <DeleteButton onPress={deletePatternSectionFunc}/>
+                        <DeleteButton 
+                            onPress={deletePatternSectionFunc}
+                            isHidden={isViewMode}    
+                        />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
                                 <Text style={patternSectionStyling.headerText}>{sectionTitle}</Text>
