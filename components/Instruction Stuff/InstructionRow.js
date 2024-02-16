@@ -20,13 +20,16 @@ export const InstructionRow = ({ instruction, repetition, color, specialInstruct
     specialInstructions = "";
   }
 
+  let isViewMode = false; //Add conditional behavior for view/(edit/create)
+
   return (
     <View>
       <View style={rowStyles.rowContainer}>
         <View style={rowStyles.topContainer}>
           <DeleteButton 
             onPress={deleteInstructionRowFunc}
-            extraStyle={rowStyles.deleteButton}  
+            extraStyle={rowStyles.deleteButton}
+            isHidden={isViewMode}
           /> 
           <View style={rowStyles.topContainerInstruction}>
             <InstructionSubBox text={instruction} />

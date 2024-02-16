@@ -20,6 +20,8 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [instructionRows, setInstructionRows] = useState([]); //contains instruction rows
 
+  let isViewMode = false; //Add conditional behavior for view/(edit/create)
+
   //toggles collapse on instruction section
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
@@ -39,7 +41,10 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
   return (
     <View style={sectionStyles.container}>
       <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-        <DeleteButton onPress={deleteInstructionSectionFunc}/>
+        <DeleteButton 
+          onPress={deleteInstructionSectionFunc}
+          isHidden={isViewMode}
+        />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
             <Text style={sectionStyles.headerText}>{title + ": " + startNum + "-" + endNum}</Text>
