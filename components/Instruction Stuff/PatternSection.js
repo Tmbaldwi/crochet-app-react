@@ -4,6 +4,7 @@ import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "./InstructionSection";
 import {CustomModal} from "../Common Models/CustomModal";
 import { DeleteButton } from "../Common Models/DeleteButton";
+import { EditOrInfoButton } from "../Common Models/EditOrInfoButton";
 
 // Pattern section
 //
@@ -58,9 +59,9 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
         <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-                        <DeleteButton 
-                            onPress={deletePatternSectionFunc}
-                            isHidden={isViewMode}    
+                        <EditOrInfoButton 
+                            isViewMode={isViewMode}
+                            onEditPress={() => {console.log("hit")}}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
