@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
-import { CustomModal } from "../Common Models/CustomModal"
-import { DeleteButton } from "../Common Models/DeleteButton";
-import { DropdownComponent } from "../Common Models/Dropdown"
+import { CustomModal } from "../../Common Models/CustomModal"
+import { DeleteButton } from "../../Common Models/DeleteButton";
+import { DropdownComponent } from "../../Common Models/Dropdown"
 
 // Add instruction modal
 // Description:

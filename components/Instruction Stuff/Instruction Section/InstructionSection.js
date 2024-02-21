@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Button, Text, Pressable, StyleSheet} from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import { InstructionRow } from "./InstructionRow";
-import { DeleteButton } from "../Common Models/DeleteButton";
+import { InstructionRow } from "../Instruction Row/InstructionRow";
+import { DeleteButton } from "../../Common Models/DeleteButton";
 import { AddInstructionModal } from "./InstructionSectionAddInstructionModal";
 
 // Instruction Section

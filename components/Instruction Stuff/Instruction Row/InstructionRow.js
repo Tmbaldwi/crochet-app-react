@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import { DeleteButton } from "../Common Models/DeleteButton";
-import { CustomModal } from "../Common Models/CustomModal";
+import { DeleteButton } from "../../Common Models/DeleteButton";
+import { CustomModal } from "../../Common Models/CustomModal";
 
 // Instruction Row
 //

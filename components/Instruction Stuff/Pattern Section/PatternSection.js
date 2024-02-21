@@ -1,10 +1,9 @@
 import React, {useState } from "react";
 import { View, Button, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {InstructionSection} from "./InstructionSection";
-import {CustomModal} from "../Common Models/CustomModal";
-import { DeleteButton } from "../Common Models/DeleteButton";
-import { EditOrInfoButton } from "../Common Models/EditOrInfoButton";
+import {InstructionSection} from "../Instruction Section/InstructionSection";
+import {CustomModal} from "../../Common Models/CustomModal";
+import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 
 // Pattern section
 //
@@ -16,7 +15,7 @@ import { EditOrInfoButton } from "../Common Models/EditOrInfoButton";
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
+export const PatternSection = ({sectionTitle, openEditModal}) => {
     const [sections, setSections] = useState([{title: "Round", startNum: 1, endNum: 2}]); //REMOVE
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -61,7 +60,7 @@ export const PatternSection = ({sectionTitle, deletePatternSectionFunc}) => {
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
-                            onEditPress={() => {console.log("hit")}}
+                            onEditPress={openEditModal}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>

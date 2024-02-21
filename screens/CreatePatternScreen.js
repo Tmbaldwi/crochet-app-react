@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
-import { PatternSection } from '../components/Instruction Stuff/PatternSection';
+import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { CustomModal } from '../components/Common Models/CustomModal'
 
 // Create Pattern Screen
@@ -12,26 +12,77 @@ function CreatePatternScreen(){
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [patSecName, setPatSecName] = useState("");
 
+  let isViewMode = false; //Add conditional behavior for view/(edit/create)
+
+  const [modalMode, setModalMode] = useState("");  //Either 'add' or 'edit'
+  const [modalHeader, setModalHeader] = useState("");
+  const [editPatternIndex, setEditPatternIndex] = useState(-1);
+
+
   // adds pattern sections to the page
-  const addPatternSec = (sectionTitle) => {
-    const newSec = {sectionTitle: sectionTitle};
+  const addPatternSection = (sectionTitle) => {
+    let newSec = {sectionTitle: sectionTitle};
     setSections(prevSections => [...prevSections, newSec]);
+  };
+
+  const editPatternSection = (newSectionTitle, index) => {
+    let newSections = sections.map((section, idx) => {
+      if (idx === index) {
+        return { ...section, sectionTitle: newSectionTitle };
+      }
+
+      return section;
+    });
+  
+    setSections(newSections);
   };
 
   // deletes pattern sections, passed to the pattern section so it can remove itself
   const deletePatternSec = (index) => {
     const newSecs = sections.filter((_, i) => i !== index);
     setSections(newSecs);
+
+    onCloseModal();
   }
+
+  // Opens modal in the 'add' mode
+  const onOpenAddModal = () => {
+    setModalMode("add");
+    setModalHeader("Add New Section");
+
+    setIsModalVisible(true);
+  };
+
+  // Opens modal in the 'edit' mode
+  // 'index' represents the index of the pattern section being edited
+  const onOpenEditModal = (index) => {
+    setModalMode("edit");
+    setModalHeader("Edit Section");
+
+    setEditPatternIndex(index);
+    setPatSecName(sections[index].sectionTitle);
+
+    setIsModalVisible(true);
+  };
 
   const onCloseModal = () =>{
     setPatSecName("");
+    setModalMode("");
+    setModalHeader("");
+    setEditPatternIndex(-1);
     
     setIsModalVisible(false);
   }
 
   const onSubmitModal = () =>{
-    addPatternSec(patSecName)
+    switch(modalMode) {
+      case "add":
+        addPatternSection(patSecName);
+        break;
+      case "edit":
+        editPatternSection(patSecName, editPatternIndex);
+        break;
+    }
 
     onCloseModal();
   }
@@ -44,7 +95,7 @@ function CreatePatternScreen(){
                               <View key={index}>
                                   <PatternSection 
                                     sectionTitle={sec.sectionTitle}
-                                    deletePatternSectionFunc={() => deletePatternSec(index)}
+                                    openEditModal={() => onOpenEditModal(index)}
                                   />
                               </View>
                           ))}
@@ -52,7 +103,7 @@ function CreatePatternScreen(){
         <View style={patternScreenStyling.addSectionButtonContainer}>
           <Pressable 
             style={patternScreenStyling.addSectionButton}
-            onPress={() => {setIsModalVisible(true)}}
+            onPress={() => onOpenAddModal()}
           >
             <Text>+</Text>
           </Pressable>
@@ -64,9 +115,12 @@ function CreatePatternScreen(){
         */}
         <CustomModal
           isVisible={isModalVisible}
-          headerText={"Add New Section:"}
+          headerText={modalHeader}
           onClose={onCloseModal}
           onSubmit={onSubmitModal}
+          onDelete={() => deletePatternSec(editPatternIndex)}
+          showDelete={modalMode === "edit"}
+          closeText={"Cancel"}
         >
           <View style={patternScreenStyling.modalTextInputContainer}>
             <Text>Section Name: </Text>
