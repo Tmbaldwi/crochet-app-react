@@ -8,30 +8,13 @@ export const EditOrInfoButton = ({onEditPress, onInfoPress, extraStyle, isViewMo
     if(isHidden){
         return null;
     }
-    else if(isViewMode){
-        return(
-            <Pressable 
-                onPress={onInfoPress} 
-                style={[
-                        buttonStyling.editOrInfoButton, 
-                        extraStyle
-                    ]}
-            >
-                <Text>Info</Text>
-            </Pressable>
-        );
-    }
     else{
         return(
             <Pressable 
-                onPress={onEditPress} 
-                style={[
-                        buttonStyling.editOrInfoButton, 
-                        {backgroundColor: 'green'}, 
-                        extraStyle
-                    ]}
+                onPress={isViewMode? onInfoPress : onEditPress} 
+                style={[buttonStyling.editOrInfoButton, {backgroundColor: isViewMode? 'none': 'green'},  extraStyle]}
             >
-                <Text>Edit</Text>
+                <Text>{isViewMode? "Info": "Edit"}</Text>
             </Pressable>
         );
     }

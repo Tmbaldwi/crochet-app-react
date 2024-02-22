@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { View, Button, Text, Pressable, StyleSheet} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "../Instruction Row/InstructionRow";
-import { DeleteButton } from "../../Common Models/DeleteButton";
-import { AddInstructionModal } from "./AddInstructionModal";
+import { AddInstructionModal } from "../Instruction Row/AddInstructionModal";
+import { AddEditInstructionSectionModal } from "./AddEditInstructionSectionModal";
+import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 
 // Instruction Section
 //
@@ -15,12 +16,11 @@ import { AddInstructionModal } from "./AddInstructionModal";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-export const InstructionSection = ( {title, startNum, endNum, deleteInstructionSectionFunc}) => {
+export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isInstructionRowModalVisible, setIsInstructionRowModalVisible] = useState(false);
+  const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
   const [instructionRows, setInstructionRows] = useState([]); //contains instruction rows
-
-  let isViewMode = false; //Add conditional behavior for view/(edit/create)
 
   //toggles collapse on instruction section
   const toggleSection = () => {
@@ -34,16 +34,24 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
     setInstructionRows(newRows);
   };
 
-  const onCloseModal = () =>{
-    setIsModalVisible(false);
+  // closes the instruction row add modal
+  // called after the closing code of the modal is ran
+  const onCloseInstructionRowAddModal = () =>{
+    setIsInstructionRowModalVisible(false);
   }
+
+  // closes the instruction section edit modal
+  // called after the closing code of the modal is ran
+  const onCloseInstructionSectionEditModal = () => {
+    setIsInstructionSectionEditModalVisible(false);
+  };
 
   return (
     <View style={sectionStyles.container}>
       <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
-        <DeleteButton 
-          onPress={deleteInstructionSectionFunc}
-          isHidden={isViewMode}
+        <EditOrInfoButton 
+          isViewMode={isViewMode}
+          onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
         />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
@@ -67,14 +75,23 @@ export const InstructionSection = ( {title, startNum, endNum, deleteInstructionS
           </View>
         ))}
         <View style={{borderTopWidth: instructionRows.length == 0 ? 0: 2}}>
-          <Button title="Add Instruction" onPress={() => setIsModalVisible(true)} />
+          <Button title="Add Instruction" onPress={() => setIsInstructionRowModalVisible(true)} />
         </View>
       </Collapsible>
 
+      <AddEditInstructionSectionModal
+        modalMode={"edit"}
+        onCloseModal={onCloseInstructionSectionEditModal}
+        isModalVisible={isInstructionSectionEditModalVisible}
+        editFunc={editFunc}
+        deleteFunc={deleteFunc}
+        currentStartNum={startNum}
+        currentEndNum={endNum}
+      />
 
       <AddInstructionModal
-        onCloseModal={onCloseModal}
-        isModalVisible={isModalVisible}
+        onCloseModal={onCloseInstructionRowAddModal}
+        isModalVisible={isInstructionRowModalVisible}
         instructionRows={instructionRows}
         setInstructionRows={setInstructionRows}
       />

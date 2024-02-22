@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 
@@ -13,15 +13,19 @@ function CreatePatternScreen(){
 
   let isViewMode = false; //Add conditional behavior for view/(edit/create)
 
-  const onCloseModal = () =>{
+  //called after pattern section modal close function is executed
+  const onClosePatternSectionAddModal = () =>{
     setIsModalVisible(false);
   }
 
+  // adds new pattern sections to the array
   const addPatternSection = (sectionTitle) => {
     let newSec = {sectionTitle: sectionTitle};
     setPatternSections(prevSections => [...prevSections, newSec]);
   };
 
+  // edits a pattern section at the given index with a new title
+  // passed to every pattern section with its index inputted
   const editPatternSection = (newSectionTitle, index) => {
     let newSections = patternSections.map((section, idx) => {
       if (idx === index) {
@@ -34,6 +38,8 @@ function CreatePatternScreen(){
     setPatternSections(newSections);
   }
 
+  // deletes a pattern section at the given index
+  // passed to every pattern section with its index inputted
   const deletePatternSection = (index) => {
     const newSecs = patternSections.filter((_, i) => i !== index);
     setPatternSections(newSecs);
@@ -65,7 +71,7 @@ function CreatePatternScreen(){
 
         <AddEditPatternSectionModal
           modalMode={"add"}
-          onCloseModal={onCloseModal}
+          onCloseModal={onClosePatternSectionAddModal}
           isModalVisible={isModalVisible}
           addFunc={addPatternSection}
           patternSections={patternSections}
@@ -104,17 +110,7 @@ const patternScreenStyling = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  modalTextInputContainer:{
-    flexDirection: "row",
-    justifyContent: 'center',
-    gap: 5,
-  },
-  modalTextInput:{
-    borderWidth: 1,
-    borderRadius: 2,
-    textAlign: 'center',
-  },
+  }
 });
 
 export default CreatePatternScreen;

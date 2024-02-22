@@ -1,10 +1,10 @@
 import React, {useState } from "react";
-import { View, Button, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, Button, StyleSheet, Text, Pressable } from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {InstructionSection} from "../Instruction Section/InstructionSection";
-import {CustomModal} from "../../Common Models/CustomModal";
+import { InstructionSection } from "../Instruction Section/InstructionSection";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
+import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
 
 // Pattern section
 //
@@ -17,23 +17,36 @@ import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
 export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc}) => {
-    const [sections, setSections] = useState([]);
+    const [instructionSections, setInstructionSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setIsPatternSectionEditModalVisible] = useState(false);
-    const [roundStartNum, setRoundStartNum] = useState("");
-    const [roundEndNum, setRoundEndNum] = useState("");
 
-    //creates instruction sections with inputted range
-    const addInstSec = (startNum, endNum) => {
-        const newSec = { title: "Round", startNum: startNum, endNum: endNum};
-        setSections(prevSections => [...prevSections, newSec]);
+    //adds instruction sections with inputted range at the end of the list
+    const addInstructionSection = (startNum, endNum) => {
+        const newSec = { title: "Round", startNum: startNum, endNum: endNum}; //Make round or row selection
+        setInstructionSections(prevSections => [...prevSections, newSec]);
     };
 
-    //removes instruction section, passed into the instruction section so it can remove itself
-    const removeInstSec = (index) => {
-        const newSecs = sections.filter((_, i) => i !== index);
-        setSections(newSecs);
+    // edits the instruction section at a given index with the new range
+    // given to every instruction section with its index inputted
+    const editInstructionSection = (newStartNum, newEndNum, index) => {
+        let newSections = instructionSections.map((section, idx) => {
+          if (idx === index) {
+            return { ...section, startNum: newStartNum, endNum: newEndNum };
+          }
+    
+          return section;
+        });
+      
+        setInstructionSections(newSections);
+      }
+
+    //removes instruction section at a given index
+    // given to every instruction section with its index inputted
+    const removeInstructionSection = (index) => {
+        const newSecs = instructionSections.filter((_, i) => i !== index);
+        setInstructionSections(newSecs);
     }
 
     //toggles the collapsable part of the pattern section
@@ -41,21 +54,16 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
         setIsCollapsed(!isCollapsed);
     };
 
-    const onCloseModal = () =>{
-        setRoundStartNum("");
-        setRoundEndNum("");
-        
+    // closes the instruction section add modal
+    // called after closing code in the modal is ran
+    const onCloseInstructionSectionAddModal = () =>{
         setIsInstructionSectionModalVisible(false);
     }
 
+    // closes the pattern section edit modal
+    // called after the closing code in the modal is ran
     const onClosePatternSectionEditModal = () =>{
         setIsPatternSectionEditModalVisible(false);
-    }
-    
-    const onSubmitModal = () =>{
-        addInstSec(roundStartNum, roundEndNum);
-    
-        onCloseModal();
     }
 
     return(
@@ -76,17 +84,19 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
                         </Pressable>
                     </View>
                 <Collapsible collapsed={isCollapsed}>
-                    {sections.map((sec, index) => (
+                    {instructionSections.map((sec, index) => (
                         <View key={index}>
                             <InstructionSection
+                                isViewMode={isViewMode}
                                 title={sec.title}
                                 startNum = {sec.startNum}
                                 endNum = {sec.endNum}
-                                deleteInstructionSectionFunc={() => removeInstSec(index)}
+                                editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
+                                deleteFunc={() => removeInstructionSection(index)}
                             />
                         </View>
                     ))}
-                    <View style={{borderTopWidth: sections.length == 0 ? 0: 2}}>
+                    <View style={{borderTopWidth: instructionSections.length == 0 ? 0: 2}}>
                         <Button title="Add Instruction Section" onPress={() => setIsInstructionSectionModalVisible(true)} />
                     </View>
                 </Collapsible>
@@ -101,37 +111,12 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
                 currentSectionTitle={sectionTitle}
             />
 
-            <CustomModal
-                isVisible={isInstructionSectionModalVisible}
-                headerText={"Add New Section:"}
-                onClose={onCloseModal}
-                onSubmit={onSubmitModal}
-            >
-                <View style={patternSectionStyling.modalBody}>
-                    <View style={patternSectionStyling.modalTextInputContainer}>
-                        <Text>Round Start: </Text>
-                        <TextInput 
-                            style={patternSectionStyling.modalTextInput}
-                            value={roundStartNum}
-                            onChangeText={setRoundStartNum}
-                            placeholder={"ex: 3"} 
-                            placeholderTextColor={"lightgrey"}
-                            keyboardType="numeric"
-                        />
-                    </View>
-                    <View style={patternSectionStyling.modalTextInputContainer}>
-                        <Text>Round End: </Text>
-                        <TextInput 
-                            style={patternSectionStyling.modalTextInput}
-                            value={roundEndNum}
-                            onChangeText={setRoundEndNum}
-                            placeholder={"ex: 4"} 
-                            placeholderTextColor={"lightgrey"}
-                            keyboardType="numeric"
-                        />
-                    </View>
-                </View>
-            </CustomModal>
+            <AddEditInstructionSectionModal
+                modalMode={"add"}
+                onCloseModal={onCloseInstructionSectionAddModal}
+                isModalVisible={isInstructionSectionModalVisible}
+                addFunc={addInstructionSection}
+            />
         </View>
     );
 };
@@ -171,17 +156,4 @@ const patternSectionStyling = StyleSheet.create({
         margin: 5,
         borderWidth: 2,
     },
-    modalBody: {
-        gap: 5,
-    },
-    modalTextInputContainer:{
-        flexDirection: "row",
-        justifyContent: 'center',
-        gap: 5,
-      },
-      modalTextInput:{
-        borderWidth: 1,
-        borderRadius: 2,
-        textAlign: 'center',
-      },
 });
