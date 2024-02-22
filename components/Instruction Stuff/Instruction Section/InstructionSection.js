@@ -3,7 +3,7 @@ import { View, Button, Text, Pressable, StyleSheet} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "../Instruction Row/InstructionRow";
 import { DeleteButton } from "../../Common Models/DeleteButton";
-import { AddInstructionModal } from "./InstructionSectionAddInstructionModal";
+import { AddInstructionModal } from "./AddInstructionModal";
 
 // Instruction Section
 //

@@ -4,6 +4,7 @@ import Collapsible from 'react-native-collapsible';
 import {InstructionSection} from "../Instruction Section/InstructionSection";
 import {CustomModal} from "../../Common Models/CustomModal";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
+import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 
 // Pattern section
 //
@@ -15,14 +16,13 @@ import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-export const PatternSection = ({sectionTitle, openEditModal}) => {
-    const [sections, setSections] = useState([{title: "Round", startNum: 1, endNum: 2}]); //REMOVE
+export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc}) => {
+    const [sections, setSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
+    const [isPatternSectionEditModalVisible, setIsPatternSectionEditModalVisible] = useState(false);
     const [roundStartNum, setRoundStartNum] = useState("");
     const [roundEndNum, setRoundEndNum] = useState("");
-
-    let isViewMode = false; //Add conditional behavior for view/(edit/create)
 
     //creates instruction sections with inputted range
     const addInstSec = (startNum, endNum) => {
@@ -45,8 +45,12 @@ export const PatternSection = ({sectionTitle, openEditModal}) => {
         setRoundStartNum("");
         setRoundEndNum("");
         
-        setIsModalVisible(false);
-      }
+        setIsInstructionSectionModalVisible(false);
+    }
+
+    const onClosePatternSectionEditModal = () =>{
+        setIsPatternSectionEditModalVisible(false);
+    }
     
     const onSubmitModal = () =>{
         addInstSec(roundStartNum, roundEndNum);
@@ -60,7 +64,7 @@ export const PatternSection = ({sectionTitle, openEditModal}) => {
                     <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
-                            onEditPress={openEditModal}
+                            onEditPress={() => setIsPatternSectionEditModalVisible(true)}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
@@ -83,12 +87,22 @@ export const PatternSection = ({sectionTitle, openEditModal}) => {
                         </View>
                     ))}
                     <View style={{borderTopWidth: sections.length == 0 ? 0: 2}}>
-                        <Button title="Add Instruction Section" onPress={() => setIsModalVisible(true)} />
+                        <Button title="Add Instruction Section" onPress={() => setIsInstructionSectionModalVisible(true)} />
                     </View>
                 </Collapsible>
             </View>
+
+            <AddEditPatternSectionModal
+                modalMode={"edit"}
+                onCloseModal={onClosePatternSectionEditModal}
+                isModalVisible={isPatternSectionEditModalVisible}
+                editFunc={editFunc}
+                deleteFunc={deleteFunc}
+                currentSectionTitle={sectionTitle}
+            />
+
             <CustomModal
-                isVisible={isModalVisible}
+                isVisible={isInstructionSectionModalVisible}
                 headerText={"Add New Section:"}
                 onClose={onCloseModal}
                 onSubmit={onSubmitModal}

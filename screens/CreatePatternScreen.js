@@ -1,32 +1,29 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
-import { CustomModal } from '../components/Common Models/CustomModal'
+import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 
 // Create Pattern Screen
 // Description:
 // Hosts all the pattern sections for pattern creation
 // Allows user to add pattern sections, prompts user with a modal to give the pattern section a name
 function CreatePatternScreen(){
-  const [sections, setSections] = useState([{sectionTitle: "Test Section"}]);
+  const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [patSecName, setPatSecName] = useState("");
 
   let isViewMode = false; //Add conditional behavior for view/(edit/create)
 
-  const [modalMode, setModalMode] = useState("");  //Either 'add' or 'edit'
-  const [modalHeader, setModalHeader] = useState("");
-  const [editPatternIndex, setEditPatternIndex] = useState(-1);
+  const onCloseModal = () =>{
+    setIsModalVisible(false);
+  }
 
-
-  // adds pattern sections to the page
   const addPatternSection = (sectionTitle) => {
     let newSec = {sectionTitle: sectionTitle};
-    setSections(prevSections => [...prevSections, newSec]);
+    setPatternSections(prevSections => [...prevSections, newSec]);
   };
 
   const editPatternSection = (newSectionTitle, index) => {
-    let newSections = sections.map((section, idx) => {
+    let newSections = patternSections.map((section, idx) => {
       if (idx === index) {
         return { ...section, sectionTitle: newSectionTitle };
       }
@@ -34,68 +31,25 @@ function CreatePatternScreen(){
       return section;
     });
   
-    setSections(newSections);
-  };
-
-  // deletes pattern sections, passed to the pattern section so it can remove itself
-  const deletePatternSec = (index) => {
-    const newSecs = sections.filter((_, i) => i !== index);
-    setSections(newSecs);
-
-    onCloseModal();
+    setPatternSections(newSections);
   }
 
-  // Opens modal in the 'add' mode
-  const onOpenAddModal = () => {
-    setModalMode("add");
-    setModalHeader("Add New Section");
-
-    setIsModalVisible(true);
-  };
-
-  // Opens modal in the 'edit' mode
-  // 'index' represents the index of the pattern section being edited
-  const onOpenEditModal = (index) => {
-    setModalMode("edit");
-    setModalHeader("Edit Section");
-
-    setEditPatternIndex(index);
-    setPatSecName(sections[index].sectionTitle);
-
-    setIsModalVisible(true);
-  };
-
-  const onCloseModal = () =>{
-    setPatSecName("");
-    setModalMode("");
-    setModalHeader("");
-    setEditPatternIndex(-1);
-    
-    setIsModalVisible(false);
-  }
-
-  const onSubmitModal = () =>{
-    switch(modalMode) {
-      case "add":
-        addPatternSection(patSecName);
-        break;
-      case "edit":
-        editPatternSection(patSecName, editPatternIndex);
-        break;
-    }
-
-    onCloseModal();
-  }
+  const deletePatternSection = (index) => {
+    const newSecs = patternSections.filter((_, i) => i !== index);
+    setPatternSections(newSecs);
+};
 
   return (
     <View style={{alignItems: 'center'}}>
       <View style={patternScreenStyling.pageContentContainer}>
         <ScrollView style={patternScreenStyling.contentBody}>
-          {sections.map((sec, index) => (
+          {patternSections.map((sec, index) => (
                               <View key={index}>
-                                  <PatternSection 
+                                  <PatternSection
+                                    isViewMode={isViewMode}
                                     sectionTitle={sec.sectionTitle}
-                                    openEditModal={() => onOpenEditModal(index)}
+                                    editFunc={(newSectionTitle) => editPatternSection(newSectionTitle, index)}
+                                    deleteFunc={() => deletePatternSection(index)}
                                   />
                               </View>
                           ))}
@@ -103,36 +57,20 @@ function CreatePatternScreen(){
         <View style={patternScreenStyling.addSectionButtonContainer}>
           <Pressable 
             style={patternScreenStyling.addSectionButton}
-            onPress={() => onOpenAddModal()}
+            onPress={() => setIsModalVisible(true)}
           >
             <Text>+</Text>
           </Pressable>
         </View>
 
-        {/* 
-          Modal for adding pattern sections
-          Prompts user for section name 
-        */}
-        <CustomModal
-          isVisible={isModalVisible}
-          headerText={modalHeader}
-          onClose={onCloseModal}
-          onSubmit={onSubmitModal}
-          onDelete={() => deletePatternSec(editPatternIndex)}
-          showDelete={modalMode === "edit"}
-          closeText={"Cancel"}
-        >
-          <View style={patternScreenStyling.modalTextInputContainer}>
-            <Text>Section Name: </Text>
-            <TextInput 
-              style={patternScreenStyling.modalTextInput}
-              value={patSecName}
-              onChangeText={setPatSecName}
-              placeholder={"ex: Head"} 
-              placeholderTextColor={"lightgrey"}
-            />
-          </View>
-        </CustomModal>
+        <AddEditPatternSectionModal
+          modalMode={"add"}
+          onCloseModal={onCloseModal}
+          isModalVisible={isModalVisible}
+          addFunc={addPatternSection}
+          patternSections={patternSections}
+          setPatternSections={setPatternSections}
+        />
       </View>
     </View>
   );
