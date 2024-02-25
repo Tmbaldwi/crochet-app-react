@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Button, Text, Pressable, StyleSheet} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "../Instruction Row/InstructionRow";
-import { AddInstructionModal } from "../Instruction Row/AddInstructionModal";
+import { AddEditInstructionModal } from "../Instruction Row/AddEditInstructionModal";
 import { AddEditInstructionSectionModal } from "./AddEditInstructionSectionModal";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 
@@ -18,18 +18,36 @@ import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
 export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isInstructionRowModalVisible, setIsInstructionRowModalVisible] = useState(false);
+  const [isInstructionRowAddModalVisible, setIsInstructionRowModalVisible] = useState(false);
   const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
-  const [instructionRows, setInstructionRows] = useState([]); //contains instruction rows
+  const [instructionRows, setInstructionRows] = useState([]); //instruction rows contain instruction, repetition, color, specialInstr
 
   //toggles collapse on instruction section
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  //adds instruction row based on input of instruction, repetitions, and yarn color to instruction row array
+  const addInstructionRow = (inst, rep, color, specialInst) => {
+    const newRow = { instruction: inst, repetition: Number(rep), color: color, specialInstructions: specialInst};
+    setInstructionRows([...instructionRows, newRow]);
+  };
+
+  const editInstructionRow = (newInst, newRep, newColor, newSpecialInst, index) => {
+    let newRows = instructionRows.map((instruction, idx) => {
+      if (idx === index) {
+        return { ...instruction, instruction: newInst, repetition: Number(newRep), color: newColor, specialInstructions: newSpecialInst };
+      }
+
+      return instruction;
+    });
+  
+    setInstructionRows(newRows);
+  }
+
   // removes given instruction row
   // passed to the instruction row so that internal delete button deletes itself
-  const removeInstRow = (index) => {
+  const removeInstructionRow = (index) => {
     const newRows = instructionRows.filter((_, i) => i !== index);
     setInstructionRows(newRows);
   };
@@ -63,14 +81,13 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
         </Pressable>
       </View>
       <Collapsible collapsed={isCollapsed}>
-        {instructionRows.map((row, index) => (
+        {instructionRows.map((instRow, index) => (
           <View key={index}>
             <InstructionRow
-              instruction={row.instruction}
-              repetition={row.repetition}
-              color={row.color}
-              specialInstructions={row.specialInst}
-              deleteInstructionRowFunc={() => removeInstRow(index)}
+              isViewMode={isViewMode}
+              instructionInfo={instRow}
+              deleteFunc={() => removeInstructionRow(index)}
+              editFunc={(inst, rep, color, specialInst) => editInstructionRow(inst, rep, color, specialInst, index)}
             />
           </View>
         ))}
@@ -89,11 +106,11 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
         currentEndNum={endNum}
       />
 
-      <AddInstructionModal
+      <AddEditInstructionModal
+        modalMode={"add"}
         onCloseModal={onCloseInstructionRowAddModal}
-        isModalVisible={isInstructionRowModalVisible}
-        instructionRows={instructionRows}
-        setInstructionRows={setInstructionRows}
+        isModalVisible={isInstructionRowAddModalVisible}
+        addFunc={addInstructionRow}
       />
     </View>
   );

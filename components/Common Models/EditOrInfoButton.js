@@ -4,17 +4,30 @@ import { StyleSheet, Text, Pressable } from 'react-native';
 // Custom model for edit/info buttons
 // If in view mode, the button displays "Info" and calls the onInfoPress callback
 // If not in view mode, the button displays "Edit" and calls the onEditPress callback
-export const EditOrInfoButton = ({onEditPress, onInfoPress, extraStyle, isViewMode, isHidden}) => {
-    if(isHidden){
-        return null;
-    }
-    else{
+export const EditOrInfoButton = ({onEditPress, onInfoPress, extraStyle, isViewMode, isInfoDisabled}) => {
+    if(isViewMode){
         return(
             <Pressable 
-                onPress={isViewMode? onInfoPress : onEditPress} 
-                style={[buttonStyling.editOrInfoButton, {backgroundColor: isViewMode? 'none': 'green'},  extraStyle]}
+                onPress={onInfoPress}
+                disabled={isInfoDisabled}
+                style={[buttonStyling.editOrInfoButton, extraStyle]}
             >
-                <Text>{isViewMode? "Info": "Edit"}</Text>
+                <Text style={[buttonStyling.editOrInfoText, {color: isInfoDisabled? 'grey': 'black'}]}>
+                    Info
+                </Text>
+            </Pressable>
+        );
+    }
+
+    else {
+        return(
+            <Pressable 
+                onPress={onEditPress}
+                style={[buttonStyling.editOrInfoButton, {backgroundColor: 'green'},  extraStyle]}
+            >
+                <Text style={buttonStyling.editOrInfoText}>
+                    Edit
+                </Text>
             </Pressable>
         );
     }
@@ -27,5 +40,8 @@ const buttonStyling = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
+    },
+    editOrInfoText: {
+        fontWeight: 'bold',
     },
 });

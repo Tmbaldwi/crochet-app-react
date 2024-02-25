@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Pressable, ScrollView, Switch } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 
@@ -10,8 +10,7 @@ import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Patt
 function CreatePatternScreen(){
   const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  let isViewMode = false; //Add conditional behavior for view/(edit/create)
+  const [isViewMode, setIsViewMode] = useState(false);
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
@@ -60,13 +59,21 @@ function CreatePatternScreen(){
                               </View>
                           ))}
         </ScrollView>
-        <View style={patternScreenStyling.addSectionButtonContainer}>
-          <Pressable 
-            style={patternScreenStyling.addSectionButton}
-            onPress={() => setIsModalVisible(true)}
-          >
-            <Text>+</Text>
-          </Pressable>
+        <View style={patternScreenStyling.bottomButtonContainer}>
+          <View style={patternScreenStyling.editModeSwitchContainer}>
+            <Switch
+              onValueChange={setIsViewMode}
+              value={isViewMode}
+            />
+          </View>
+          <View style={patternScreenStyling.addSectionButtonContainer}>
+            <Pressable 
+              style={patternScreenStyling.addSectionButton}
+              onPress={() => setIsModalVisible(true)}
+            >
+              <Text>+</Text>
+            </Pressable>
+          </View>
         </View>
 
         <AddEditPatternSectionModal
@@ -94,13 +101,20 @@ const patternScreenStyling = StyleSheet.create({
     width: "100%", 
     flex: 1,
   },
-  addSectionButtonContainer: {
-    bottom: 0,
-    right: 0,
+  bottomButtonContainer: {
+    flexDirection: 'row',
     height: 100,
     width: '100%',
+  },
+  editModeSwitchContainer:{
+    flex: 1,
+    padding: 20,
+  },
+  addSectionButtonContainer: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     padding: 20,
   },
   addSectionButton: {

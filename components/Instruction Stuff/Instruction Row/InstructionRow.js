@@ -1,7 +1,8 @@
 import React, {useState} from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import { DeleteButton } from "../../Common Models/DeleteButton";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { CustomModal } from "../../Common Models/CustomModal";
+import { AddEditInstructionModal } from "./AddEditInstructionModal";
 
 // Instruction Row
 //
@@ -11,53 +12,66 @@ import { CustomModal } from "../../Common Models/CustomModal";
 // User can delete the instruction
 //
 // Usage:
-// MUST be passed a function to delete itself from a list
-export const InstructionRow = ({ instruction, repetition, color, specialInstructions, deleteInstructionRowFunc }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  let isInfoDisabled = !(specialInstructions.trim() && specialInstructions.trim().length > 0);
+// Must be passed a function to delete and edit itself
+export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFunc }) => {
+  const [isSpecialInstructionModalVisible, setIsSpecialInstructionModalVisible] = useState(false);
+  const [isInstructionEditModalVisible, setIsInstructionEditModalVisible] = useState(false);
+  const isInfoDisabled = instructionInfo.specialInstructions.trim().length > 0;
 
   if(isInfoDisabled){
-    specialInstructions = "";
+    instructionInfo.specialInstructions = "";
   }
 
-  let isViewMode = false; //Add conditional behavior for view/(edit/create)
+  // Called after special instruction modal closing tasks are performed
+  const onCloseSpecialInstructionModal = () =>{
+    setIsSpecialInstructionModalVisible(false);
+  }
+
+  // Called after instruction edit modal closing tasks are performed
+  const onCloseInstructionEditModal = () =>{
+    setIsInstructionEditModalVisible(false);
+  }
 
   return (
     <View>
       <View style={rowStyles.rowContainer}>
         <View style={rowStyles.topContainer}>
-          <DeleteButton 
-            onPress={deleteInstructionRowFunc}
-            extraStyle={rowStyles.deleteButton}
-            isHidden={isViewMode}
-          /> 
           <View style={rowStyles.topContainerInstruction}>
-            <InstructionSubBox text={instruction} />
+            <InstructionSubBox text={instructionInfo.instruction} />
           </View>
         </View>
         <View style={rowStyles.bottomContainer}>
-          <InstructionSubBox text={"x" + repetition} />
-          <InstructionSubBox text={color} flex={2}/>
-          <Pressable
-            style={rowStyles.infoPressable}
-            onPress={() => setIsModalVisible(true)}
-            disabled={isInfoDisabled}
-          >
-            <InstructionSubBox text={"Info"} textColor={isInfoDisabled ? 'grey' : 'black'}/>
-          </Pressable>
+          <InstructionSubBox text={"x" + instructionInfo.repetition} />
+          <InstructionSubBox text={instructionInfo.color} flex={2}/>
+          <EditOrInfoButton
+            isViewMode={isViewMode}
+            onEditPress={() => setIsInstructionEditModalVisible(true)}
+            onInfoPress={() => setIsSpecialInstructionModalVisible(true)}
+            extraStyle={rowStyles.infoEditPressable}
+            isInfoDisabled={isInfoDisabled}
+          /> 
         </View>
       </View>
 
+      <AddEditInstructionModal
+        modalMode={"edit"}
+        onCloseModal={onCloseInstructionEditModal}
+        isModalVisible={isInstructionEditModalVisible}
+        editFunc={editFunc}
+        deleteFunc={deleteFunc}
+        currentInfo={instructionInfo}
+      />
+
       <CustomModal
-        isVisible={isModalVisible}
+        isVisible={isSpecialInstructionModalVisible}
         headerText={"Special Instructions:"}
-        onClose={ () => setIsModalVisible(false)}
+        onClose={onCloseSpecialInstructionModal}
       >
-      <ScrollView>
-        <Text style={rowStyles.modalText}>
-            {specialInstructions}
-        </Text>
-      </ScrollView>
+        <ScrollView>
+          <Text style={rowStyles.modalText}>
+              {instructionInfo.specialInstructions}
+          </Text>
+        </ScrollView>
       </CustomModal>
     </View>
   );
@@ -74,10 +88,6 @@ const rowStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  deleteButton:{
-    maxHeight: 60,
-    maxWidth: 60,
-  },
   topContainerInstruction: {
     flex: 1,
     alignSelf: 'stretch',
@@ -89,9 +99,10 @@ const rowStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  infoPressable: {
+  infoEditPressable: {
     flex: 1,
     height: '100%',
+    aspectRatio: 'none',
   },
   modalText: {
     textAlign: 'center',
@@ -101,10 +112,10 @@ const rowStyles = StyleSheet.create({
 // Instructions subboxes
 // Blocks of information used for the instruction rows
 // Allows for custom text, and flex for sizing
-export const InstructionSubBox = ({ text, textColor, flex }) => {
+export const InstructionSubBox = ({ text, flex }) => {
   return (
     <View style={[subBoxStyles.subBoxContainer, {flex: flex ? flex : 1}]}>
-      <Text style={[subBoxStyles.subBoxText, {color: textColor}]}>
+      <Text style={subBoxStyles.subBoxText}>
         {text}
       </Text>
     </View>
@@ -119,7 +130,6 @@ const subBoxStyles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   subBoxText:{
-    margin: 10,
     textAlign: 'center',
     fontWeight: 'bold',
   }

@@ -15,13 +15,59 @@ import { DropdownComponent } from "../../Common Models/Dropdown"
 // 
 // Usage:
 // Must pass a close callback function, the modal's visibility variable, and the array where instructions will be added to
-export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRows, setInstructionRows}) => {
+export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
     const [repetitionsNum, setRepetitionsNum] = useState("");
     const [colorText, setColorText] = useState("");
     const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
     const [specialInst, setSpecialInst] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
+
+    let modalHeader = "";
+    let showDelete = false;
+
+    // changes modal look/function depending on if its in add/edit mode
+    switch(modalMode){
+      case "add":
+          modalHeader = "Add New Instruction:";
+          showDelete = false;
+          break;
+      case "edit":
+          modalHeader = "Edit Instruction:";
+          showDelete = true;
+          break;
+     };
+
+    // When the modal is opened, if it is in edit mode then load the current range
+    useEffect(() => {
+      if (modalMode === "edit") {
+        setRepetitionsNum(currentInfo.repetition);
+        setColorText(currentInfo.color);
+      }
+    }, [isModalVisible === true]);
+
+    // Called when submitting the modal
+    // Either runs the add function with the inputted instruction info,
+    // or the edit function with the new instruction info
+    const onSubmitInstructionModal = () =>{
+      switch(modalMode) {
+        case "add":
+          addFunc(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
+          break;
+        case "edit":
+          editFunc(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
+          break;
+      }
+  
+      onCloseInstructionModal();
+    };
+
+    // deletes the instruction
+    const deleteInstruction = () => {
+      deleteFunc();
+
+      onCloseInstructionModal();
+    }
 
     // adds a new step to the instruction creator
     const addNewStep = () => {
@@ -44,18 +90,6 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
         setSpecialInstHeight(0);
 
         onCloseModal();
-    };
-
-    // adds instruction row to instruction row array, calls close function
-    const onSubmitInstructionModal = () =>{
-        addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
-        onCloseInstructionModal();
-    }
-
-    //adds instruction row based on input of instruction, repetitions, and yarn color to instruction row array
-    const addInstRow = (inst, rep, color, specialInst) => {
-        const newRow = { instruction: inst, repetition: Number(rep), color: color, specialInst: specialInst};
-        setInstructionRows([...instructionRows, newRow]);
     };
 
     // updates instruction steps array with new instruction when changed
@@ -92,9 +126,11 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
     return (
         <CustomModal
             isVisible={isModalVisible}
-            headerText={"Add New Instruction:"}
+            headerText={modalHeader}
             onClose={onCloseInstructionModal}
             onSubmit={onSubmitInstructionModal}
+            onDelete={deleteInstruction}
+            showDelete={showDelete}
             height={'80%'}
         >
             <View style={modalStyles.modalSubheaderPreviewInstruction}>
