@@ -28,15 +28,15 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
   };
 
   //adds instruction row based on input of instruction, repetitions, and yarn color to instruction row array
-  const addInstructionRow = (inst, rep, color, specialInst) => {
-    const newRow = { instruction: inst, repetition: Number(rep), color: color, specialInstructions: specialInst};
+  const addInstructionRow = (inst, instSteps, rep, color, specialInst) => {
+    const newRow = { instruction: inst, instructionSteps: instSteps, repetition: Number(rep), color: color, specialInstruction: specialInst};
     setInstructionRows([...instructionRows, newRow]);
   };
 
-  const editInstructionRow = (newInst, newRep, newColor, newSpecialInst, index) => {
+  const editInstructionRow = (newInst, newInstSteps, newRep, newColor, newSpecialInst, index) => {
     let newRows = instructionRows.map((instruction, idx) => {
       if (idx === index) {
-        return { ...instruction, instruction: newInst, repetition: Number(newRep), color: newColor, specialInstructions: newSpecialInst };
+        return { ...instruction, instruction: newInst, instructionSteps: newInstSteps, repetition: Number(newRep), color: newColor, specialInstruction: newSpecialInst };
       }
 
       return instruction;

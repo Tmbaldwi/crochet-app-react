@@ -10,7 +10,7 @@ import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Patt
 function CreatePatternScreen(){
   const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isViewMode, setIsViewMode] = useState(false);
+  const [isNotViewMode, setIsNotViewMode] = useState(false);
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
@@ -51,7 +51,7 @@ function CreatePatternScreen(){
           {patternSections.map((sec, index) => (
                               <View key={index}>
                                   <PatternSection
-                                    isViewMode={isViewMode}
+                                    isViewMode={!isNotViewMode}
                                     sectionTitle={sec.sectionTitle}
                                     editFunc={(newSectionTitle) => editPatternSection(newSectionTitle, index)}
                                     deleteFunc={() => deletePatternSection(index)}
@@ -62,8 +62,8 @@ function CreatePatternScreen(){
         <View style={patternScreenStyling.bottomButtonContainer}>
           <View style={patternScreenStyling.editModeSwitchContainer}>
             <Switch
-              onValueChange={setIsViewMode}
-              value={isViewMode}
+              onValueChange={setIsNotViewMode}
+              value={isNotViewMode}
             />
           </View>
           <View style={patternScreenStyling.addSectionButtonContainer}>

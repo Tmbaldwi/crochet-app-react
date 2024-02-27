@@ -16,7 +16,7 @@ import { AddEditInstructionModal } from "./AddEditInstructionModal";
 export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFunc }) => {
   const [isSpecialInstructionModalVisible, setIsSpecialInstructionModalVisible] = useState(false);
   const [isInstructionEditModalVisible, setIsInstructionEditModalVisible] = useState(false);
-  const isInfoDisabled = instructionInfo.specialInstructions.trim().length > 0;
+  const isInfoDisabled = instructionInfo.specialInstruction.trim().length > 0;
 
   if(isInfoDisabled){
     instructionInfo.specialInstructions = "";

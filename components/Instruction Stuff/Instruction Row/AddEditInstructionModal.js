@@ -20,7 +20,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const [colorText, setColorText] = useState("");
     const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
-    const [specialInst, setSpecialInst] = useState("");
+    const [specialInstruction, setSpecialInstruction] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
 
     let modalHeader = "";
@@ -43,6 +43,8 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
       if (modalMode === "edit") {
         setRepetitionsNum(currentInfo.repetition);
         setColorText(currentInfo.color);
+        setSpecialInstruction(currentInfo.specialInstruction)
+        setInstSteps(currentInfo.instructionSteps)
       }
     }, [isModalVisible === true]);
 
@@ -52,10 +54,10 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const onSubmitInstructionModal = () =>{
       switch(modalMode) {
         case "add":
-          addFunc(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
+          addFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
           break;
         case "edit":
-          editFunc(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
+          editFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
           break;
       }
   
@@ -86,7 +88,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
         setInstPreview("");
         setRepetitionsNum("");
         setColorText("");
-        setSpecialInst("");
+        setSpecialInstruction("");
         setSpecialInstHeight(0);
 
         onCloseModal();
@@ -216,8 +218,8 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                           <Text style={modalStyles.modalSubheaderText}>Special Instructions: </Text>
                           <TextInput 
                               style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
-                              value={specialInst}
-                              onChangeText={setSpecialInst}
+                              value={specialInstruction}
+                              onChangeText={setSpecialInstruction}
                               placeholder={"..."} 
                               placeholderTextColor={"lightgrey"}
                               multiline={true}
