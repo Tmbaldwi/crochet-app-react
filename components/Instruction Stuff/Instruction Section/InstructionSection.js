@@ -87,7 +87,7 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
               isViewMode={isViewMode}
               instructionInfo={instRow}
               deleteFunc={() => removeInstructionRow(index)}
-              editFunc={(inst, rep, color, specialInst) => editInstructionRow(inst, rep, color, specialInst, index)}
+              editFunc={(inst, instSteps, rep, color, specialInst) => editInstructionRow(inst, instSteps, rep, color, specialInst, index)}
             />
           </View>
         ))}

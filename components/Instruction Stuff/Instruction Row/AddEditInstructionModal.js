@@ -18,7 +18,7 @@ import { DropdownComponent } from "../../Common Models/Dropdown"
 export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
     const [repetitionsNum, setRepetitionsNum] = useState("");
     const [colorText, setColorText] = useState("");
-    const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
+    const [instSteps, setInstSteps] = useState([{rep: "", stitch: "", stitchAbbr: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
     const [specialInstruction, setSpecialInstruction] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
@@ -73,7 +73,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
 
     // adds a new step to the instruction creator
     const addNewStep = () => {
-        setInstSteps([...instSteps, {rep: "", stitch: ""}])
+        setInstSteps([...instSteps, {rep: "", stitch: "", stitchAbbr: ""}])
     };
 
     // removes a given step on the instruction creator
@@ -84,7 +84,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
 
     // clears text boxes and calls close callback function
     const onCloseInstructionModal = () => {
-        setInstSteps([{rep: "", stitch: ""}]);
+        setInstSteps([{rep: "", stitch: "", stitchAbbr: ""}]);
         setInstPreview("");
         setRepetitionsNum("");
         setColorText("");
@@ -95,13 +95,27 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     };
 
     // updates instruction steps array with new instruction when changed
-    const handleNewStepChange = (index, field, newText) => {
-        const newInstSteps = instSteps.map((step, idx) => {
-        if (idx === index) {
-            return {...step, [field]: newText};
+    const handleNewStepChange = (index, field, newItem) => {
+        let newInstSteps = instSteps;
+        switch(field){
+          case 'rep':
+            newInstSteps = instSteps.map((step, idx) => {
+              if (idx === index) {
+                  return {...step, rep: newItem.rep};
+              }
+              return step;
+              });
+            break;
+          case 'stitch':
+            newInstSteps = instSteps.map((step, idx) => {
+              if (idx === index) {
+                  return {...step, stitchAbbr: newItem.label, stitch: newItem.value};
+              }
+              return step;
+              });
+            break;
         }
-        return step;
-        });
+
         setInstSteps(newInstSteps);
     };
 
@@ -111,7 +125,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
 
         if(instSteps.length > 0){
           instSteps.forEach((step) => {
-            preview += " " + step.rep + " " + step.stitch + ",";
+            preview += " " + step.rep + " " + step.stitchAbbr + ",";
           });
 
           preview = preview.substring(0, preview.length-1);
@@ -165,7 +179,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <TextInput 
                                 style={modalStyles.modalTextInputInstruction} 
                                 value={step.rep}
-                                onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
+                                onChangeText={(text) => handleNewStepChange(index, 'rep', {rep: text})}
                                 placeholder={"repetitions"} 
                                 placeholderTextColor={"lightgrey"}
                                 inputMode="numeric"
@@ -174,7 +188,8 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                           </View>
                           <View style={modalStyles.instructionDropdown}>
                             <DropdownComponent
-                              callback={(text) => handleNewStepChange(index, 'stitch', text)}
+                              callback={(item) => handleNewStepChange(index, 'stitch', item)}
+                              currentSelection={step}
                             />
                           </View>
                         </View>
