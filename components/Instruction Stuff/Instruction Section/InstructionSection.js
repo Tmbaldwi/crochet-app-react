@@ -91,8 +91,12 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
             />
           </View>
         ))}
-        <View style={{borderTopWidth: instructionRows.length == 0 ? 0: 2}}>
-          <Button title="Add Instruction" onPress={() => setIsInstructionRowModalVisible(true)} />
+        <View style={[sectionStyles.addInstructionButtonContainer, {borderTopWidth: instructionRows.length == 0 ? 0: 2}]}>
+          {!isViewMode && <Button 
+              title="Add Instruction" 
+              onPress={() => setIsInstructionRowModalVisible(true)} 
+              style={sectionStyles.addInstructionButton}
+          />}
         </View>
       </Collapsible>
 
@@ -150,5 +154,12 @@ const sectionStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'stretch',
+    },
+    addInstructionButtonContainer: {
+      height: 35,
+      backgroundColor: 'orange',
+    },
+    addInstructionButton: {
+        flex: 1,
     },
 });

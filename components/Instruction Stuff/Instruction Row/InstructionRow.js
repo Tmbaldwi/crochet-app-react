@@ -16,7 +16,7 @@ import { AddEditInstructionModal } from "./AddEditInstructionModal";
 export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFunc }) => {
   const [isSpecialInstructionModalVisible, setIsSpecialInstructionModalVisible] = useState(false);
   const [isInstructionEditModalVisible, setIsInstructionEditModalVisible] = useState(false);
-  const isInfoDisabled = instructionInfo.specialInstruction.trim().length > 0;
+  const isInfoDisabled = instructionInfo.specialInstruction.trim().length == 0;
 
   if(isInfoDisabled){
     instructionInfo.specialInstructions = "";
@@ -69,7 +69,7 @@ export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFu
       >
         <ScrollView>
           <Text style={rowStyles.modalText}>
-              {instructionInfo.specialInstructions}
+              {instructionInfo.specialInstruction}
           </Text>
         </ScrollView>
       </CustomModal>
@@ -102,7 +102,7 @@ const rowStyles = StyleSheet.create({
   infoEditPressable: {
     flex: 1,
     height: '100%',
-    aspectRatio: 'none',
+    aspectRatio: 'auto',
   },
   modalText: {
     textAlign: 'center',

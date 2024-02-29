@@ -96,8 +96,12 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
                             />
                         </View>
                     ))}
-                    <View style={{borderTopWidth: instructionSections.length == 0 ? 0: 2}}>
-                        <Button title="Add Instruction Section" onPress={() => setIsInstructionSectionModalVisible(true)} />
+                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, {borderTopWidth: instructionSections.length == 0 ? 0: 2}]}>
+                        {!isViewMode && <Button 
+                            title="Add Instruction Section" 
+                            onPress={() => setIsInstructionSectionModalVisible(true)}
+                            style={patternSectionStyling.addInstructionSectionButton}
+                        />}
                     </View>
                 </Collapsible>
             </View>
@@ -155,5 +159,12 @@ const patternSectionStyling = StyleSheet.create({
     sectionContent: {
         margin: 5,
         borderWidth: 2,
+    },
+    addInstructionSectionButtonContainer: {
+        height: 35,
+        backgroundColor: 'darkorange',
+    },
+    addInstructionSectionButton: {
+        flex: 1,
     },
 });
