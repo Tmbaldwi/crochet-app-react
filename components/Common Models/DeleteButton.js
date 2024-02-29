@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { StyleSheet, Text, Pressable } from 'react-native';
 
 // Custom model for delete buttons
 export const DeleteButton = ({onPress, extraStyle, isHidden}) => {

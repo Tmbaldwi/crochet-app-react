@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
-import { CustomModal } from "../Common Models/CustomModal"
-import { DeleteButton } from "../Common Models/DeleteButton";
-import { DropdownComponent } from "../Common Models/Dropdown"
+import { CustomModal } from "../../Common Models/CustomModal"
+import { DeleteButton } from "../../Common Models/DeleteButton";
+import { DropdownComponent } from "../../Common Models/Dropdown"
 
 // Add instruction modal
 // Description:
@@ -15,17 +15,65 @@ import { DropdownComponent } from "../Common Models/Dropdown"
 // 
 // Usage:
 // Must pass a close callback function, the modal's visibility variable, and the array where instructions will be added to
-export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRows, setInstructionRows}) => {
+export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
     const [repetitionsNum, setRepetitionsNum] = useState("");
     const [colorText, setColorText] = useState("");
-    const [instSteps, setInstSteps] = useState([{rep: "", stitch: ""}]);
+    const [instSteps, setInstSteps] = useState([{rep: "", stitch: "", stitchAbbr: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
-    const [specialInst, setSpecialInst] = useState("");
+    const [specialInstruction, setSpecialInstruction] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
+
+    let modalHeader = "";
+    let showDelete = false;
+
+    // changes modal look/function depending on if its in add/edit mode
+    switch(modalMode){
+      case "add":
+          modalHeader = "Add New Instruction:";
+          showDelete = false;
+          break;
+      case "edit":
+          modalHeader = "Edit Instruction:";
+          showDelete = true;
+          break;
+     };
+
+    // When the modal is opened, if it is in edit mode then load the current range
+    useEffect(() => {
+      if (modalMode === "edit") {
+        setRepetitionsNum(currentInfo.repetition);
+        setColorText(currentInfo.color);
+        setSpecialInstruction(currentInfo.specialInstruction)
+        setInstSteps(currentInfo.instructionSteps)
+      }
+    }, [isModalVisible === true]);
+
+    // Called when submitting the modal
+    // Either runs the add function with the inputted instruction info,
+    // or the edit function with the new instruction info
+    const onSubmitInstructionModal = () =>{
+      switch(modalMode) {
+        case "add":
+          addFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          break;
+        case "edit":
+          editFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          break;
+      }
+  
+      onCloseInstructionModal();
+    };
+
+    // deletes the instruction
+    const deleteInstruction = () => {
+      deleteFunc();
+
+      onCloseInstructionModal();
+    }
 
     // adds a new step to the instruction creator
     const addNewStep = () => {
-        setInstSteps([...instSteps, {rep: "", stitch: ""}])
+        setInstSteps([...instSteps, {rep: "", stitch: "", stitchAbbr: ""}])
     };
 
     // removes a given step on the instruction creator
@@ -36,36 +84,38 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
 
     // clears text boxes and calls close callback function
     const onCloseInstructionModal = () => {
-        setInstSteps([{rep: "", stitch: ""}]);
+        setInstSteps([{rep: "", stitch: "", stitchAbbr: ""}]);
         setInstPreview("");
         setRepetitionsNum("");
         setColorText("");
-        setSpecialInst("");
+        setSpecialInstruction("");
         setSpecialInstHeight(0);
 
         onCloseModal();
     };
 
-    // adds instruction row to instruction row array, calls close function
-    const onSubmitInstructionModal = () =>{
-        addInstRow(instPreview, repetitionsNum ? repetitionsNum : 1, colorText, specialInst);
-        onCloseInstructionModal();
-    }
-
-    //adds instruction row based on input of instruction, repetitions, and yarn color to instruction row array
-    const addInstRow = (inst, rep, color, specialInst) => {
-        const newRow = { instruction: inst, repetition: Number(rep), color: color, specialInst: specialInst};
-        setInstructionRows([...instructionRows, newRow]);
-    };
-
     // updates instruction steps array with new instruction when changed
-    const handleNewStepChange = (index, field, newText) => {
-        const newInstSteps = instSteps.map((step, idx) => {
-        if (idx === index) {
-            return {...step, [field]: newText};
+    const handleNewStepChange = (index, field, newItem) => {
+        let newInstSteps = instSteps;
+        switch(field){
+          case 'rep':
+            newInstSteps = instSteps.map((step, idx) => {
+              if (idx === index) {
+                  return {...step, rep: newItem.rep};
+              }
+              return step;
+              });
+            break;
+          case 'stitch':
+            newInstSteps = instSteps.map((step, idx) => {
+              if (idx === index) {
+                  return {...step, stitchAbbr: newItem.label, stitch: newItem.value};
+              }
+              return step;
+              });
+            break;
         }
-        return step;
-        });
+
         setInstSteps(newInstSteps);
     };
 
@@ -75,7 +125,7 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
 
         if(instSteps.length > 0){
           instSteps.forEach((step) => {
-            preview += " " + step.rep + " " + step.stitch + ",";
+            preview += " " + step.rep + " " + step.stitchAbbr + ",";
           });
 
           preview = preview.substring(0, preview.length-1);
@@ -92,9 +142,11 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
     return (
         <CustomModal
             isVisible={isModalVisible}
-            headerText={"Add New Instruction:"}
+            headerText={modalHeader}
             onClose={onCloseInstructionModal}
             onSubmit={onSubmitInstructionModal}
+            onDelete={deleteInstruction}
+            showDelete={showDelete}
             height={'80%'}
         >
             <View style={modalStyles.modalSubheaderPreviewInstruction}>
@@ -127,7 +179,7 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                             <TextInput 
                                 style={modalStyles.modalTextInputInstruction} 
                                 value={step.rep}
-                                onChangeText={(text) => handleNewStepChange(index, 'rep', text)}
+                                onChangeText={(text) => handleNewStepChange(index, 'rep', {rep: text})}
                                 placeholder={"repetitions"} 
                                 placeholderTextColor={"lightgrey"}
                                 inputMode="numeric"
@@ -136,7 +188,8 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                           </View>
                           <View style={modalStyles.instructionDropdown}>
                             <DropdownComponent
-                              callback={(text) => handleNewStepChange(index, 'stitch', text)}
+                              callback={(item) => handleNewStepChange(index, 'stitch', item)}
+                              currentSelection={step}
                             />
                           </View>
                         </View>
@@ -180,8 +233,8 @@ export const AddInstructionModal = ({onCloseModal, isModalVisible, instructionRo
                           <Text style={modalStyles.modalSubheaderText}>Special Instructions: </Text>
                           <TextInput 
                               style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
-                              value={specialInst}
-                              onChangeText={setSpecialInst}
+                              value={specialInstruction}
+                              onChangeText={setSpecialInstruction}
                               placeholder={"..."} 
                               placeholderTextColor={"lightgrey"}
                               multiline={true}

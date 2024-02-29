@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const data = [
@@ -40,8 +40,8 @@ const data = [
   ];
   
 
-export const DropdownComponent = ({callback}) => {
-  const [value, setValue] = useState(null);
+export const DropdownComponent = ({callback, currentSelection}) => {
+  const [value, setValue] = useState(currentSelection.stitch);
   const [isFocus, setIsFocus] = useState(false);
 
   return (
@@ -62,7 +62,7 @@ export const DropdownComponent = ({callback}) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
-          callback(item.label);
+          callback(item);
           setValue(item.value);
           setIsFocus(false);
         }}
