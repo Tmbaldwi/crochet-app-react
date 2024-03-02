@@ -16,7 +16,7 @@ import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditIn
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc}) => {
+export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, backgroundColorInfo}) => {
     const [instructionSections, setInstructionSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
@@ -69,7 +69,11 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
     return(
         <View style={{width: '100%'}}>
             <View style={patternSectionStyling.sectionContent}>
-                    <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+                    <View style={[patternSectionStyling.header, 
+                                { 
+                                    borderBottomWidth: isCollapsed ? 1 : 2,
+                                    backgroundColor: backgroundColorInfo?.colorStart
+                                }]}>
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
                             onEditPress={() => setIsPatternSectionEditModalVisible(true)}
@@ -96,7 +100,11 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
                             />
                         </View>
                     ))}
-                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, {borderTopWidth: instructionSections.length == 0 ? 0: 2}]}>
+                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, 
+                                    {
+                                        borderTopWidth: instructionSections.length == 0 ? 0: 2,
+                                        backgroundColor: backgroundColorInfo?.colorStart
+                                    }]}>
                         {!isViewMode && <Button 
                             title="Add Instruction Section" 
                             onPress={() => setIsInstructionSectionModalVisible(true)}

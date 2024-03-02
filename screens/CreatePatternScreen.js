@@ -11,6 +11,7 @@ function CreatePatternScreen(){
   const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
+  const backgroundColorInfo = {colorStart: '#0febff'}
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
@@ -55,6 +56,7 @@ function CreatePatternScreen(){
                                     sectionTitle={sec.sectionTitle}
                                     editFunc={(newSectionTitle) => editPatternSection(newSectionTitle, index)}
                                     deleteFunc={() => deletePatternSection(index)}
+                                    backgroundColorInfo={backgroundColorInfo}
                                   />
                               </View>
                           ))}
