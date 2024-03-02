@@ -16,7 +16,7 @@ import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc}) => {
+export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc, backgroundColor}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInstructionRowAddModalVisible, setIsInstructionRowModalVisible] = useState(false);
   const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
@@ -66,7 +66,11 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
 
   return (
     <View style={sectionStyles.container}>
-      <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+      <View style={[sectionStyles.header, 
+                    { 
+                      borderBottomWidth: isCollapsed ? 1 : 2,
+                      backgroundColor: backgroundColor,
+                    }]}>
         <EditOrInfoButton 
           isViewMode={isViewMode}
           onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
@@ -91,7 +95,12 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
             />
           </View>
         ))}
-        <View style={[sectionStyles.addInstructionButtonContainer, {borderTopWidth: instructionRows.length == 0 ? 0: 2}]}>
+        <View style={[sectionStyles.addInstructionButtonContainer, 
+                      {
+                        borderTopWidth: instructionRows.length == 0 ? 0: 2,
+                        backgroundColor: backgroundColor,
+                      }
+                      ]}>
           {!isViewMode && <Button 
               title="Add Instruction" 
               onPress={() => setIsInstructionRowModalVisible(true)} 
