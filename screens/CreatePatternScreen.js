@@ -63,11 +63,14 @@ function CreatePatternScreen(){
                           ))}
         </ScrollView>
         <View style={patternScreenStyling.bottomButtonContainer}>
-          <View style={patternScreenStyling.editModeSwitchContainer}>
-            <Switch
-              onValueChange={setIsNotViewMode}
-              value={isNotViewMode}
-            />
+          <View style={patternScreenStyling.bottomLeftContainer}>
+            <View style={patternScreenStyling.editSwitchContainer}>
+              <Text style={patternScreenStyling.editSwitchText}>Edit:</Text>
+              <Switch
+                onValueChange={setIsNotViewMode}
+                value={isNotViewMode}
+              />
+            </View>
           </View>
           {isNotViewMode && <View style={patternScreenStyling.addSectionButtonContainer}>
             <Pressable 
@@ -109,9 +112,17 @@ const patternScreenStyling = StyleSheet.create({
     height: 100,
     width: '100%',
   },
-  editModeSwitchContainer:{
+  bottomLeftContainer:{
     flex: 1,
     padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
+  },
+  editSwitchContainer:{
+  },
+  editSwitchText:{
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   addSectionButtonContainer: {
     flex: 1,
