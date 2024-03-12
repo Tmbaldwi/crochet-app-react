@@ -48,7 +48,7 @@ function CreatePatternScreen(){
 };
 
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={patternScreenStyling.outerPageContentContainer}>
       <View style={patternScreenStyling.pageContentContainer}>
         <ScrollView 
           style={patternScreenStyling.contentBody}
@@ -101,12 +101,16 @@ function CreatePatternScreen(){
 };
 
 const patternScreenStyling = StyleSheet.create({
+  outerPageContentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
   pageContentContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    width: '100%',
     maxWidth: 1400,
-    height: '100%',
+    width: '100%',
   },
   contentBody: {
     width: "100%", 
