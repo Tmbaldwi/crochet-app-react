@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView, Switch } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
+import { colorCalculator } from '../components/Tools/ColorCalculator';
 
 // Create Pattern Screen
 // Description:
@@ -11,6 +12,8 @@ function CreatePatternScreen(){
   const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
+  const scrollViewRef = useRef();
+  const gradientArray = colorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
@@ -45,9 +48,13 @@ function CreatePatternScreen(){
 };
 
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={patternScreenStyling.outerPageContentContainer}>
       <View style={patternScreenStyling.pageContentContainer}>
-        <ScrollView style={patternScreenStyling.contentBody}>
+        <ScrollView 
+          style={patternScreenStyling.contentBody}
+          ref={scrollViewRef}
+          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+        >
           {patternSections.map((sec, index) => (
                               <View key={index}>
                                   <PatternSection
@@ -55,16 +62,20 @@ function CreatePatternScreen(){
                                     sectionTitle={sec.sectionTitle}
                                     editFunc={(newSectionTitle) => editPatternSection(newSectionTitle, index)}
                                     deleteFunc={() => deletePatternSection(index)}
+                                    backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index+1]}}
                                   />
                               </View>
                           ))}
         </ScrollView>
         <View style={patternScreenStyling.bottomButtonContainer}>
-          <View style={patternScreenStyling.editModeSwitchContainer}>
-            <Switch
-              onValueChange={setIsNotViewMode}
-              value={isNotViewMode}
-            />
+          <View style={patternScreenStyling.bottomLeftContainer}>
+            <View style={patternScreenStyling.editSwitchContainer}>
+              <Text style={patternScreenStyling.editSwitchText}>Edit:</Text>
+              <Switch
+                onValueChange={setIsNotViewMode}
+                value={isNotViewMode}
+              />
+            </View>
           </View>
           {isNotViewMode && <View style={patternScreenStyling.addSectionButtonContainer}>
             <Pressable 
@@ -90,32 +101,44 @@ function CreatePatternScreen(){
 };
 
 const patternScreenStyling = StyleSheet.create({
+  outerPageContentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
   pageContentContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    width: '100%',
     maxWidth: 1400,
-    height: '100%',
+    width: '100%',
   },
   contentBody: {
     width: "100%", 
     flex: 1,
+    margin: 10,
   },
   bottomButtonContainer: {
     flexDirection: 'row',
-    height: 100,
+    height: 80,
     width: '100%',
   },
-  editModeSwitchContainer:{
+  bottomLeftContainer:{
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
+  },
+  editSwitchContainer:{
+  },
+  editSwitchText:{
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   addSectionButtonContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   addSectionButton: {
     width: 60,

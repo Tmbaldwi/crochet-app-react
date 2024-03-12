@@ -78,7 +78,6 @@ export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFu
 };
 const rowStyles = StyleSheet.create({
   rowContainer: {
-    margin: 5,
     borderWidth: 2,
   },
   topContainer: {

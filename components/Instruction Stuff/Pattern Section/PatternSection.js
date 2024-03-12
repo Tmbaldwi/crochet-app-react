@@ -5,6 +5,7 @@ import { InstructionSection } from "../Instruction Section/InstructionSection";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
+import { colorCalculator } from "../../Tools/ColorCalculator";
 
 // Pattern section
 //
@@ -16,11 +17,12 @@ import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditIn
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc}) => {
+export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, backgroundColorInfo}) => {
     const [instructionSections, setInstructionSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setIsPatternSectionEditModalVisible] = useState(false);
+    const gradientArray = colorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length+1);
 
     //adds instruction sections with inputted range at the end of the list
     const addInstructionSection = (startNum, endNum) => {
@@ -67,9 +69,13 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
     }
 
     return(
-        <View style={{width: '100%'}}>
+        <View style={patternSectionStyling.container}>
             <View style={patternSectionStyling.sectionContent}>
-                    <View style={[patternSectionStyling.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+                    <View style={[patternSectionStyling.header, 
+                                { 
+                                    borderBottomWidth: isCollapsed ? 1 : 2,
+                                    backgroundColor: backgroundColorInfo?.colorStart
+                                }]}>
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
                             onEditPress={() => setIsPatternSectionEditModalVisible(true)}
@@ -83,20 +89,30 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
                             </View>
                         </Pressable>
                     </View>
-                <Collapsible collapsed={isCollapsed}>
-                    {instructionSections.map((sec, index) => (
-                        <View key={index}>
-                            <InstructionSection
-                                isViewMode={isViewMode}
-                                title={sec.title}
-                                startNum = {sec.startNum}
-                                endNum = {sec.endNum}
-                                editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
-                                deleteFunc={() => removeInstructionSection(index)}
-                            />
-                        </View>
-                    ))}
-                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, {borderTopWidth: instructionSections.length == 0 ? 0: 2}]}>
+                <Collapsible 
+                    collapsed={isCollapsed}
+                    style={{backgroundColor: backgroundColorInfo?.colorStart + '80'}}
+                >
+                    <View style={[patternSectionStyling.patternSectionContent, {padding: instructionSections.length == 0? 0: 15}]}>
+                        {instructionSections.map((sec, index) => (
+                            <View key={index}>
+                                <InstructionSection
+                                    isViewMode={isViewMode}
+                                    title={sec.title}
+                                    startNum = {sec.startNum}
+                                    endNum = {sec.endNum}
+                                    editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
+                                    deleteFunc={() => removeInstructionSection(index)}
+                                    backgroundColor={gradientArray[index+1]}
+                                />
+                            </View>
+                        ))}
+                    </View>
+                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, 
+                                    {
+                                        borderTopWidth: instructionSections.length == 0 ? 0: 2,
+                                        backgroundColor: backgroundColorInfo?.colorStart
+                                    }]}>
                         {!isViewMode && <Button 
                             title="Add Instruction Section" 
                             onPress={() => setIsInstructionSectionModalVisible(true)}
@@ -126,6 +142,14 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc})
 };
 
 const patternSectionStyling = StyleSheet.create({
+    container: {
+        width: '100%',
+        backgroundColor: 'white',
+    },
+    sectionContent: {
+        margin: 5,
+        borderWidth: 2,
+    },
     header: {
         height: 60,
         backgroundColor: 'darkorange',
@@ -156,9 +180,8 @@ const patternSectionStyling = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'stretch',
     },
-    sectionContent: {
-        margin: 5,
-        borderWidth: 2,
+    patternSectionContent: {
+        gap: 15,
     },
     addInstructionSectionButtonContainer: {
         height: 35,

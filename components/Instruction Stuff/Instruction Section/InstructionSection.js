@@ -16,7 +16,7 @@ import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc}) => {
+export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc, backgroundColor}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInstructionRowAddModalVisible, setIsInstructionRowModalVisible] = useState(false);
   const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
@@ -66,7 +66,11 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
 
   return (
     <View style={sectionStyles.container}>
-      <View style={[sectionStyles.header, { borderBottomWidth: isCollapsed ? 1 : 2 }]}>
+      <View style={[sectionStyles.header, 
+                    { 
+                      borderBottomWidth: isCollapsed ? 1 : 2,
+                      backgroundColor: backgroundColor,
+                    }]}>
         <EditOrInfoButton 
           isViewMode={isViewMode}
           onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
@@ -80,18 +84,28 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
           </View>
         </Pressable>
       </View>
-      <Collapsible collapsed={isCollapsed}>
-        {instructionRows.map((instRow, index) => (
-          <View key={index}>
-            <InstructionRow
-              isViewMode={isViewMode}
-              instructionInfo={instRow}
-              deleteFunc={() => removeInstructionRow(index)}
-              editFunc={(inst, instSteps, rep, color, specialInst) => editInstructionRow(inst, instSteps, rep, color, specialInst, index)}
-            />
-          </View>
-        ))}
-        <View style={[sectionStyles.addInstructionButtonContainer, {borderTopWidth: instructionRows.length == 0 ? 0: 2}]}>
+      <Collapsible 
+        collapsed={isCollapsed}
+        style={{backgroundColor: backgroundColor + '80'}}
+      >
+        <View style={[sectionStyles.instructionSectionContent, {padding: instructionRows.length == 0? 0: 15}]}>
+          {instructionRows.map((instRow, index) => (
+            <View key={index}>
+              <InstructionRow
+                isViewMode={isViewMode}
+                instructionInfo={instRow}
+                deleteFunc={() => removeInstructionRow(index)}
+                editFunc={(inst, instSteps, rep, color, specialInst) => editInstructionRow(inst, instSteps, rep, color, specialInst, index)}
+              />
+            </View>
+          ))}
+        </View>
+        <View style={[sectionStyles.addInstructionButtonContainer, 
+                      {
+                        borderTopWidth: instructionRows.length == 0 ? 0: 2,
+                        backgroundColor: backgroundColor,
+                      }
+                      ]}>
           {!isViewMode && <Button 
               title="Add Instruction" 
               onPress={() => setIsInstructionRowModalVisible(true)} 
@@ -122,8 +136,8 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
 
 const sectionStyles = StyleSheet.create({
   container: {
-    margin: 5,
     borderWidth: 2,
+    backgroundColor: 'white',
   },
   header: {
     height: 60,
@@ -154,6 +168,9 @@ const sectionStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'stretch',
+    },
+    instructionSectionContent: {
+      gap: 15,
     },
     addInstructionButtonContainer: {
       height: 35,
