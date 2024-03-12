@@ -13,11 +13,11 @@ export const colorCalculator = {
         return { r, g, b };
     },
 
-    createGradient: function(colorStart, colorEnd, numSplit){
-        let gradient = [colorStart];
+    createGradient: function(c1, c2, numSplit){
+        let gradient = [c1];
 
-        let rgb1 = this.hexToRgb(colorStart);
-        let rgb2 = this.hexToRgb(colorEnd);
+        let rgb1 = this.hexToRgb(c1);
+        let rgb2 = this.hexToRgb(c2);
 
         for(let i = 1; i < numSplit; i++){
             let r3 = Math.round(rgb1.r + i * (rgb2.r - rgb1.r) / numSplit);
@@ -28,7 +28,7 @@ export const colorCalculator = {
             gradient.push(hex);
         }
 
-        gradient.push(colorEnd);
+        gradient.push(c2);
         return gradient;
     }    
 };

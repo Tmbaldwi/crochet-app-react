@@ -69,7 +69,7 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
     }
 
     return(
-        <View style={{width: '100%'}}>
+        <View style={patternSectionStyling.container}>
             <View style={patternSectionStyling.sectionContent}>
                     <View style={[patternSectionStyling.header, 
                                 { 
@@ -89,20 +89,25 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                             </View>
                         </Pressable>
                     </View>
-                <Collapsible collapsed={isCollapsed}>
-                    {instructionSections.map((sec, index) => (
-                        <View key={index}>
-                            <InstructionSection
-                                isViewMode={isViewMode}
-                                title={sec.title}
-                                startNum = {sec.startNum}
-                                endNum = {sec.endNum}
-                                editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
-                                deleteFunc={() => removeInstructionSection(index)}
-                                backgroundColor={gradientArray[index+1]}
-                            />
-                        </View>
-                    ))}
+                <Collapsible 
+                    collapsed={isCollapsed}
+                    style={{backgroundColor: backgroundColorInfo?.colorStart + '80'}}
+                >
+                    <View style={[patternSectionStyling.patternSectionContent, {padding: instructionSections.length == 0? 0: 15}]}>
+                        {instructionSections.map((sec, index) => (
+                            <View key={index}>
+                                <InstructionSection
+                                    isViewMode={isViewMode}
+                                    title={sec.title}
+                                    startNum = {sec.startNum}
+                                    endNum = {sec.endNum}
+                                    editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
+                                    deleteFunc={() => removeInstructionSection(index)}
+                                    backgroundColor={gradientArray[index+1]}
+                                />
+                            </View>
+                        ))}
+                    </View>
                     <View style={[patternSectionStyling.addInstructionSectionButtonContainer, 
                                     {
                                         borderTopWidth: instructionSections.length == 0 ? 0: 2,
@@ -137,6 +142,14 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
 };
 
 const patternSectionStyling = StyleSheet.create({
+    container: {
+        width: '100%',
+        backgroundColor: 'white',
+    },
+    sectionContent: {
+        margin: 5,
+        borderWidth: 2,
+    },
     header: {
         height: 60,
         backgroundColor: 'darkorange',
@@ -167,9 +180,8 @@ const patternSectionStyling = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'stretch',
     },
-    sectionContent: {
-        margin: 5,
-        borderWidth: 2,
+    patternSectionContent: {
+        gap: 15,
     },
     addInstructionSectionButtonContainer: {
         height: 35,

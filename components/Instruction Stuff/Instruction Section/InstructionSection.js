@@ -84,17 +84,22 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
           </View>
         </Pressable>
       </View>
-      <Collapsible collapsed={isCollapsed}>
-        {instructionRows.map((instRow, index) => (
-          <View key={index}>
-            <InstructionRow
-              isViewMode={isViewMode}
-              instructionInfo={instRow}
-              deleteFunc={() => removeInstructionRow(index)}
-              editFunc={(inst, instSteps, rep, color, specialInst) => editInstructionRow(inst, instSteps, rep, color, specialInst, index)}
-            />
-          </View>
-        ))}
+      <Collapsible 
+        collapsed={isCollapsed}
+        style={{backgroundColor: backgroundColor + '80'}}
+      >
+        <View style={[sectionStyles.instructionSectionContent, {padding: instructionRows.length == 0? 0: 15}]}>
+          {instructionRows.map((instRow, index) => (
+            <View key={index}>
+              <InstructionRow
+                isViewMode={isViewMode}
+                instructionInfo={instRow}
+                deleteFunc={() => removeInstructionRow(index)}
+                editFunc={(inst, instSteps, rep, color, specialInst) => editInstructionRow(inst, instSteps, rep, color, specialInst, index)}
+              />
+            </View>
+          ))}
+        </View>
         <View style={[sectionStyles.addInstructionButtonContainer, 
                       {
                         borderTopWidth: instructionRows.length == 0 ? 0: 2,
@@ -131,8 +136,8 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
 
 const sectionStyles = StyleSheet.create({
   container: {
-    margin: 5,
     borderWidth: 2,
+    backgroundColor: 'white',
   },
   header: {
     height: 60,
@@ -163,6 +168,9 @@ const sectionStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'stretch',
+    },
+    instructionSectionContent: {
+      gap: 15,
     },
     addInstructionButtonContainer: {
       height: 35,

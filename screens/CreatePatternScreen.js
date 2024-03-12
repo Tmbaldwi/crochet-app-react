@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView, Switch } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
@@ -12,7 +12,8 @@ function CreatePatternScreen(){
   const [patternSections, setPatternSections] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
-  const gradientArray = colorCalculator.createGradient('#ffea00', '#0febff', patternSections.length);
+  const scrollViewRef = useRef();
+  const gradientArray = colorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
@@ -49,7 +50,11 @@ function CreatePatternScreen(){
   return (
     <View style={{alignItems: 'center'}}>
       <View style={patternScreenStyling.pageContentContainer}>
-        <ScrollView style={patternScreenStyling.contentBody}>
+        <ScrollView 
+          style={patternScreenStyling.contentBody}
+          ref={scrollViewRef}
+          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+        >
           {patternSections.map((sec, index) => (
                               <View key={index}>
                                   <PatternSection
@@ -106,15 +111,16 @@ const patternScreenStyling = StyleSheet.create({
   contentBody: {
     width: "100%", 
     flex: 1,
+    margin: 10,
   },
   bottomButtonContainer: {
     flexDirection: 'row',
-    height: 100,
+    height: 80,
     width: '100%',
   },
   bottomLeftContainer:{
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'flex-start'
   },
@@ -128,8 +134,7 @@ const patternScreenStyling = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   addSectionButton: {
     width: 60,
