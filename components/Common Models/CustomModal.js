@@ -25,11 +25,13 @@ export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, o
             <View style={modalStyles.buttonContainer}>
               <View style={modalStyles.buttonContainerTopRow}>
                 <CommonButton 
-                  text={closeText ? closeText: 'Close'}
+                  label={closeText ? closeText: 'CLOSE'}
                   onPress={onClose}
+                  buttonStyle={modalStyles.closeButton}
+                  textStyle={modalStyles.closeButtonText}
                 />
                 <CommonButton
-                  text={submitText ? submitText: 'Submit'}
+                  label={submitText ? submitText: 'SUBMIT'}
                   onPress={onSubmit}
                   isHidden={!onSubmit}
                   isDisabled={false}
@@ -37,12 +39,11 @@ export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, o
               </View>
               <View style={[modalStyles.buttonContainerBottomRow, {display: hideDelete? 'none': 'flex'}]}>
                 <CommonButton
-                  text={'Delete'}
+                  label={'DELETE'}
                   onPress={onDelete}
                   isHidden={hideDelete}
-                  extraStyles={modalStyles.deleteButton}
-                >
-                </CommonButton>
+                  buttonStyle={modalStyles.deleteButton}
+                />
               </View>
             </View>
           </View>
@@ -88,6 +89,12 @@ const modalStyles = StyleSheet.create({
       flexDirection: 'row',
       height: 40,
       columnGap: 10,
+    },
+    closeButton:{
+      backgroundColor: 'lightblue',
+    },
+    closeButtonText: {
+      color: 'black',
     },
     buttonContainerBottomRow: {
       height: 40,

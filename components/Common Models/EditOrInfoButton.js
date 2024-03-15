@@ -26,7 +26,7 @@ export const EditOrInfoButton = ({onEditPress, onInfoPress, extraStyle, isViewMo
                 style={[buttonStyling.editOrInfoButton, {backgroundColor: 'green'},  extraStyle]}
             >
                 <Text style={buttonStyling.editOrInfoText}>
-                    Edit
+                    EDIT
                 </Text>
             </Pressable>
         );

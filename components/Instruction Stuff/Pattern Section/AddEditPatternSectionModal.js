@@ -77,7 +77,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
             onSubmit={onSubmitModal}
             onDelete={deletePatternSection}
             hideDelete={hideDelete}
-            closeText={"Cancel"}
+            closeText={"CANCEL"}
         >
         <View style={patternSectionModalStyling.textInputContainer}>
           <Text>Section Name: </Text>

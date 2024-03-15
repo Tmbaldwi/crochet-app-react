@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-
 import { CustomModal } from "../../Common Models/CustomModal"
 import { DeleteButton } from "../../Common Models/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
+import { CommonButton } from "../../Common Models/CommonButton";
 
 // Add instruction modal
 // Description:
@@ -194,12 +195,11 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                           </View>
                         </View>
                       ))}
-                      <Pressable 
-                          style={[modalStyles.instructionCreationAddButton, {marginTop: instSteps.length == 0 ? 10 : 0}]}
-                          onPress={() => addNewStep()}
-                      >
-                          <Text style={modalStyles.instructionCreationAddButtonText}>Add Instruction</Text>
-                      </Pressable>
+                      <CommonButton
+                        label={"ADD INSTRUCTION STEP"}
+                        onPress={() => addNewStep()}
+                        buttonStyle={[modalStyles.instructionCreationAddButton, {marginTop: instSteps.length == 0 ? 10 : 0}]}
+                      />
                       </View>
                   </View>
                   
@@ -309,15 +309,9 @@ const modalStyles = StyleSheet.create({
         flex: 1,
       },
       instructionCreationAddButton: {
+        flex: 'none',
         marginBottom: 10,
         padding: 5,
-        borderWidth: 2,
-        borderRadius: 8,
-        backgroundColor: 'lightblue'
-      },
-      instructionCreationAddButtonText: {
-        fontWeight: 'bold',
-        textAlign: 'center',
       },
       modalExtraInputsContainer: {
         margin: 10,
