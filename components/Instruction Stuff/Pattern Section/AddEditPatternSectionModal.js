@@ -17,17 +17,17 @@ import { CustomModal } from '../../Common Models/CustomModal'
 export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentSectionTitle}) => {
     const [patternSectionName, setPatternSectionName] = useState("");
     let modalHeader = "";
-    let showDelete = false;
+    let hideDelete = false;
 
     // changes modal look/function depending on if its in add/edit mode
     switch(modalMode){
       case "add":
           modalHeader = "Add New Section:";
-          showDelete = false;
+          hideDelete = true;
           break;
       case "edit":
           modalHeader = "Edit Section:";
-          showDelete = true;
+          hideDelete = false;
           break;
     };
 
@@ -76,7 +76,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
             onClose={onClosePatternSectionModal}
             onSubmit={onSubmitModal}
             onDelete={deletePatternSection}
-            showDelete={showDelete}
+            hideDelete={hideDelete}
             closeText={"Cancel"}
         >
         <View style={patternSectionModalStyling.textInputContainer}>

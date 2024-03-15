@@ -24,17 +24,17 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
 
     let modalHeader = "";
-    let showDelete = false;
+    let hideDelete = false;
 
     // changes modal look/function depending on if its in add/edit mode
     switch(modalMode){
       case "add":
           modalHeader = "Add New Instruction:";
-          showDelete = false;
+          hideDelete = true;
           break;
       case "edit":
           modalHeader = "Edit Instruction:";
-          showDelete = true;
+          hideDelete = false;
           break;
      };
 
@@ -146,7 +146,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
             onClose={onCloseInstructionModal}
             onSubmit={onSubmitInstructionModal}
             onDelete={deleteInstruction}
-            showDelete={showDelete}
+            hideDelete={hideDelete}
             height={'80%'}
         >
             <View style={modalStyles.modalSubheaderPreviewInstruction}>
