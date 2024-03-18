@@ -19,17 +19,17 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const [roundEndNum, setRoundEndNum] = useState("");
     
     let modalHeader = "";
-    let showDelete = false;
+    let hideDelete = false;
     
     // changes modal look/function depending on if its in add/edit mode
     switch(modalMode){
         case "add":
             modalHeader = "Add New Section:";
-            showDelete = false;
+            hideDelete = true;
             break;
         case "edit":
             modalHeader = "Edit Section:";
-            showDelete = true;
+            hideDelete = false;
             break;
     };
     
@@ -80,7 +80,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             onClose={onCloseInstructionSectionModal}
             onSubmit={onSubmitModal}
             onDelete={deleteInstructionSection}
-            showDelete={showDelete}
+            hideDelete={hideDelete}
         >
             <View style={instructionSectionModalStyling.modalBody}>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>

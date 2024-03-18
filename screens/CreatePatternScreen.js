@@ -53,7 +53,6 @@ function CreatePatternScreen(){
         <ScrollView 
           style={patternScreenStyling.contentBody}
           ref={scrollViewRef}
-          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
         >
           {patternSections.map((sec, index) => (
                               <View key={index}>
@@ -70,7 +69,9 @@ function CreatePatternScreen(){
         <View style={patternScreenStyling.bottomButtonContainer}>
           <View style={patternScreenStyling.bottomLeftContainer}>
             <View style={patternScreenStyling.editSwitchContainer}>
-              <Text style={patternScreenStyling.editSwitchText}>Edit:</Text>
+              <Text style={patternScreenStyling.editSwitchText}>
+                EDIT:
+              </Text>
               <Switch
                 onValueChange={setIsNotViewMode}
                 value={isNotViewMode}

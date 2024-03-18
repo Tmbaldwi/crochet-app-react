@@ -1,10 +1,10 @@
 import React from 'react';
-import {Modal, View, Text, Pressable, StyleSheet } from 'react-native';
+import {Modal, View, Text, StyleSheet } from 'react-native';
+import { CommonButton } from './CommonButton';
 
 // Custom modal for use in creating instructions
 // Allows for a custom header and body 
-// TODO: Maybe custom close/submit text?
-export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, showDelete, closeText, submitText, children}) => {
+export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, hideDelete, closeText, submitText, children}) => {
     return (
     <Modal
         visible={isVisible}
@@ -24,17 +24,26 @@ export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, o
             </View>
             <View style={modalStyles.buttonContainer}>
               <View style={modalStyles.buttonContainerTopRow}>
-                <Pressable onPress={onClose} style={modalStyles.buttons}>
-                  <Text style={modalStyles.buttonText}>{closeText ? closeText: 'Close'}</Text>
-                </Pressable>
-                <Pressable onPress={onSubmit} style={[modalStyles.buttons, {display: onSubmit? 'flex' : 'none'}]}>
-                  <Text style={modalStyles.buttonText}>{submitText ? submitText: 'Submit'}</Text>
-                </Pressable>
+                <CommonButton 
+                  label={closeText ? closeText: 'CLOSE'}
+                  onPress={onClose}
+                  buttonStyle={modalStyles.closeButton}
+                  textStyle={modalStyles.closeButtonText}
+                />
+                <CommonButton
+                  label={submitText ? submitText: 'SUBMIT'}
+                  onPress={onSubmit}
+                  isHidden={!onSubmit}
+                  isDisabled={false}
+                />
               </View>
-              <View style={[modalStyles.buttonContainerBottomRow, {display: showDelete? 'flex' : 'none'}]}>
-                <Pressable onPress={onDelete} style={modalStyles.deleteButton}>
-                  <Text style={modalStyles.buttonText}>Delete</Text>
-                </Pressable>
+              <View style={[modalStyles.buttonContainerBottomRow, {display: hideDelete? 'none': 'flex'}]}>
+                <CommonButton
+                  label={'DELETE'}
+                  onPress={onDelete}
+                  isHidden={hideDelete}
+                  buttonStyle={modalStyles.deleteButton}
+                />
               </View>
             </View>
           </View>
@@ -81,22 +90,17 @@ const modalStyles = StyleSheet.create({
       height: 40,
       columnGap: 10,
     },
+    closeButton:{
+      backgroundColor: 'lightblue',
+    },
+    closeButtonText: {
+      color: 'black',
+    },
     buttonContainerBottomRow: {
       height: 40,
     },
-    buttons:{
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: 'lightblue',
-      borderRadius: 8,
-      borderWidth: 2,
-    },
     deleteButton: {
-      flex: 1,
-      justifyContent: 'center',
       backgroundColor: 'red',
-      borderRadius: 8,
-      borderWidth: 2,
     },
     buttonText:{
       fontWeight: 'bold',

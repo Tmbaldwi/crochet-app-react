@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Button, Text, Pressable, StyleSheet} from 'react-native';
+import { View, Text, Pressable, StyleSheet} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "../Instruction Row/InstructionRow";
 import { AddEditInstructionModal } from "../Instruction Row/AddEditInstructionModal";
 import { AddEditInstructionSectionModal } from "./AddEditInstructionSectionModal";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
+import { CommonButton } from "../../Common Models/CommonButton";
 
 // Instruction Section
 //
@@ -74,6 +75,7 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
         <EditOrInfoButton 
           isViewMode={isViewMode}
           onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
+          extraStyle={{borderWidth: 0,}}
         />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
@@ -106,11 +108,16 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
                         backgroundColor: backgroundColor,
                       }
                       ]}>
-          {!isViewMode && <Button 
-              title="Add Instruction" 
-              onPress={() => setIsInstructionRowModalVisible(true)} 
-              style={sectionStyles.addInstructionButton}
-          />}
+          <View style={{flex: 1}}/>
+          <View style={{flex: 3}}>
+          {!isViewMode && 
+            <CommonButton
+              label={"ADD INSTRUCTION"}
+              onPress={() => setIsInstructionRowModalVisible(true)}
+            />
+          }
+          </View>
+          <View style={{flex: 1}}/>
         </View>
       </Collapsible>
 
@@ -157,6 +164,8 @@ const sectionStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'stretch',
+      borderLeftWidth: 2,
+      borderRightWidth: 2,
     },
     headerText: {
       fontWeight: 'bold',
@@ -164,7 +173,6 @@ const sectionStyles = StyleSheet.create({
     },
     toggleIconContainer: {
       width: 60,
-      borderLeftWidth: 1,
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'stretch',
@@ -173,10 +181,9 @@ const sectionStyles = StyleSheet.create({
       gap: 15,
     },
     addInstructionButtonContainer: {
-      height: 35,
+      flexDirection: 'row',
+      padding: 5,
+      height: 50,
       backgroundColor: 'orange',
-    },
-    addInstructionButton: {
-        flex: 1,
     },
 });

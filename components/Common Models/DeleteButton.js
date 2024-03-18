@@ -9,7 +9,7 @@ export const DeleteButton = ({onPress, extraStyle, isHidden}) => {
     else{
         return(
             <Pressable onPress={onPress} style={[deleteButtonStyling.deleteButton, extraStyle]}>
-                <Text>X</Text>
+                <Text style={deleteButtonStyling.deleteButtonText}>X</Text>
             </Pressable>
         );
     }
@@ -18,10 +18,14 @@ export const DeleteButton = ({onPress, extraStyle, isHidden}) => {
 const deleteButtonStyling = StyleSheet.create({
     deleteButton: {
         aspectRatio: 1/1,
-        borderWidth: 1,
-        alignItems: 'center',
+        borderRadius: 4,
+        borderWidth: 2,
         justifyContent: 'center',
         alignSelf: 'stretch',
         backgroundColor: 'red',
+    },
+    deleteButtonText: {
+        textAlign: 'center',
+        fontWeight: 'bold',
     },
 });

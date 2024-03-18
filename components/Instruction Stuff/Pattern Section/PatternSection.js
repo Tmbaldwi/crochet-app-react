@@ -1,11 +1,12 @@
 import React, {useState } from "react";
-import { View, Button, StyleSheet, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionSection } from "../Instruction Section/InstructionSection";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
 import { colorCalculator } from "../../Tools/ColorCalculator";
+import { CommonButton } from "../../Common Models/CommonButton";
 
 // Pattern section
 //
@@ -79,6 +80,7 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
                             onEditPress={() => setIsPatternSectionEditModalVisible(true)}
+                            extraStyle={{borderWidth: 0}}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
@@ -112,12 +114,19 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                                     {
                                         borderTopWidth: instructionSections.length == 0 ? 0: 2,
                                         backgroundColor: backgroundColorInfo?.colorStart
-                                    }]}>
-                        {!isViewMode && <Button 
-                            title="Add Instruction Section" 
-                            onPress={() => setIsInstructionSectionModalVisible(true)}
-                            style={patternSectionStyling.addInstructionSectionButton}
-                        />}
+                                    }
+                                ]}
+                    >
+                        <View style={{flex: 1}}/>
+                        <View style={{flex: 3}}>
+                            {!isViewMode && 
+                                <CommonButton
+                                    label={"ADD INSTRUCTION SECTION"}
+                                    onPress={() => setIsInstructionSectionModalVisible(true)}
+                                />
+                            }
+                        </View>
+                        <View style={{flex: 1}}/>
                     </View>
                 </Collapsible>
             </View>
@@ -168,6 +177,8 @@ const patternSectionStyling = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
     },
     headerText: {
         fontWeight: 'bold',
@@ -175,7 +186,6 @@ const patternSectionStyling = StyleSheet.create({
     },
     toggleIconContainer: {
         width: 60,
-        borderLeftWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'stretch',
@@ -184,10 +194,9 @@ const patternSectionStyling = StyleSheet.create({
         gap: 15,
     },
     addInstructionSectionButtonContainer: {
-        height: 35,
+        flexDirection: 'row',
+        height: 55,
+        padding: 5,
         backgroundColor: 'darkorange',
-    },
-    addInstructionSectionButton: {
-        flex: 1,
     },
 });

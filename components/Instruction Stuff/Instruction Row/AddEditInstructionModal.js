@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-
 import { CustomModal } from "../../Common Models/CustomModal"
 import { DeleteButton } from "../../Common Models/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
+import { CommonButton } from "../../Common Models/CommonButton";
 
 // Add instruction modal
 // Description:
@@ -24,17 +25,17 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
 
     let modalHeader = "";
-    let showDelete = false;
+    let hideDelete = false;
 
     // changes modal look/function depending on if its in add/edit mode
     switch(modalMode){
       case "add":
           modalHeader = "Add New Instruction:";
-          showDelete = false;
+          hideDelete = true;
           break;
       case "edit":
           modalHeader = "Edit Instruction:";
-          showDelete = true;
+          hideDelete = false;
           break;
      };
 
@@ -146,7 +147,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
             onClose={onCloseInstructionModal}
             onSubmit={onSubmitInstructionModal}
             onDelete={deleteInstruction}
-            showDelete={showDelete}
+            hideDelete={hideDelete}
             height={'80%'}
         >
             <View style={modalStyles.modalSubheaderPreviewInstruction}>
@@ -194,12 +195,11 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                           </View>
                         </View>
                       ))}
-                      <Pressable 
-                          style={[modalStyles.instructionCreationAddButton, {marginTop: instSteps.length == 0 ? 10 : 0}]}
-                          onPress={() => addNewStep()}
-                      >
-                          <Text style={modalStyles.instructionCreationAddButtonText}>Add Instruction</Text>
-                      </Pressable>
+                      <CommonButton
+                        label={"ADD INSTRUCTION STEP"}
+                        onPress={() => addNewStep()}
+                        buttonStyle={[modalStyles.instructionCreationAddButton, {marginTop: instSteps.length == 0 ? 10 : 0}]}
+                      />
                       </View>
                   </View>
                   
@@ -309,15 +309,9 @@ const modalStyles = StyleSheet.create({
         flex: 1,
       },
       instructionCreationAddButton: {
+        flex: 'none',
         marginBottom: 10,
         padding: 5,
-        borderWidth: 2,
-        borderRadius: 8,
-        backgroundColor: 'lightblue'
-      },
-      instructionCreationAddButtonText: {
-        fontWeight: 'bold',
-        textAlign: 'center',
       },
       modalExtraInputsContainer: {
         margin: 10,

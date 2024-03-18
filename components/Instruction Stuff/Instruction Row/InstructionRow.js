@@ -37,19 +37,26 @@ export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFu
       <View style={rowStyles.rowContainer}>
         <View style={rowStyles.topContainer}>
           <View style={rowStyles.topContainerInstruction}>
-            <InstructionSubBox text={instructionInfo.instruction} />
+            <InstructionSubBox 
+              label={instructionInfo.instruction}
+            />
           </View>
         </View>
         <View style={rowStyles.bottomContainer}>
-          <InstructionSubBox text={"x" + instructionInfo.repetition} />
-          <InstructionSubBox text={instructionInfo.color} flex={2}/>
           <EditOrInfoButton
-            isViewMode={isViewMode}
-            onEditPress={() => setIsInstructionEditModalVisible(true)}
-            onInfoPress={() => setIsSpecialInstructionModalVisible(true)}
-            extraStyle={rowStyles.infoEditPressable}
-            isInfoDisabled={isInfoDisabled}
-          /> 
+              isViewMode={isViewMode}
+              onEditPress={() => setIsInstructionEditModalVisible(true)}
+              onInfoPress={() => setIsSpecialInstructionModalVisible(true)}
+              extraStyle={rowStyles.infoEditPressable}
+              isInfoDisabled={isInfoDisabled}
+            /> 
+          <InstructionSubBox 
+            label={instructionInfo.color} 
+            extraStyle={rowStyles.instructionColorBox}
+          />
+          <InstructionSubBox 
+            label={"x" + instructionInfo.repetition}  
+          />
         </View>
       </View>
 
@@ -86,6 +93,7 @@ const rowStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomWidth: 2,
   },
   topContainerInstruction: {
     flex: 1,
@@ -102,6 +110,12 @@ const rowStyles = StyleSheet.create({
     flex: 1,
     height: '100%',
     aspectRatio: 'auto',
+    borderWidth: 0,
+  },
+  instructionColorBox: {
+    flex: 2,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
   },
   modalText: {
     textAlign: 'center',
@@ -111,11 +125,11 @@ const rowStyles = StyleSheet.create({
 // Instructions subboxes
 // Blocks of information used for the instruction rows
 // Allows for custom text, and flex for sizing
-export const InstructionSubBox = ({ text, flex }) => {
+export const InstructionSubBox = ({ label, extraStyle }) => {
   return (
-    <View style={[subBoxStyles.subBoxContainer, {flex: flex ? flex : 1}]}>
+    <View style={[subBoxStyles.subBoxContainer, extraStyle]}>
       <Text style={subBoxStyles.subBoxText}>
-        {text}
+        {label}
       </Text>
     </View>
   );
@@ -123,7 +137,7 @@ export const InstructionSubBox = ({ text, flex }) => {
 
 const subBoxStyles = StyleSheet.create({
   subBoxContainer: {
-    borderWidth: 1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
