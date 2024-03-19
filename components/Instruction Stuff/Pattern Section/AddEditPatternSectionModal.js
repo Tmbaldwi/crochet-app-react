@@ -16,6 +16,8 @@ import { CustomModal } from '../../Common Models/CustomModal'
 //  and the current section title
 export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentSectionTitle}) => {
     const [patternSectionName, setPatternSectionName] = useState("");
+    let requiredInputs = [{input: patternSectionName, disallowEmptyInput: true}];
+
     let modalHeader = "";
     let hideDelete = false;
 
@@ -78,6 +80,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
             onDelete={deletePatternSection}
             hideDelete={hideDelete}
             closeText={"CANCEL"}
+            requiredInputsForSubmit={requiredInputs}
         >
         <View style={patternSectionModalStyling.textInputContainer}>
           <Text>Section Name: </Text>

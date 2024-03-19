@@ -17,6 +17,7 @@ import {CustomModal} from "../../Common Models/CustomModal";
 export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentStartNum, currentEndNum}) => {
     const [roundStartNum, setRoundStartNum] = useState("");
     const [roundEndNum, setRoundEndNum] = useState("");
+    let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}, {input: roundEndNum, disallowEmptyInput: true}];
     
     let modalHeader = "";
     let hideDelete = false;
@@ -81,6 +82,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             onSubmit={onSubmitModal}
             onDelete={deleteInstructionSection}
             hideDelete={hideDelete}
+            requiredInputsForSubmit={requiredInputs}
         >
             <View style={instructionSectionModalStyling.modalBody}>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
