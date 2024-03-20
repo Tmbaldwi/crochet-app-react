@@ -1,6 +1,7 @@
 import React, {useState, useEffect } from "react";
 import { View, StyleSheet, Text, TextInput } from 'react-native';
 import {CustomModal} from "../../Common Models/CustomModal";
+import { StringValidator } from './../../Tools/StringValidator';
 
 // Add/Edit Instruction Section Modal
 //
@@ -90,10 +91,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <TextInput 
                         style={instructionSectionModalStyling.modalTextInput}
                         value={roundStartNum}
-                        onChangeText={setRoundStartNum}
+                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundStartNum)}
                         placeholder={"ex: 3"} 
                         placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
+                        returnKeyType='done'
                     />
                 </View>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
@@ -101,10 +103,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <TextInput 
                         style={instructionSectionModalStyling.modalTextInput}
                         value={roundEndNum}
-                        onChangeText={setRoundEndNum}
+                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundEndNum)}
                         placeholder={"ex: 4"} 
                         placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
+                        returnKeyType='done'
                     />
                 </View>
             </View>

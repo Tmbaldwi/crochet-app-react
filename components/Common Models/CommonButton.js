@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, Pressable, StyleSheet } from 'react-native';
 
 export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle, textStyle, requiredInputs = []}) => {
+    // Sets button to disabled state if required inputs are not filled
     let isMissingInputs = false;
     for(let reqInput of requiredInputs){
         if(reqInput.disallowEmptyInput){
@@ -26,14 +27,14 @@ export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle
                     modalStyles.defaultButtonStyle,
                     {display: isHidden? 'none' : 'flex'}, 
                     isDisabledMode? modalStyles.disabledButtonStyle: {},
-                    buttonStyle
+                    buttonStyle,
             ]}
         >
             <Text 
                 style={[
                     modalStyles.defaultButtonText,
                     isDisabledMode? modalStyles.disabledButtonText: {}, 
-                    textStyle
+                    textStyle,
                 ]}
             >
                 {label}

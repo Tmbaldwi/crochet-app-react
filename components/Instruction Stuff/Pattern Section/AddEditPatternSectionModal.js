@@ -90,6 +90,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
             onChangeText={setPatternSectionName}
             placeholder={"ex: Head"} 
             placeholderTextColor={"lightgrey"}
+            returnKeyType='done'
           />
         </View>
       </CustomModal>

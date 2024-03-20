@@ -1,4 +1,4 @@
-export const colorCalculator = {
+export const ColorCalculator = {
     rgbToHex: function(r, g, b){
         const toHex = c => ('0' + c.toString(16)).slice(-2);
         return `#${toHex(r)}${toHex(g)}${toHex(b)}`;

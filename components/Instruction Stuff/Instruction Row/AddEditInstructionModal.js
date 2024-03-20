@@ -4,6 +4,9 @@ import { CustomModal } from "../../Common Models/CustomModal"
 import { DeleteButton } from "../../Common Models/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
 import { CommonButton } from "../../Common Models/CommonButton";
+import { StringValidator } from "../../Tools/StringValidator";
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 // Add instruction modal
 // Description:
@@ -17,12 +20,20 @@ import { CommonButton } from "../../Common Models/CommonButton";
 // Usage:
 // Must pass a close callback function, the modal's visibility variable, and the array where instructions will be added to
 export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
-    const [repetitionsNum, setRepetitionsNum] = useState("");
+    const [repetitionsNum, setRepetitionsNum] = useState(1);
     const [colorText, setColorText] = useState("");
-    const [instSteps, setInstSteps] = useState([{rep: "", stitch: "", stitchAbbr: ""}]);
+    const [instSteps, setInstSteps] = useState([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
     const [specialInstruction, setSpecialInstruction] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
+
+    // Adds all instruction steps to required inputs
+    let requiredInputs = [];
+    for(let step of instSteps){
+      requiredInputs.push({input: step.rep, disallowEmptyInput: true})
+      requiredInputs.push({input: step.stitch, disallowEmptyInput: true})
+      requiredInputs.push({input: step.stitchAbbr, disallowEmptyInput: true})
+    }
 
     let modalHeader = "";
     let hideDelete = false;
@@ -74,7 +85,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
 
     // adds a new step to the instruction creator
     const addNewStep = () => {
-        setInstSteps([...instSteps, {rep: "", stitch: "", stitchAbbr: ""}])
+        setInstSteps([...instSteps, { id: uuidv4(), rep: "", stitch: "", stitchAbbr: "" }]);
     };
 
     // removes a given step on the instruction creator
@@ -85,9 +96,9 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
 
     // clears text boxes and calls close callback function
     const onCloseInstructionModal = () => {
-        setInstSteps([{rep: "", stitch: "", stitchAbbr: ""}]);
+        setInstSteps([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
         setInstPreview("");
-        setRepetitionsNum("");
+        setRepetitionsNum(1);
         setColorText("");
         setSpecialInstruction("");
         setSpecialInstHeight(0);
@@ -149,6 +160,8 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
             onDelete={deleteInstruction}
             hideDelete={hideDelete}
             height={'80%'}
+            disableSubmit={requiredInputs.length == 0}
+            requiredInputsForSubmit={requiredInputs}
         >
             <View style={modalStyles.modalSubheaderPreviewInstruction}>
               <Text style={modalStyles.modalSubheaderText}>Preview Instruction:</Text>
@@ -171,7 +184,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                       </View>
                       <View style={modalStyles.instrutionCreationContent}>
                       {instSteps.map((step, index) => (
-                        <View style={modalStyles.instructionInputContainer} key={index}>
+                        <View style={modalStyles.instructionInputContainer} key={step.id}>
                           <View style={modalStyles.modalTextInputInstructionContainer}>
                             <DeleteButton 
                               onPress={() => removeInstStep(index)}
@@ -180,15 +193,21 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <TextInput 
                                 style={modalStyles.modalTextInputInstruction} 
                                 value={step.rep}
-                                onChangeText={(text) => handleNewStepChange(index, 'rep', {rep: text})}
+                                onChangeText={(text) => {
+                                  StringValidator.enforceNumerics(text, (numericText) => {
+                                    handleNewStepChange(index, 'rep', {rep: numericText})
+                                  });
+                                }}
                                 placeholder={"repetitions"} 
                                 placeholderTextColor={"lightgrey"}
                                 inputMode="numeric"
                                 maxLength={4}
+                                returnKeyType='done'
                               />
                           </View>
                           <View style={modalStyles.instructionDropdown}>
                             <DropdownComponent
+                            key={step.id}
                               callback={(item) => handleNewStepChange(index, 'stitch', item)}
                               currentSelection={step}
                             />
@@ -210,11 +229,12 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <TextInput 
                                 style={modalStyles.modalTextInput} 
                                 value={repetitionsNum}
-                                onChangeText={setRepetitionsNum}
+                                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitionsNum)}
                                 placeholder={"ex: 3"} 
                                 placeholderTextColor={"lightgrey"}
                                 keyboardType="numeric"
                                 maxLength={4}
+                                returnKeyType='done'
                             />
                           </View>
                           <View style={modalStyles.modalTextInputContainer}>

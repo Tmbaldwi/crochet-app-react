@@ -2,7 +2,7 @@ import React, {useState, useRef} from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView, Switch } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
-import { colorCalculator } from '../components/Tools/ColorCalculator';
+import { ColorCalculator } from '../components/Tools/ColorCalculator';
 
 // Create Pattern Screen
 // Description:
@@ -13,7 +13,7 @@ function CreatePatternScreen(){
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
   const scrollViewRef = useRef();
-  const gradientArray = colorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
+  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
 
   //called after pattern section modal close function is executed
   const onClosePatternSectionAddModal = () =>{
