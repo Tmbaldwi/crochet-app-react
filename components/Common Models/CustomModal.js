@@ -4,7 +4,7 @@ import { CommonButton } from './CommonButton';
 
 // Custom modal for use in creating instructions
 // Allows for a custom header and body 
-export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, hideDelete, closeText, submitText, children}) => {
+export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, hideDelete, closeText, submitText, requiredInputsForSubmit, disableSubmit, children}) => {
     return (
     <Modal
         visible={isVisible}
@@ -34,7 +34,8 @@ export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, o
                   label={submitText ? submitText: 'SUBMIT'}
                   onPress={onSubmit}
                   isHidden={!onSubmit}
-                  isDisabled={false}
+                  isDisabled={disableSubmit}
+                  requiredInputs={requiredInputsForSubmit}
                 />
               </View>
               <View style={[modalStyles.buttonContainerBottomRow, {display: hideDelete? 'none': 'flex'}]}>

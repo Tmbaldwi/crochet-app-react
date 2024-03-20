@@ -1,3 +1,5 @@
+Dropdown:
 https://www.npmjs.com/package/react-native-element-dropdown
 
+//Keyboard navigation and 'done' options
 https://github.com/ardaogulcan/react-native-keyboard-accessory

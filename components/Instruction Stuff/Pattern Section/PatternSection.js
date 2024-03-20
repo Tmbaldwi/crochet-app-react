@@ -5,7 +5,7 @@ import { InstructionSection } from "../Instruction Section/InstructionSection";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
-import { colorCalculator } from "../../Tools/ColorCalculator";
+import { ColorCalculator } from "../../Tools/ColorCalculator";
 import { CommonButton } from "../../Common Models/CommonButton";
 
 // Pattern section
@@ -23,7 +23,7 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setIsPatternSectionEditModalVisible] = useState(false);
-    const gradientArray = colorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length+1);
+    const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length+1);
 
     //adds instruction sections with inputted range at the end of the list
     const addInstructionSection = (startNum, endNum) => {

@@ -1,6 +1,7 @@
 import React, {useState, useEffect } from "react";
 import { View, StyleSheet, Text, TextInput } from 'react-native';
 import {CustomModal} from "../../Common Models/CustomModal";
+import { StringValidator } from './../../Tools/StringValidator';
 
 // Add/Edit Instruction Section Modal
 //
@@ -17,6 +18,7 @@ import {CustomModal} from "../../Common Models/CustomModal";
 export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentStartNum, currentEndNum}) => {
     const [roundStartNum, setRoundStartNum] = useState("");
     const [roundEndNum, setRoundEndNum] = useState("");
+    let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}, {input: roundEndNum, disallowEmptyInput: true}];
     
     let modalHeader = "";
     let hideDelete = false;
@@ -81,6 +83,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             onSubmit={onSubmitModal}
             onDelete={deleteInstructionSection}
             hideDelete={hideDelete}
+            requiredInputsForSubmit={requiredInputs}
         >
             <View style={instructionSectionModalStyling.modalBody}>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
@@ -88,10 +91,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <TextInput 
                         style={instructionSectionModalStyling.modalTextInput}
                         value={roundStartNum}
-                        onChangeText={setRoundStartNum}
+                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundStartNum)}
                         placeholder={"ex: 3"} 
                         placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
+                        returnKeyType='done'
                     />
                 </View>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
@@ -99,10 +103,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <TextInput 
                         style={instructionSectionModalStyling.modalTextInput}
                         value={roundEndNum}
-                        onChangeText={setRoundEndNum}
+                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundEndNum)}
                         placeholder={"ex: 4"} 
                         placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
+                        returnKeyType='done'
                     />
                 </View>
             </View>
