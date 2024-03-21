@@ -94,7 +94,7 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                             onEditPress={() => setIsPatternSectionEditModalVisible(true)}
                             onInfoPress={() => setIsSpecialInstructionModalVisible(true)}
                             isInfoDisabled={isInfoDisabled}
-                            extraStyle={{borderWidth: 0, width: 60,}}
+                            extraStyle={{borderWidth: 0, width: 60, aspectRatio: 'auto'}}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
