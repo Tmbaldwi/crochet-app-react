@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
-import { CustomModal } from "../../Common Models/CustomModal";
+import { EditOrInfoButton } from "../../Common Models/Buttons/EditOrInfoButton";
+import { CustomModal } from "../../Common Models/Modals/CustomModal";
 import { AddEditInstructionModal } from "./AddEditInstructionModal";
-import { SpecialInstructionModal } from "../../Common Models/SpecialInstructionModal";
+import { SpecialInstructionModal } from "../../Common Models/Modals/SpecialInstructionModal";
 
 // Instruction Row
 //

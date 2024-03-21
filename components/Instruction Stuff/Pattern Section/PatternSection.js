@@ -2,12 +2,12 @@ import React, {useState } from "react";
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionSection } from "../Instruction Section/InstructionSection";
-import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
+import { EditOrInfoButton } from "../../Common Models/Buttons/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
 import { ColorCalculator } from "../../Tools/ColorCalculator";
-import { CommonButton } from "../../Common Models/CommonButton";
-import { SpecialInstructionModal } from "../../Common Models/SpecialInstructionModal";
+import { CommonButton } from "../../Common Models/Buttons/CommonButton";
+import { SpecialInstructionModal } from "../../Common Models/Modals/SpecialInstructionModal";
 
 // Pattern section
 //

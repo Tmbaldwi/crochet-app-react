@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Text, TextInput, ScrollView } from 'react-native';
-import { CustomModal } from '../../Common Models/CustomModal';
+import { CustomModal } from '../../Common Models/Modals/CustomModal';
 import { StringValidator } from '../../Tools/StringValidator';
 
 // Add/Edit Pattern Section Modal

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
-import { CustomModal } from "../../Common Models/CustomModal"
-import { DeleteButton } from "../../Common Models/DeleteButton";
+import { CustomModal } from "../../Common Models/Modals/CustomModal"
+import { DeleteButton } from "../../Common Models/Buttons/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
-import { CommonButton } from "../../Common Models/CommonButton";
+import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 import { StringValidator } from "../../Tools/StringValidator";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';

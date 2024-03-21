@@ -4,8 +4,8 @@ import Collapsible from 'react-native-collapsible';
 import { InstructionRow } from "../Instruction Row/InstructionRow";
 import { AddEditInstructionModal } from "../Instruction Row/AddEditInstructionModal";
 import { AddEditInstructionSectionModal } from "./AddEditInstructionSectionModal";
-import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
-import { CommonButton } from "../../Common Models/CommonButton";
+import { EditOrInfoButton } from "../../Common Models/Buttons/EditOrInfoButton";
+import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 
 // Instruction Section
 //
