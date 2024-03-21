@@ -1,10 +1,10 @@
 import React from 'react';
 import {Modal, View, Text, StyleSheet } from 'react-native';
-import { CommonButton } from './CommonButton';
+import { CommonButton } from '../Buttons/CommonButton';
 
 // Custom modal for use in creating instructions
 // Allows for a custom header and body 
-export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, hideDelete, closeText, submitText, requiredInputsForSubmit, disableSubmit, children}) => {
+export const CustomModal = ({isVisible, headerText, height, maxWidth, onClose, onSubmit, onDelete, hideDelete = true, closeText, submitText, requiredInputsForSubmit, disableSubmit, children}) => {
     return (
     <Modal
         visible={isVisible}

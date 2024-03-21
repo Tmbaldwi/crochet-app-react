@@ -2,11 +2,12 @@ import React, {useState } from "react";
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { InstructionSection } from "../Instruction Section/InstructionSection";
-import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
+import { EditOrInfoButton } from "../../Common Models/Buttons/EditOrInfoButton";
 import { AddEditPatternSectionModal } from "./AddEditPatternSectionModal";
 import { AddEditInstructionSectionModal } from "../Instruction Section/AddEditInstructionSectionModal";
 import { ColorCalculator } from "../../Tools/ColorCalculator";
-import { CommonButton } from "../../Common Models/CommonButton";
+import { CommonButton } from "../../Common Models/Buttons/CommonButton";
+import { SpecialInstructionModal } from "../../Common Models/Modals/SpecialInstructionModal";
 
 // Pattern section
 //
@@ -18,12 +19,18 @@ import { CommonButton } from "../../Common Models/CommonButton";
 //
 // Usage:
 // Must be passed its title, and a function to delete itself from the list
-export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, backgroundColorInfo}) => {
+export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, deleteFunc, backgroundColorInfo}) => {
     const [instructionSections, setInstructionSections] = useState([]);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isInstructionSectionModalVisible, setIsInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setIsPatternSectionEditModalVisible] = useState(false);
+    const [isSpecialInstructionModalVisible, setIsSpecialInstructionModalVisible] = useState(false);
     const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length+1);
+    const isInfoDisabled = patternSectionInfo.specialInstruction.trim().length == 0;
+
+    if(isInfoDisabled){
+        patternSectionInfo.specialInstructions = "";
+    }
 
     //adds instruction sections with inputted range at the end of the list
     const addInstructionSection = (startNum, endNum) => {
@@ -69,6 +76,11 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
         setIsPatternSectionEditModalVisible(false);
     }
 
+    // Called after special instruction modal closing tasks are performed
+    const onCloseSpecialInstructionModal = () =>{
+        setIsSpecialInstructionModalVisible(false);
+    }
+
     return(
         <View style={patternSectionStyling.container}>
             <View style={patternSectionStyling.sectionContent}>
@@ -80,11 +92,13 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                         <EditOrInfoButton 
                             isViewMode={isViewMode}
                             onEditPress={() => setIsPatternSectionEditModalVisible(true)}
-                            extraStyle={{borderWidth: 0}}
+                            onInfoPress={() => setIsSpecialInstructionModalVisible(true)}
+                            isInfoDisabled={isInfoDisabled}
+                            extraStyle={{borderWidth: 0, width: 60, aspectRatio: 'auto'}}
                         />
                         <Pressable onPress={toggleSection} style={patternSectionStyling.headerTextAndToggleContainer}>
                             <View style={patternSectionStyling.headerTextContainer}>
-                                <Text style={patternSectionStyling.headerText}>{sectionTitle}</Text>
+                                <Text style={patternSectionStyling.headerText}>{patternSectionInfo.sectionTitle}</Text>
                             </View>
                             <View style={patternSectionStyling.toggleIconContainer}>
                                 <Text>{isCollapsed ? '^' : '-'}</Text>
@@ -110,15 +124,19 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                             </View>
                         ))}
                     </View>
-                    <View style={[patternSectionStyling.addInstructionSectionButtonContainer, 
+                    <View style={[patternSectionStyling.lowerPatternSectionContainer, 
                                     {
                                         borderTopWidth: instructionSections.length == 0 ? 0: 2,
                                         backgroundColor: backgroundColorInfo?.colorStart
                                     }
                                 ]}
                     >
-                        <View style={{flex: 1}}/>
-                        <View style={{flex: 3}}>
+                        <View style={patternSectionStyling.repetitionContainer}>
+                                <Text style={patternSectionStyling.repetitionText}>
+                                    {"x" + patternSectionInfo.repetitions}
+                                </Text>
+                        </View>
+                        <View style={patternSectionStyling.addInstructionSectionButtonContainer}>
                             {!isViewMode && 
                                 <CommonButton
                                     label={"ADD INSTRUCTION SECTION"}
@@ -137,7 +155,7 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                 isModalVisible={isPatternSectionEditModalVisible}
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
-                currentSectionTitle={sectionTitle}
+                currentInfo={patternSectionInfo}
             />
 
             <AddEditInstructionSectionModal
@@ -145,6 +163,12 @@ export const PatternSection = ({isViewMode, sectionTitle, editFunc, deleteFunc, 
                 onCloseModal={onCloseInstructionSectionAddModal}
                 isModalVisible={isInstructionSectionModalVisible}
                 addFunc={addInstructionSection}
+            />
+
+            <SpecialInstructionModal
+                isVisible={isSpecialInstructionModalVisible}
+                onClose={onCloseSpecialInstructionModal}
+                specialInstruction={patternSectionInfo.specialInstruction}
             />
         </View>
     );
@@ -160,7 +184,7 @@ const patternSectionStyling = StyleSheet.create({
         borderWidth: 2,
     },
     header: {
-        height: 60,
+        minHeight: 60,
         backgroundColor: 'darkorange',
         flexDirection: 'row',
         alignItems: 'center',
@@ -179,6 +203,7 @@ const patternSectionStyling = StyleSheet.create({
         alignSelf: 'stretch',
         borderLeftWidth: 2,
         borderRightWidth: 2,
+        padding: 10,
     },
     headerText: {
         fontWeight: 'bold',
@@ -193,10 +218,23 @@ const patternSectionStyling = StyleSheet.create({
     patternSectionContent: {
         gap: 15,
     },
-    addInstructionSectionButtonContainer: {
+    lowerPatternSectionContainer: {
         flexDirection: 'row',
         height: 55,
-        padding: 5,
         backgroundColor: 'darkorange',
+    },
+    addInstructionSectionButtonContainer: {
+        flex: 3,
+        padding: 5,
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
+    },
+    repetitionContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    repetitionText: {
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });
