@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { CustomModal } from '../../Common Models/CustomModal'
+import { View, StyleSheet, Text, TextInput, ScrollView } from 'react-native';
+import { CustomModal } from '../../Common Models/CustomModal';
+import { StringValidator } from '../../Tools/StringValidator';
 
 // Add/Edit Pattern Section Modal
 //
@@ -14,9 +15,12 @@ import { CustomModal } from '../../Common Models/CustomModal'
 // Add mode: must pass an add function to add a new pattern section
 // Edit mode: must pass an edit function to edit the pattern section, a delete function to delete the pattern section,
 //  and the current section title
-export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentSectionTitle}) => {
+export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
     const [patternSectionName, setPatternSectionName] = useState("");
-    let requiredInputs = [{input: patternSectionName, disallowEmptyInput: true}];
+    const [repetitions, setRepetitions] = useState("1");
+    const [specialInstruction, setSpecialInstruction] = useState("");
+    const [specialInstHeight, setSpecialInstHeight] = useState(0);
+    let requiredInputs = [{input: patternSectionName, disallowEmptyInput: true}, {input: repetitions, disallowEmptyInput: true}];
 
     let modalHeader = "";
     let hideDelete = false;
@@ -36,7 +40,9 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     // When the modal is opened, if it is in edit mode then load the current section title
     useEffect(() => {
       if (modalMode === "edit") {
-          setPatternSectionName(currentSectionTitle);
+          setPatternSectionName(currentInfo.sectionTitle);
+          setRepetitions(currentInfo.repetitions);
+          setSpecialInstruction(currentInfo.specialInstruction);
       }
 
     }, [isModalVisible === true]);
@@ -47,10 +53,10 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc(patternSectionName);
+            addFunc(patternSectionName, repetitions, specialInstruction);
             break;
           case "edit":
-            editFunc(patternSectionName);
+            editFunc(patternSectionName, repetitions, specialInstruction);
             break;
         }
     
@@ -67,6 +73,9 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     // close function called after submit/delete/close
     const onClosePatternSectionModal = () =>{
         setPatternSectionName("");
+        setRepetitions("1");
+        setSpecialInstruction("");
+        setSpecialInstHeight(0);
 
         onCloseModal();
     };
@@ -82,28 +91,97 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
             closeText={"CANCEL"}
             requiredInputsForSubmit={requiredInputs}
         >
-        <View style={patternSectionModalStyling.textInputContainer}>
-          <Text>Section Name: </Text>
-          <TextInput 
-            style={patternSectionModalStyling.textInput}
-            value={patternSectionName}
-            onChangeText={setPatternSectionName}
-            placeholder={"ex: Head"} 
-            placeholderTextColor={"lightgrey"}
-            returnKeyType='done'
-          />
-        </View>
+        <ScrollView contentContainerStyle={patternSectionModalStyling.modalBody}>
+          <View style={patternSectionModalStyling.inputContainerUpper}>
+            <View style={patternSectionModalStyling.sectionNameTextInputContainer}>
+              <Text style={patternSectionModalStyling.textInputText}>
+                Section Name:
+              </Text>
+              <TextInput 
+                style={patternSectionModalStyling.textInput}
+                value={patternSectionName}
+                onChangeText={setPatternSectionName}
+                placeholder={"ex: Head"} 
+                placeholderTextColor={"lightgrey"}
+                returnKeyType='done'
+              />
+            </View>
+            <View style={patternSectionModalStyling.repetitionsTextInputContainer}>
+              <Text style={patternSectionModalStyling.textInputText}>
+                Repetitions:
+              </Text>
+              <TextInput 
+                style={patternSectionModalStyling.textInputRepetitions}
+                value={repetitions}
+                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitions)}
+                placeholder={"ex: 3"} 
+                placeholderTextColor={"lightgrey"}
+                keyboardType='numeric'
+                maxLength={4}
+                returnKeyType='done'
+              />
+            </View>
+          </View>
+          <View style={patternSectionModalStyling.modalSpecialInstructionTextInputContainer}>
+            <Text style={patternSectionModalStyling.textInputText}>Special Instructions: </Text>
+              <TextInput 
+                style={[patternSectionModalStyling.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+                value={specialInstruction}
+                onChangeText={setSpecialInstruction}
+                placeholder={"..."} 
+                placeholderTextColor={"lightgrey"}
+                multiline={true}
+                onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
+                scrollEnabled={false}
+              />
+            </View>
+        </ScrollView>
       </CustomModal>
     )
 }
 
 const patternSectionModalStyling = StyleSheet.create({
-    textInputContainer:{
-      flexDirection: "row",
+    modalBody: {
+      gap: 10,
+    },
+    inputContainerUpper: {
+      flexDirection: 'row',
+      gap: 5,
+    },
+    sectionNameTextInputContainer:{
+      flex: 2,
       justifyContent: 'center',
       gap: 5,
     },
-    textInput:{
+    repetitionsTextInputContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      gap: 5,
+    },
+    textInputText: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    textInput: {
+      alignSelf: 'stretch',
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
+      minHeight: 30,
+    },
+    textInputRepetitions: {
+      borderWidth: 1,
+      borderRadius: 2,
+      textAlign: 'center',
+      minHeight: 30,
+      alignSelf: 'stretch',
+    },
+    modalSpecialInstructionTextInputContainer:{
+      alignItems: 'center',
+      gap: 5,
+    },
+    modalSpecialInstructionTextInput:{
+      alignSelf: 'stretch',
       borderWidth: 1,
       borderRadius: 2,
       textAlign: 'center',

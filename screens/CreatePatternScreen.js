@@ -21,17 +21,17 @@ function CreatePatternScreen(){
   }
 
   // adds new pattern sections to the array
-  const addPatternSection = (sectionTitle) => {
-    let newSec = {sectionTitle: sectionTitle};
+  const addPatternSection = (sectionTitle, reps, specialInst) => {
+    let newSec = {sectionTitle: sectionTitle, repetitions: reps, specialInstruction: specialInst};
     setPatternSections(prevSections => [...prevSections, newSec]);
   };
 
   // edits a pattern section at the given index with a new title
   // passed to every pattern section with its index inputted
-  const editPatternSection = (newSectionTitle, index) => {
+  const editPatternSection = (newSectionTitle, newReps, specialInst, index) => {
     let newSections = patternSections.map((section, idx) => {
       if (idx === index) {
-        return { ...section, sectionTitle: newSectionTitle };
+        return { ...section, sectionTitle: newSectionTitle, repetitions: newReps, specialInstruction: specialInst};
       }
 
       return section;
@@ -58,8 +58,8 @@ function CreatePatternScreen(){
                               <View key={index}>
                                   <PatternSection
                                     isViewMode={!isNotViewMode}
-                                    sectionTitle={sec.sectionTitle}
-                                    editFunc={(newSectionTitle) => editPatternSection(newSectionTitle, index)}
+                                    patternSectionInfo={sec}
+                                    editFunc={(newSectionTitle, newReps, newSpecialInst) => editPatternSection(newSectionTitle, newReps, newSpecialInst, index)}
                                     deleteFunc={() => deletePatternSection(index)}
                                     backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index+1]}}
                                   />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { CustomModal } from "../../Common Models/CustomModal"
 import { DeleteButton } from "../../Common Models/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 // Usage:
 // Must pass a close callback function, the modal's visibility variable, and the array where instructions will be added to
 export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
-    const [repetitionsNum, setRepetitionsNum] = useState(1);
+    const [repetitionsNum, setRepetitionsNum] = useState("1");
     const [colorText, setColorText] = useState("");
     const [instSteps, setInstSteps] = useState([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
@@ -98,7 +98,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const onCloseInstructionModal = () => {
         setInstSteps([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
         setInstPreview("");
-        setRepetitionsNum(1);
+        setRepetitionsNum("1");
         setColorText("");
         setSpecialInstruction("");
         setSpecialInstHeight(0);
@@ -200,7 +200,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                                 }}
                                 placeholder={"repetitions"} 
                                 placeholderTextColor={"lightgrey"}
-                                inputMode="numeric"
+                                keyboardType="numeric"
                                 maxLength={4}
                                 returnKeyType='done'
                               />

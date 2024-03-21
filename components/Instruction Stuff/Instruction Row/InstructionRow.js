@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { EditOrInfoButton } from "../../Common Models/EditOrInfoButton";
 import { CustomModal } from "../../Common Models/CustomModal";
 import { AddEditInstructionModal } from "./AddEditInstructionModal";
+import { SpecialInstructionModal } from "../../Common Models/SpecialInstructionModal";
 
 // Instruction Row
 //
@@ -69,17 +70,11 @@ export const InstructionRow = ({ isViewMode, instructionInfo, editFunc, deleteFu
         currentInfo={instructionInfo}
       />
 
-      <CustomModal
+      <SpecialInstructionModal
         isVisible={isSpecialInstructionModalVisible}
-        headerText={"Special Instructions:"}
         onClose={onCloseSpecialInstructionModal}
-      >
-        <ScrollView>
-          <Text style={rowStyles.modalText}>
-              {instructionInfo.specialInstruction}
-          </Text>
-        </ScrollView>
-      </CustomModal>
+        specialInstruction={instructionInfo.specialInstruction}
+      />
     </View>
   );
 };
