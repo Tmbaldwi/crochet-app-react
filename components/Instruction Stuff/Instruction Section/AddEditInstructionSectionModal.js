@@ -1,7 +1,8 @@
 import React, {useState, useEffect } from "react";
-import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
 import { StringValidator } from './../../Tools/StringValidator';
+import { CommonTextInput } from "../../Common Models/CommonTextInput";
 
 // Add/Edit Instruction Section Modal
 //
@@ -88,26 +89,20 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             <View style={instructionSectionModalStyling.modalBody}>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
                     <Text>Round Start: </Text>
-                    <TextInput 
-                        style={instructionSectionModalStyling.modalTextInput}
+                    <CommonTextInput 
                         value={roundStartNum}
                         onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundStartNum)}
                         placeholder={"ex: 3"} 
-                        placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
-                        returnKeyType='done'
                     />
                 </View>
                 <View style={instructionSectionModalStyling.modalTextInputContainer}>
                     <Text>Round End: </Text>
-                    <TextInput 
-                        style={instructionSectionModalStyling.modalTextInput}
+                    <CommonTextInput 
                         value={roundEndNum}
                         onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundEndNum)}
                         placeholder={"ex: 4"} 
-                        placeholderTextColor={"lightgrey"}
                         keyboardType="numeric"
-                        returnKeyType='done'
                     />
                 </View>
             </View>
@@ -123,10 +118,5 @@ const instructionSectionModalStyling = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'center',
         gap: 5,
-      },
-      modalTextInput:{
-        borderWidth: 1,
-        borderRadius: 2,
-        textAlign: 'center',
       },
 });
