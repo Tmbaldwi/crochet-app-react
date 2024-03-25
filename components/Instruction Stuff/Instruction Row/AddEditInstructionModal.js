@@ -5,6 +5,7 @@ import { DeleteButton } from "../../Common Models/Buttons/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
 import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 import { StringValidator } from "../../Tools/StringValidator";
+import { CommonTextInput } from "../../Common Models/CommonTextInput";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -190,19 +191,13 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                               onPress={() => removeInstStep(index)}
                               extraStyle={{minHeight: 30, minWidth: 30}}
                               />
-                            <TextInput 
-                                style={modalStyles.modalTextInputInstruction} 
+                            <CommonTextInput 
+                                extraStyle={modalStyles.stepRepetitionTextInput} 
                                 value={step.rep}
-                                onChangeText={(text) => {
-                                  StringValidator.enforceNumerics(text, (numericText) => {
-                                    handleNewStepChange(index, 'rep', {rep: numericText})
-                                  });
-                                }}
+                                onChangeText={(text) => {handleNewStepChange(index, 'rep', {rep: text})}}
                                 placeholder={"repetitions"} 
-                                placeholderTextColor={"lightgrey"}
                                 keyboardType="numeric"
                                 maxLength={4}
-                                returnKeyType='done'
                               />
                           </View>
                           <View style={modalStyles.instructionDropdown}>
@@ -226,37 +221,31 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                       <View style={modalStyles.modalExtraInputsTopRow}>
                           <View style={modalStyles.modalTextInputContainer}>
                             <Text style={modalStyles.modalSubheaderText}>Repetitions: </Text>
-                            <TextInput 
-                                style={modalStyles.modalTextInput} 
+                            <CommonTextInput 
                                 value={repetitionsNum}
-                                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitionsNum)}
+                                onChangeText={setRepetitionsNum}
                                 placeholder={"ex: 3"} 
-                                placeholderTextColor={"lightgrey"}
                                 keyboardType="numeric"
                                 maxLength={4}
-                                returnKeyType='done'
                             />
                           </View>
                           <View style={modalStyles.modalTextInputContainer}>
                             <Text style={modalStyles.modalSubheaderText}>Yarn Color: </Text>
-                            <TextInput 
-                                style={modalStyles.modalTextInput}
+                            <CommonTextInput 
                                 value={colorText}
                                 onChangeText={setColorText}
                                 placeholder={"ex: blue"} 
-                                placeholderTextColor={"lightgrey"}
                                 maxLength={100}
                             />
                           </View>
                       </View>
                       <View style={modalStyles.modalSpecialInstructionTextInputContainer}>
                           <Text style={modalStyles.modalSubheaderText}>Special Instructions: </Text>
-                          <TextInput 
-                              style={[modalStyles.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+                          <CommonTextInput 
+                              extraStyle={{minHeight: Math.max(60, specialInstHeight)}}
                               value={specialInstruction}
                               onChangeText={setSpecialInstruction}
                               placeholder={"..."} 
-                              placeholderTextColor={"lightgrey"}
                               multiline={true}
                               onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
                               scrollEnabled={false}
@@ -317,12 +306,8 @@ const modalStyles = StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
       },
-      modalTextInputInstruction:{
+      stepRepetitionTextInput:{
         flex: 1,
-        borderWidth: 1,
-        borderRadius: 2,
-        textAlign: 'center',
-        minHeight: 30,
         width: '100%',
       },
       instructionDropdown: {
@@ -351,21 +336,8 @@ const modalStyles = StyleSheet.create({
         alignItems: 'center',
         gap: 5,
       },
-      modalTextInput:{
-        alignSelf: 'stretch',
-        borderWidth: 1,
-        borderRadius: 2,
-        textAlign: 'center',
-        minHeight: 30,
-      },
       modalSpecialInstructionTextInputContainer:{
         alignItems: 'center',
         gap: 5,
-      },
-      modalSpecialInstructionTextInput:{
-        alignSelf: 'stretch',
-        borderWidth: 1,
-        borderRadius: 2,
-        textAlign: 'center',
       },
   });

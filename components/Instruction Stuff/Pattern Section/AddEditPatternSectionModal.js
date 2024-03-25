@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Text, TextInput, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { CustomModal } from '../../Common Models/Modals/CustomModal';
 import { StringValidator } from '../../Tools/StringValidator';
+import { CommonTextInput } from '../../Common Models/CommonTextInput';
 
 // Add/Edit Pattern Section Modal
 //
@@ -94,42 +95,36 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
         <ScrollView contentContainerStyle={patternSectionModalStyling.modalBody}>
           <View style={patternSectionModalStyling.inputContainerUpper}>
             <View style={patternSectionModalStyling.sectionNameTextInputContainer}>
-              <Text style={patternSectionModalStyling.textInputText}>
+              <Text style={patternSectionModalStyling.inputSubheader}>
                 Section Name:
               </Text>
-              <TextInput 
-                style={patternSectionModalStyling.textInput}
+              <CommonTextInput 
                 value={patternSectionName}
                 onChangeText={setPatternSectionName}
                 placeholder={"ex: Head"} 
-                placeholderTextColor={"lightgrey"}
-                returnKeyType='done'
               />
             </View>
             <View style={patternSectionModalStyling.repetitionsTextInputContainer}>
-              <Text style={patternSectionModalStyling.textInputText}>
+              <Text style={patternSectionModalStyling.inputSubheader}>
                 Repetitions:
               </Text>
-              <TextInput 
+              <CommonTextInput 
                 style={patternSectionModalStyling.textInputRepetitions}
                 value={repetitions}
-                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitions)}
+                onChangeText={setRepetitions}
                 placeholder={"ex: 3"} 
-                placeholderTextColor={"lightgrey"}
-                keyboardType='numeric'
+                keyboardType="numeric"
                 maxLength={4}
-                returnKeyType='done'
               />
             </View>
           </View>
           <View style={patternSectionModalStyling.modalSpecialInstructionTextInputContainer}>
-            <Text style={patternSectionModalStyling.textInputText}>Special Instructions: </Text>
-              <TextInput 
-                style={[patternSectionModalStyling.modalSpecialInstructionTextInput, {minHeight: Math.max(60, specialInstHeight)}]}
+            <Text style={patternSectionModalStyling.inputSubheader}>Special Instructions: </Text>
+              <CommonTextInput 
+                extraStyle={{minHeight: Math.max(60, specialInstHeight)}}
                 value={specialInstruction}
                 onChangeText={setSpecialInstruction}
                 placeholder={"..."} 
-                placeholderTextColor={"lightgrey"}
                 multiline={true}
                 onContentSizeChange={(event) => setSpecialInstHeight(event.nativeEvent.contentSize.height)}
                 scrollEnabled={false}
@@ -158,32 +153,12 @@ const patternSectionModalStyling = StyleSheet.create({
       justifyContent: 'center',
       gap: 5,
     },
-    textInputText: {
+    inputSubheader: {
       textAlign: 'center',
       fontWeight: 'bold',
-    },
-    textInput: {
-      alignSelf: 'stretch',
-      borderWidth: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      minHeight: 30,
-    },
-    textInputRepetitions: {
-      borderWidth: 1,
-      borderRadius: 2,
-      textAlign: 'center',
-      minHeight: 30,
-      alignSelf: 'stretch',
     },
     modalSpecialInstructionTextInputContainer:{
       alignItems: 'center',
       gap: 5,
-    },
-    modalSpecialInstructionTextInput:{
-      alignSelf: 'stretch',
-      borderWidth: 1,
-      borderRadius: 2,
-      textAlign: 'center',
     },
   });
