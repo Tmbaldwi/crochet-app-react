@@ -111,9 +111,9 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
               <CommonTextInput 
                 style={patternSectionModalStyling.textInputRepetitions}
                 value={repetitions}
-                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitions)}
+                onChangeText={setRepetitions}
                 placeholder={"ex: 3"} 
-                keyboardType='numeric'
+                keyboardType="numeric"
                 maxLength={4}
               />
             </View>

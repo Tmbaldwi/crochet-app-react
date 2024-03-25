@@ -91,7 +91,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <Text>Round Start: </Text>
                     <CommonTextInput 
                         value={roundStartNum}
-                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundStartNum)}
+                        onChangeText={setRoundStartNum}
                         placeholder={"ex: 3"} 
                         keyboardType="numeric"
                     />
@@ -100,7 +100,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                     <Text>Round End: </Text>
                     <CommonTextInput 
                         value={roundEndNum}
-                        onChangeText={(num) => StringValidator.enforceNumerics(num, setRoundEndNum)}
+                        onChangeText={setRoundEndNum}
                         placeholder={"ex: 4"} 
                         keyboardType="numeric"
                     />

@@ -194,11 +194,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <CommonTextInput 
                                 extraStyle={modalStyles.stepRepetitionTextInput} 
                                 value={step.rep}
-                                onChangeText={(text) => {
-                                  StringValidator.enforceNumerics(text, (numericText) => {
-                                    handleNewStepChange(index, 'rep', {rep: numericText})
-                                  });
-                                }}
+                                onChangeText={(text) => {handleNewStepChange(index, 'rep', {rep: text})}}
                                 placeholder={"repetitions"} 
                                 keyboardType="numeric"
                                 maxLength={4}
@@ -227,7 +223,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <Text style={modalStyles.modalSubheaderText}>Repetitions: </Text>
                             <CommonTextInput 
                                 value={repetitionsNum}
-                                onChangeText={(num) => StringValidator.enforceNumerics(num, setRepetitionsNum)}
+                                onChangeText={setRepetitionsNum}
                                 placeholder={"ex: 3"} 
                                 keyboardType="numeric"
                                 maxLength={4}
@@ -311,6 +307,7 @@ const modalStyles = StyleSheet.create({
         gap: 5,
       },
       stepRepetitionTextInput:{
+        flex: 1,
         width: '100%',
       },
       instructionDropdown: {
