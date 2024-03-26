@@ -1,7 +1,6 @@
 import React, {useState, useEffect } from "react";
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, CheckBox } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
-import { StringValidator } from './../../Tools/StringValidator';
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
 
 // Add/Edit Instruction Section Modal
@@ -16,10 +15,15 @@ import { CommonTextInput } from "../../Common Models/CommonTextInput";
 // Add mode: must pass an add function to add a new instruction section
 // Edit mode: must pass an edit function to edit the instruction section, a delete function to delete the instruction section,
 //  and the current section range
-export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentStartNum, currentEndNum}) => {
-    const [roundStartNum, setRoundStartNum] = useState("");
+export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentStartNum, currentEndNum, previousRoundNum}) => {
+    const [roundStartNum, setRoundStartNum] = useState(previousRoundNum? previousRoundNum + 1: "");
     const [roundEndNum, setRoundEndNum] = useState("");
-    let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}, {input: roundEndNum, disallowEmptyInput: true}];
+    const [roundEndIsSelected, setRoundEndIsSelected] = useState(false);
+    let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}];
+
+    if(roundEndIsSelected){
+        requiredInputs.push({input: roundEndNum, disallowEmptyInput: true})
+    }
     
     let modalHeader = "";
     let hideDelete = false;
@@ -38,11 +42,20 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     
     // When the modal is opened, if it is in edit mode then load the current range
     useEffect(() => {
-        if (modalMode === "edit") {
-            setRoundStartNum(currentStartNum);
-            setRoundEndNum(currentEndNum);
+        switch(modalMode){
+            case "edit":
+                setRoundStartNum(currentStartNum);
+                setRoundEndNum(currentEndNum);
+                setRoundEndIsSelected(currentEndNum);
+                break;
+            case "add":
+                setRoundStartNum(previousRoundNum? ""+ (parseInt(previousRoundNum) + 1): "1"); //TODO Fix
         }
       }, [isModalVisible === true]);
+
+    useEffect(() => {
+        setRoundEndNum("");
+      }, [roundEndIsSelected]);
 
 
     // Called when submitting the modal
@@ -72,6 +85,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onCloseInstructionSectionModal = () => {
         setRoundStartNum("");
         setRoundEndNum("");
+        setRoundEndIsSelected(false);
 
         onCloseModal();
     };
@@ -87,23 +101,49 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             requiredInputsForSubmit={requiredInputs}
         >
             <View style={instructionSectionModalStyling.modalBody}>
-                <View style={instructionSectionModalStyling.modalTextInputContainer}>
-                    <Text>Round Start: </Text>
-                    <CommonTextInput 
-                        value={roundStartNum}
-                        onChangeText={setRoundStartNum}
-                        placeholder={"ex: 3"} 
-                        keyboardType="numeric"
-                    />
-                </View>
-                <View style={instructionSectionModalStyling.modalTextInputContainer}>
-                    <Text>Round End: </Text>
-                    <CommonTextInput 
-                        value={roundEndNum}
-                        onChangeText={setRoundEndNum}
-                        placeholder={"ex: 4"} 
-                        keyboardType="numeric"
-                    />
+                <View style={instructionSectionModalStyling.rangeSelectionContainer}>
+                    <Text style={[instructionSectionModalStyling.rangeSelectionHeaderText, {fontWeight: 'bold'}]}>
+                        Previous Section End:
+                    </Text>
+                    <Text style={instructionSectionModalStyling.rangeSelectionHeaderText}>
+                        {previousRoundNum? previousRoundNum: "N/A"}
+                    </Text>
+                    <View style={instructionSectionModalStyling.rangeSelectionInputContainer}>
+                        <View style={instructionSectionModalStyling.modalTextInputContainer}>
+                            <Text style={instructionSectionModalStyling.modalTextInputSubheader}>
+                                Start:
+                            </Text>
+                            <CommonTextInput 
+                                value={roundStartNum}
+                                onChangeText={setRoundStartNum}
+                                placeholder={"ex: 3"} 
+                                keyboardType="numeric"
+                                maxLength={4}
+                            />
+                        </View>
+                        <View style={instructionSectionModalStyling.modalTextInputContainer}>
+                            <View style={instructionSectionModalStyling.modalTextInputRoundEndSubheaderContainer}>
+                                <CheckBox
+                                    value={roundEndIsSelected}
+                                    onValueChange={setRoundEndIsSelected}
+                                />
+                                <Text style={[instructionSectionModalStyling.modalTextInputSubheader, 
+                                            roundEndIsSelected? null : instructionSectionModalStyling.modalTextInputSubheaderDisabled,
+                                            ]}
+                                >
+                                    End:
+                                </Text>
+                            </View>
+                            <CommonTextInput 
+                                value={roundEndNum}
+                                onChangeText={setRoundEndNum}
+                                placeholder={"ex: 4"} 
+                                keyboardType="numeric"
+                                maxLength={4}
+                                isDisabled={!roundEndIsSelected}
+                            />
+                        </View>
+                    </View>
                 </View>
             </View>
         </CustomModal>
@@ -114,9 +154,33 @@ const instructionSectionModalStyling = StyleSheet.create({
     modalBody: {
         gap: 5,
     },
-    modalTextInputContainer:{
-        flexDirection: "row",
-        justifyContent: 'center',
+    rangeSelectionContainer: {
+        alignItems: 'center',
         gap: 5,
-      },
+    },
+    rangeSelectionHeaderText: {
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    rangeSelectionInputContainer: {
+        flexDirection: 'row',
+        gap: 5,
+    },
+    modalTextInputContainer:{
+        flex: 1,
+        alignItems: 'center',
+        gap: 5,
+    },
+    modalTextInputSubheader:{
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    modalTextInputSubheaderDisabled:{
+        color: 'grey',
+    },
+    modalTextInputRoundEndSubheaderContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
 });

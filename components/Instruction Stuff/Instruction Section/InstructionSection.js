@@ -17,7 +17,7 @@ import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc, backgroundColor}) => {
+export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFunc, deleteFunc, backgroundColor, preivousRoundNum}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInstructionRowAddModalVisible, setIsInstructionRowModalVisible] = useState(false);
   const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
@@ -79,7 +79,7 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
         />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
-            <Text style={sectionStyles.headerText}>{title + ": " + startNum + "-" + endNum}</Text>
+            <Text style={sectionStyles.headerText}>{title + ": " + startNum + (endNum? "-" + endNum : "")}</Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
             <Text>{isCollapsed ? '^' : '-'}</Text>
@@ -129,6 +129,7 @@ export const InstructionSection = ( {isViewMode, title, startNum, endNum, editFu
         deleteFunc={deleteFunc}
         currentStartNum={startNum}
         currentEndNum={endNum}
+        previousRoundNum={preivousRoundNum}
       />
 
       <AddEditInstructionModal

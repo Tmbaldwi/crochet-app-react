@@ -81,6 +81,16 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
         setIsSpecialInstructionModalVisible(false);
     }
 
+    const getPreviousRoundNum = (idx) =>{
+        if(idx > 0){
+            let prevSec = instructionSections[idx-1];
+            return prevSec.endNum? prevSec.endNum : prevSec.startNum;
+        }
+        else{
+            return null;
+        }
+    }
+
     return(
         <View style={patternSectionStyling.container}>
             <View style={patternSectionStyling.sectionContent}>
@@ -120,6 +130,7 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                                     editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
                                     deleteFunc={() => removeInstructionSection(index)}
                                     backgroundColor={gradientArray[index+1]}
+                                    preivousRoundNum={getPreviousRoundNum(index)}
                                 />
                             </View>
                         ))}
@@ -163,6 +174,7 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                 onCloseModal={onCloseInstructionSectionAddModal}
                 isModalVisible={isInstructionSectionModalVisible}
                 addFunc={addInstructionSection}
+                previousRoundNum={getPreviousRoundNum(instructionSections.length)}
             />
 
             <SpecialInstructionModal

@@ -4,7 +4,6 @@ import { CustomModal } from "../../Common Models/Modals/CustomModal"
 import { DeleteButton } from "../../Common Models/Buttons/DeleteButton";
 import { DropdownComponent } from "../../Common Models/Dropdown"
 import { CommonButton } from "../../Common Models/Buttons/CommonButton";
-import { StringValidator } from "../../Tools/StringValidator";
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
