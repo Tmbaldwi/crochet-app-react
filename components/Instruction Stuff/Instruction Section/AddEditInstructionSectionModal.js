@@ -1,7 +1,9 @@
 import React, {useState, useEffect } from "react";
-import { View, StyleSheet, Text, CheckBox } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
+import { DropdownComponent } from "../../Common Models/Dropdown";
+import { CheckBoxComponent } from "@react-native-community/checkbox";
 
 // Add/Edit Instruction Section Modal
 //
@@ -15,14 +17,17 @@ import { CommonTextInput } from "../../Common Models/CommonTextInput";
 // Add mode: must pass an add function to add a new instruction section
 // Edit mode: must pass an edit function to edit the instruction section, a delete function to delete the instruction section,
 //  and the current section range
-export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentStartNum, currentEndNum, previousRoundNum}) => {
+export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo, previousRoundNum}) => {
     const [roundStartNum, setRoundStartNum] = useState(previousRoundNum? previousRoundNum + 1: "");
     const [roundEndNum, setRoundEndNum] = useState("");
     const [roundEndIsSelected, setRoundEndIsSelected] = useState(false);
+    const [sectionTypeSelection, setSectionTypeSelection] = useState({value: "", label: ""});
+    const [isSectionTypeTextInputDisabled, setIsSectionTypeTextInputDisabled] = useState(true);
     let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}];
 
     if(roundEndIsSelected){
-        requiredInputs.push({input: roundEndNum, disallowEmptyInput: true})
+        let roundIncreasing = parseInt(roundStartNum) < parseInt(roundEndNum);
+        requiredInputs.push({input: roundEndNum, disallowEmptyInput: true, extraReqNotFulfilled: !roundIncreasing})
     }
     
     let modalHeader = "";
@@ -44,9 +49,12 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     useEffect(() => {
         switch(modalMode){
             case "edit":
-                setRoundStartNum(currentStartNum);
-                setRoundEndNum(currentEndNum);
-                setRoundEndIsSelected(currentEndNum);
+                setRoundStartNum(currentInfo.startNum);
+                setRoundEndNum(currentInfo.endNum);
+                setRoundEndIsSelected(currentInfo.endNum);
+                setSectionTypeSelection(currentInfo.sectionTypeSelection)
+                console.log(currentInfo)
+                setIsSectionTypeTextInputDisabled(currentInfo.sectionTypeSelection.value !== "other")
                 break;
             case "add":
                 setRoundStartNum(previousRoundNum? ""+ (parseInt(previousRoundNum) + 1): "1"); //TODO Fix
@@ -64,10 +72,10 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc(roundStartNum, roundEndNum);
+            addFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
             break;
           case "edit":
-            editFunc(roundStartNum, roundEndNum);
+            editFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
             break;
         }
     
@@ -86,8 +94,28 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
         setRoundStartNum("");
         setRoundEndNum("");
         setRoundEndIsSelected(false);
+        setSectionTypeSelection({value: "", label: ""});
+        setIsSectionTypeTextInputDisabled(true);
 
         onCloseModal();
+    };
+
+    // function to handle dropdown selections, notably allows the text input to be used  during "other" selection
+    const handleSectionTypeChange = (item) => {
+        switch(item.value){
+            case "other":
+                setIsSectionTypeTextInputDisabled(false);
+                setSectionTypeSelection({value: item.value, label: ""});
+                break;
+            default:
+                setIsSectionTypeTextInputDisabled(true);
+                setSectionTypeSelection(item);
+                break;
+        }
+    };
+
+    const handleSectionTypeTextInputChange = (newText) => {
+        setSectionTypeSelection({value: sectionTypeSelection.value, label: newText});
     };
 
     return (
@@ -101,6 +129,28 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
             requiredInputsForSubmit={requiredInputs}
         >
             <View style={instructionSectionModalStyling.modalBody}>
+                <View style={instructionSectionModalStyling.instructionSectionTypeSelectionContainer}>
+                    <Text style={instructionSectionModalStyling.instructionSectionTypeSelectionSubheader}>
+                        Select Section Type:
+                    </Text>
+                    <View style={instructionSectionModalStyling.instructionSectionTypeSelectionInputContainer}>
+                        <View style={instructionSectionModalStyling.instructionSectionTypeDropdown}>
+                            <DropdownComponent
+                                callback={handleSectionTypeChange}
+                                dataType={"instructionSectionType"}
+                                currentSelection={currentInfo?.sectionTypeSelection.value}
+                            />
+                        </View>
+                        <View style={instructionSectionModalStyling.instructionSectionOtherTextInput}>
+                            <CommonTextInput
+                                value={sectionTypeSelection.label}
+                                onChangeText={handleSectionTypeTextInputChange}
+                                placeholder={"..."}
+                                isDisabled={isSectionTypeTextInputDisabled}
+                            />
+                        </View>
+                    </View>
+                </View>
                 <View style={instructionSectionModalStyling.rangeSelectionContainer}>
                     <Text style={[instructionSectionModalStyling.rangeSelectionHeaderText, {fontWeight: 'bold'}]}>
                         Previous Section End:
@@ -123,7 +173,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                         </View>
                         <View style={instructionSectionModalStyling.modalTextInputContainer}>
                             <View style={instructionSectionModalStyling.modalTextInputRoundEndSubheaderContainer}>
-                                <CheckBox
+                                <CheckBoxComponent
                                     value={roundEndIsSelected}
                                     onValueChange={setRoundEndIsSelected}
                                 />
@@ -154,9 +204,30 @@ const instructionSectionModalStyling = StyleSheet.create({
     modalBody: {
         gap: 5,
     },
+    instructionSectionTypeSelectionContainer:{
+        gap: 5,
+        paddingBottom: 15,
+        borderBottomWidth: 1,
+    },
+    instructionSectionTypeSelectionSubheader:{
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    instructionSectionTypeSelectionInputContainer: {
+        flexDirection: 'row',
+        gap: 5,
+    },
+    instructionSectionTypeDropdown: {
+        flex: 1,
+    },
+    instructionSectionOtherTextInput: {
+        flex: 1,
+    },
     rangeSelectionContainer: {
         alignItems: 'center',
         gap: 5,
+        paddingTop: 10,
     },
     rangeSelectionHeaderText: {
         textAlign: 'center',

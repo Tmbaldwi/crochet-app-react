@@ -33,17 +33,17 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
     }
 
     //adds instruction sections with inputted range at the end of the list
-    const addInstructionSection = (startNum, endNum) => {
-        const newSec = { title: "Round", startNum: startNum, endNum: endNum}; //Make round or row selection
+    const addInstructionSection = (sectionType, sectionTypeSelection, startNum, endNum) => {
+        const newSec = { title: sectionType, sectionTypeSelection: sectionTypeSelection, startNum: startNum, endNum: endNum}; //Make round or row selection
         setInstructionSections(prevSections => [...prevSections, newSec]);
     };
 
     // edits the instruction section at a given index with the new range
     // given to every instruction section with its index inputted
-    const editInstructionSection = (newStartNum, newEndNum, index) => {
+    const editInstructionSection = (newSectionType, newSectionTypeSelection, newStartNum, newEndNum, index) => {
         let newSections = instructionSections.map((section, idx) => {
           if (idx === index) {
-            return { ...section, startNum: newStartNum, endNum: newEndNum };
+            return { ...section, title: newSectionType, sectionTypeSelection: newSectionTypeSelection, startNum: newStartNum, endNum: newEndNum };
           }
     
           return section;
@@ -124,10 +124,8 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                             <View key={index}>
                                 <InstructionSection
                                     isViewMode={isViewMode}
-                                    title={sec.title}
-                                    startNum = {sec.startNum}
-                                    endNum = {sec.endNum}
-                                    editFunc={(newStartNum, newEndNum) => editInstructionSection(newStartNum, newEndNum, index)}
+                                    sectionInfo={sec}
+                                    editFunc={(...args) => editInstructionSection(...args, index)}
                                     deleteFunc={() => removeInstructionSection(index)}
                                     backgroundColor={gradientArray[index+1]}
                                     preivousRoundNum={getPreviousRoundNum(index)}

@@ -203,7 +203,8 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
                             <DropdownComponent
                             key={step.id}
                               callback={(item) => handleNewStepChange(index, 'stitch', item)}
-                              currentSelection={step}
+                              currentSelection={step.stitch}
+                              dataType={"stitch"}
                             />
                           </View>
                         </View>

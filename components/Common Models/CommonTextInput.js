@@ -34,11 +34,11 @@ export const CommonTextInput = ({value, onChangeText, placeholder, keyboardType,
 
 const textInputStyling = StyleSheet.create({
     textInput: {
-      borderWidth: 2,
-      borderRadius: 4,
-      textAlign: 'center',
-      minHeight: 30,
-      alignSelf: 'stretch',
+        borderWidth: 2,
+        borderRadius: 4,
+        textAlign: 'center',
+        minHeight: 30,
+        alignSelf: 'stretch',
     },
     textInputDisabled: {
         borderColor: 'grey',
