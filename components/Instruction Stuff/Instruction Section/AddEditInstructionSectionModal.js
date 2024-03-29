@@ -1,9 +1,8 @@
 import React, {useState, useEffect } from "react";
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Switch } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
 import { DropdownComponent } from "../../Common Models/Dropdown";
-import { CheckBoxComponent } from "@react-native-community/checkbox";
 
 // Add/Edit Instruction Section Modal
 //
@@ -23,7 +22,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const [roundEndIsSelected, setRoundEndIsSelected] = useState(false);
     const [sectionTypeSelection, setSectionTypeSelection] = useState({value: "", label: ""});
     const [isSectionTypeTextInputDisabled, setIsSectionTypeTextInputDisabled] = useState(true);
-    let requiredInputs = [{input: roundStartNum, disallowEmptyInput: true}];
+    let requiredInputs = [
+                            {input: roundStartNum, disallowEmptyInput: true}, 
+                            {input: sectionTypeSelection.value, disallowEmptyInput: true},
+                            {input: sectionTypeSelection.label, disallowEmptyInput: true},
+    ];
 
     if(roundEndIsSelected){
         let roundIncreasing = parseInt(roundStartNum) < parseInt(roundEndNum);
@@ -173,16 +176,21 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                         </View>
                         <View style={instructionSectionModalStyling.modalTextInputContainer}>
                             <View style={instructionSectionModalStyling.modalTextInputRoundEndSubheaderContainer}>
-                                <CheckBoxComponent
-                                    value={roundEndIsSelected}
-                                    onValueChange={setRoundEndIsSelected}
-                                />
-                                <Text style={[instructionSectionModalStyling.modalTextInputSubheader, 
-                                            roundEndIsSelected? null : instructionSectionModalStyling.modalTextInputSubheaderDisabled,
-                                            ]}
-                                >
-                                    End:
-                                </Text>
+                                <View style={{flex: 1,}}/>
+                                <View style={{flex: 1,}}>
+                                    <Text style={[instructionSectionModalStyling.modalTextInputSubheader, 
+                                                roundEndIsSelected? null : instructionSectionModalStyling.modalTextInputSubheaderDisabled,
+                                                ]}
+                                    >
+                                        End:
+                                    </Text>
+                                </View>
+                                <View style={instructionSectionModalStyling.modalTextInputSwitchContainer}>
+                                    <Switch
+                                        value={roundEndIsSelected}
+                                        onValueChange={setRoundEndIsSelected}
+                                    />
+                                </View>
                             </View>
                             <CommonTextInput 
                                 value={roundEndNum}
@@ -240,7 +248,12 @@ const instructionSectionModalStyling = StyleSheet.create({
     modalTextInputContainer:{
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'flex-end',
         gap: 5,
+    },
+    modalTextInputSwitchContainer: {
+        flex: 1,
+        alignItems: 'center',
     },
     modalTextInputSubheader:{
         textAlign: 'center',
@@ -253,5 +266,6 @@ const instructionSectionModalStyling = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 5,
+        width: '100%',
     },
 });
