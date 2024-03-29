@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-const data = [
+const stitchData = [
     {label: 'ch', value: 'Chain'},
     {label: 'sl st', value: 'Slip Stitch'},
     {label: 'sc', value: 'Single Crochet'},
@@ -38,11 +38,31 @@ const data = [
     {label: 'shell', value: 'Shell stitch'},
     {label: 'cl', value: 'Cluster'}
   ];
+
+const instSecTypeData = [
+  {label: 'Round', value: 'round'},
+  {label: 'Row', value: 'row'},
+  {label: 'Other', value: 'other'}
+]
   
 
-export const DropdownComponent = ({callback, currentSelection}) => {
-  const [value, setValue] = useState(currentSelection.stitch);
+export const DropdownComponent = ({callback, dataType, currentSelection}) => {
+  const [value, setValue] = useState(currentSelection);
   const [isFocus, setIsFocus] = useState(false);
+
+  let placeholder = "";
+  let data = [];
+
+  switch(dataType){
+    case "stitch":
+      placeholder = "Select stitch";
+      data = stitchData;
+      break;
+    case "instructionSectionType":
+      placeholder = "Select Type"
+      data = instSecTypeData;
+      break;
+  }
 
   return (
     <View style={styles.container}>
@@ -56,7 +76,7 @@ export const DropdownComponent = ({callback, currentSelection}) => {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? 'Select stitch' : '...'}
+        placeholder={!isFocus ? placeholder : '...'}
         searchPlaceholder="Search..."
         value={value}
         onFocus={() => setIsFocus(true)}

@@ -4,6 +4,7 @@ import {Text, Pressable, StyleSheet } from 'react-native';
 export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle, textStyle, requiredInputs = []}) => {
     // Sets button to disabled state if required inputs are not filled
     let isMissingInputs = false;
+    let extraConditionsNotFulfilled =  false;
     for(let reqInput of requiredInputs){
         if(reqInput.disallowEmptyInput){
             isMissingInputs = reqInput.input.trim().length == 0;
@@ -12,12 +13,14 @@ export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle
             isMissingInputs = reqInput.input.length == 0;
         }
 
-        if(isMissingInputs){
+        extraConditionsNotFulfilled = reqInput.extraReqNotFulfilled;
+
+        if(isMissingInputs || extraConditionsNotFulfilled){
             break;
         }
     };
 
-    let isDisabledMode = isMissingInputs || isDisabled;
+    let isDisabledMode = isMissingInputs || extraConditionsNotFulfilled || isDisabled;
 
     return(
         <Pressable 

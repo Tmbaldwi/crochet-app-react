@@ -9,5 +9,8 @@ export const StringValidator = {
         if(numericText == '' || (parseInt(numericText, 10) > 0)) {
             return numericText;
         }
+        else{
+            return "";
+        }
     },
 }
