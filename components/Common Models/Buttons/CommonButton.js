@@ -7,7 +7,7 @@ export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle
     let extraConditionsNotFulfilled =  false;
     for(let reqInput of requiredInputs){
         if(reqInput.disallowEmptyInput){
-            isMissingInputs = reqInput.input.trim().length == 0;
+            isMissingInputs = ('' + reqInput.input).trim().length == 0;
         }
         else{
             isMissingInputs = reqInput.input.length == 0;
