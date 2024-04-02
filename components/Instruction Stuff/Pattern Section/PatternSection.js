@@ -128,7 +128,7 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                                     editFunc={(...args) => editInstructionSection(...args, index)}
                                     deleteFunc={() => removeInstructionSection(index)}
                                     backgroundColor={gradientArray[index+1]}
-                                    preivousRoundNum={getPreviousRoundNum(index)}
+                                    previousRoundNum={getPreviousRoundNum(index)}
                                 />
                             </View>
                         ))}
@@ -165,6 +165,7 @@ export const PatternSection = ({isViewMode, patternSectionInfo, editFunc, delete
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
                 currentInfo={patternSectionInfo}
+                previousRoundNum={getPreviousRoundNum(instructionSections.length)}
             />
 
             <AddEditInstructionSectionModal

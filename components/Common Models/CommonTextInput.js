@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import { StringValidator } from '../Tools/StringValidator';
 
-export const CommonTextInput = ({value, onChangeText, placeholder, keyboardType, maxLength, multiline, scrollEnabled, onContentSizeChange, isDisabled, extraStyle}) => {
+export const CommonTextInput = ({value, onChangeText, placeholder, inputType, maxLength, multiline, scrollEnabled, onContentSizeChange, isDisabled, extraStyle}) => {
     const handleOnChangeText = (input, onChangeText) => {
-        switch(keyboardType) {
+        switch(inputType) {
             case "numeric":
                 onChangeText(StringValidator.enforceNumericsLargerThanZero(input));
                 break;
@@ -20,12 +20,12 @@ export const CommonTextInput = ({value, onChangeText, placeholder, keyboardType,
             onChangeText={(input) => handleOnChangeText(input, onChangeText)}
             placeholder={placeholder} 
             placeholderTextColor={"lightgrey"}
-            keyboardType={keyboardType}
+            inputType={inputType}
             maxLength={maxLength}
             multiline={multiline}
             scrollEnabled={scrollEnabled}
             onContentSizeChange={onContentSizeChange}
-            returnKeyType='done'
+            enterKeyHint='done'
             readOnly={isDisabled}
             selectTextOnFocus={!isDisabled}
         />
