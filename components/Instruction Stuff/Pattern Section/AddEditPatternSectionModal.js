@@ -112,7 +112,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
                 value={repetitions}
                 onChangeText={setRepetitions}
                 placeholder={"ex: 3"} 
-                keyboardType="numeric"
+                inputType='numeric'
                 maxLength={4}
               />
             </View>
