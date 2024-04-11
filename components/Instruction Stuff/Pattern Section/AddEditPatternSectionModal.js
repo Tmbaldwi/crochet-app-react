@@ -17,7 +17,7 @@ import { CommonTextInput } from '../../Common Models/CommonTextInput';
 //  and the current section title
 export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
     const [patternSectionName, setPatternSectionName] = useState("");
-    const [repetitions, setRepetitions] = useState(1);
+    const [repetitions, setRepetitions] = useState("1");
     const [specialInstruction, setSpecialInstruction] = useState("");
     const [specialInstHeight, setSpecialInstHeight] = useState(0);
     let requiredInputs = [{input: patternSectionName, disallowEmptyInput: true}, {input: repetitions, disallowEmptyInput: true}];
@@ -73,7 +73,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     // close function called after submit/delete/close
     const onClosePatternSectionModal = () =>{
         setPatternSectionName("");
-        setRepetitions(1);
+        setRepetitions("1");
         setSpecialInstruction("");
         setSpecialInstHeight(0);
 

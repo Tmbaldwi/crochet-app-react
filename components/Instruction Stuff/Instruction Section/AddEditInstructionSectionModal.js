@@ -17,7 +17,7 @@ import { DropdownComponent } from "../../Common Models/Dropdown";
 // Edit mode: must pass an edit function to edit the instruction section, a delete function to delete the instruction section,
 //  and the current section range
 export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo, previousRoundNum}) => {
-    const [roundStartNum, setRoundStartNum] = useState(previousRoundNum? Number(parseInt(previousRoundNum) + 1): 1);
+    const [roundStartNum, setRoundStartNum] = useState("1");
     const [roundEndNum, setRoundEndNum] = useState("");
     const [roundEndIsSelected, setRoundEndIsSelected] = useState(false);
     const [sectionTypeSelection, setSectionTypeSelection] = useState({value: "", label: ""});
@@ -59,7 +59,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                 setIsSectionTypeTextInputDisabled(currentInfo.sectionTypeSelection.value !== "other")
                 break;
             case "add":
-                setRoundStartNum(previousRoundNum? previousRoundNum + 1: 1);
+                setRoundStartNum(previousRoundNum? (parseInt(previousRoundNum) + 1).toString() : "1");
         }
       }, [isModalVisible === true]);
 
@@ -93,7 +93,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
 
     // close function called after submit/delete/close
     const onCloseInstructionSectionModal = () => {
-        setRoundStartNum(1);
+        setRoundStartNum("1");
         setRoundEndNum("");
         setRoundEndIsSelected(false);
         setSectionTypeSelection({value: "", label: ""});
