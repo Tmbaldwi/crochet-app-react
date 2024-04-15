@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen'; 
 import CreatePatternScreen from './screens/CreatePatternScreen';
 import * as SQLite from 'expo-sqlite';
+import { Provider } from 'react-redux';
+import { store } from './redux/store/store';
 
 const Stack = createStackNavigator();
 const DatabaseContext = createContext();
@@ -14,20 +16,22 @@ const db = SQLite.openDatabase('CrochetAppDatabase');
 
 function App() {
   return (
-    <DatabaseContext.Provider value={{db}}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-          />
-          <Stack.Screen
-            name="Create Pattern"
-            component={CreatePatternScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>      
-    </DatabaseContext.Provider>
+    <Provider store={store}>
+      <DatabaseContext.Provider value={{db}}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+            />
+            <Stack.Screen
+              name="Create Pattern"
+              component={CreatePatternScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>      
+      </DatabaseContext.Provider>
+    </Provider>
   );
 }
 

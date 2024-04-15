@@ -53,10 +53,10 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc(patternSectionName, repetitions, specialInstruction);
+            addFunc({sectionTitle: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
             break;
           case "edit":
-            editFunc(patternSectionName, repetitions, specialInstruction);
+            editFunc({sectionTitle: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
             break;
         }
     
