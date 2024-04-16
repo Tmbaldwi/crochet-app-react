@@ -5,7 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import CreatePatternScreen from './screens/CreatePatternScreen';
 import * as SQLite from 'expo-sqlite';
 import { Provider } from 'react-redux';
-import { store } from './redux/store/store';
+import { store } from './redux/store/Store';
 
 const Stack = createStackNavigator();
 const DatabaseContext = createContext();

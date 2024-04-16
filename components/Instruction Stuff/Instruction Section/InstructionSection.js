@@ -76,6 +76,7 @@ export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFu
           isViewMode={isViewMode}
           onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
           extraStyle={{borderWidth: 0,}}
+          isInfoDisabled={true}
         />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>

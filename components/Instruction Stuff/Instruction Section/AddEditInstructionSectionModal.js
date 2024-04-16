@@ -74,10 +74,10 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
+            addFunc({title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
             break;
           case "edit":
-            editFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
+            editFunc({title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
             break;
         }
     

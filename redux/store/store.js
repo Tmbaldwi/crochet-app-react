@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import patternSectionReducer from '../slices/patternSectionSlice'
+import patternSectionReducer from '../slices/PatternSectionSlice';
+import instructionSectionReducer from '../slices/InstructionSectionSlice';
 
 export const store = configureStore({
   reducer: {
-    pattern: patternSectionReducer
+    patternSection: patternSectionReducer,
+    instructionSection: instructionSectionReducer,
   }
 });

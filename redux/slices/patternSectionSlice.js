@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   patternSections: [],
-  isModalVisible: false,
-  isNotViewMode: true
 };
 
 const patternSectionSlice = createSlice({
@@ -20,21 +18,12 @@ const patternSectionSlice = createSlice({
     deletePatternSection: (state, action) => {
       state.patternSections.splice(action.payload, 1);
     },
-    toggleViewMode: (state) => {
-      state.isNotViewMode = !state.isNotViewMode;
-    },
-    setModalVisibility: (state, action) => {
-      state.isModalVisible = action.payload;
-    }
   }
 });
 
 export const {
   addPatternSection,
   editPatternSection,
-  deletePatternSection,
-  toggleViewMode,
-  setModalVisibility
-} = patternSectionSlice.actions;
+  deletePatternSection} = patternSectionSlice.actions;
 
 export default patternSectionSlice.reducer;
