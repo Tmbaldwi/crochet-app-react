@@ -14,6 +14,24 @@ function CreatePatternScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
 
+  const handleSetIsModalVisible = (isVisible) => {
+    setIsModalVisible(isVisible);
+  }
+  const handleToggleIsNotViewMode = () => {
+    setIsNotViewMode(!isNotViewMode);
+  }
+
+  const handleAddPatternSection = (section) => {
+    dispatch(addPatternSection(section));
+  }
+
+  const handleEditPatternSection = (section, index) => {
+    dispatch(editPatternSection({ index, section }));
+  }
+  const handleDeletePatternSection = (index) => {
+    dispatch(deletePatternSection(index));
+  }
+
   return (
     <View style={styles.outerPageContentContainer}>
       <View style={styles.pageContentContainer}>
@@ -23,8 +41,8 @@ function CreatePatternScreen() {
               <PatternSection
                 isViewMode={!isNotViewMode}
                 patternSectionInfo={sec}
-                editFunc={(section) => dispatch(editPatternSection({ index, section }))}
-                deleteFunc={() => dispatch(deletePatternSection(index))}
+                editFunc={(section) => handleEditPatternSection(section, index)}
+                deleteFunc={() => handleDeletePatternSection(index)}
                 backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index + 1]}}
               />
             </View>
@@ -34,14 +52,14 @@ function CreatePatternScreen() {
           <View style={styles.bottomLeftContainer}>
             <View style={styles.editSwitchContainer}>
               <Text style={styles.editSwitchText}>EDIT:</Text>
-              <Switch onValueChange={() => setIsNotViewMode(!isNotViewMode)} value={isNotViewMode} />
+              <Switch onValueChange={handleToggleIsNotViewMode} value={isNotViewMode} />
             </View>
           </View>
           {isNotViewMode && (
             <View style={styles.addSectionButtonContainer}>
               <Pressable 
                 style={styles.addSectionButton} 
-                onPress={() => setIsModalVisible(true)}>
+                onPress={() => handleSetIsModalVisible(true)}>
                 <Text>+</Text>
               </Pressable>
             </View>
@@ -49,9 +67,9 @@ function CreatePatternScreen() {
         </View>
         <AddEditPatternSectionModal
           modalMode="add"
-          onCloseModal={() => setIsModalVisible(false)}
+          onCloseModal={() => handleSetIsModalVisible(false)}
           isModalVisible={isModalVisible}
-          addFunc={(section) => dispatch(addPatternSection(section))}
+          addFunc={handleAddPatternSection}
         />
       </View>
     </View>

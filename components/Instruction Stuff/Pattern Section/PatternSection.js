@@ -22,8 +22,6 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
     const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length + 1);
     const isInfoDisabled = patternSectionInfo.specialInstruction.trim().length === 0;
 
-    const handleToggleIsCollapsed = () => setIsCollapsed(!isCollapsed);
-
     if(isInfoDisabled){
         patternSectionInfo.specialInstructions = "";
     }
@@ -37,6 +35,33 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
             return null;
         }
     }
+    const handleToggleIsCollapsed = () => {
+        setIsCollapsed(!isCollapsed);
+    }
+
+    const handleSetPatternSectionEditModalVisible = (isVisible) => {
+        setPatternSectionEditModalVisible(isVisible);
+    }
+
+    const handleSetInstructionSectionModalVisible = (isVisible) => {
+        setInstructionSectionModalVisible(isVisible);
+    }
+
+    const handleSetSpecialInstructionModalVisible = (isVisible) => {
+        setSpecialInstructionModalVisible(isVisible);
+    }
+
+    const handleEditInstructionSection = (section, index) => {
+        dispatch(editInstructionSection({ index, section }));
+    }
+
+    const handleDeleteInstructionSection = (index) => {
+        dispatch(deleteInstructionSection(index));
+    }
+
+    const handleAddInstructionSection = (section) => {
+        dispatch(addInstructionSection(section));
+    }
 
     return (
         <View style={styles.container}>
@@ -49,8 +74,8 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                 ]}>
                     <EditOrInfoButton 
                         isViewMode={isViewMode}
-                        onEditPress={() => setPatternSectionEditModalVisible(true)}
-                        onInfoPress={() => setSpecialInstructionModalVisible(true)}
+                        onEditPress={() => handleSetPatternSectionEditModalVisible(true)}
+                        onInfoPress={() => handleSetSpecialInstructionModalVisible(true)}
                         isInfoDisabled={isInfoDisabled}
                         extraStyle={{ borderWidth: 0, width: 60, aspectRatio: 'auto' }}
                     />
@@ -73,8 +98,8 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                                 key={index}
                                 isViewMode={isViewMode}
                                 sectionInfo={sec}
-                                editFunc={(section) => dispatch(editInstructionSection({ index, section }))}
-                                deleteFunc={() => dispatch(deleteInstructionSection(index))}
+                                editFunc={(section) => handleEditInstructionSection(section, index)}
+                                deleteFunc={() => handleDeleteInstructionSection(index)}
                                 backgroundColor={gradientArray[index + 1]}
                             />
                         ))}
@@ -94,7 +119,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                             {!isViewMode && 
                                 <CommonButton
                                     label={"ADD INSTRUCTION SECTION"}
-                                    onPress={() => setInstructionSectionModalVisible(true)}
+                                    onPress={() => handleSetInstructionSectionModalVisible(true)}
                                 />
                             }
                         </View>
@@ -105,7 +130,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
 
             <AddEditPatternSectionModal
                 modalMode="edit"
-                onCloseModal={() => setPatternSectionEditModalVisible(false)}
+                onCloseModal={() => handleSetPatternSectionEditModalVisible(false)}
                 isModalVisible={isPatternSectionEditModalVisible}
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
@@ -115,15 +140,15 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
 
             <AddEditInstructionSectionModal
                 modalMode="add"
-                onCloseModal={() => setInstructionSectionModalVisible(false)}
+                onCloseModal={() => handleSetInstructionSectionModalVisible(false)}
                 isModalVisible={isInstructionSectionModalVisible}
                 previousRoundNum={getPreviousRoundNum(instructionSections.length)}
-                addFunc={(section) => dispatch(addInstructionSection(section))}
+                addFunc={handleAddInstructionSection}
             />
 
             <SpecialInstructionModal
                 isVisible={isSpecialInstructionModalVisible}
-                onClose={() => setSpecialInstructionModalVisible(false)}
+                onClose={() => handleSetSpecialInstructionModalVisible(false)}
                 specialInstruction={patternSectionInfo.specialInstruction}
             />
         </View>

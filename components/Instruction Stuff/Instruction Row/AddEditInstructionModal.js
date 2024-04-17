@@ -53,7 +53,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     // When the modal is opened, if it is in edit mode then load the current range
     useEffect(() => {
       if (modalMode === "edit") {
-        setRepetitionsNum(currentInfo.repetition);
+        setRepetitionsNum('' + currentInfo.repetition);
         setColorText(currentInfo.color);
         setSpecialInstruction(currentInfo.specialInstruction)
         setInstSteps(currentInfo.instructionSteps)
@@ -66,10 +66,20 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const onSubmitInstructionModal = () =>{
       switch(modalMode) {
         case "add":
-          addFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          addFunc({
+            instruction: instPreview, 
+            instructionSteps: instSteps, 
+            repetition: repetitionsNum ? Number(repetitionsNum) : 1, 
+            color: colorText, 
+            specialInstruction: specialInstruction});
           break;
         case "edit":
-          editFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          editFunc({
+            instruction: instPreview, 
+            instructionSteps: instSteps, 
+            repetition: repetitionsNum ? Number(repetitionsNum) : 1, 
+            color: colorText, 
+            specialInstruction: specialInstruction});
           break;
       }
   
