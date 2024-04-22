@@ -15,15 +15,15 @@ const initialState = {
     }
 };
 
-const patternSectionSlice = createSlice({
+const patternSlice = createSlice({
     name: 'pattern',
     initialState,
     reducers: {
         addPatternSection: (state, action) => {
-            const { id, sectionTitle, repetitions, specialInstruction } = action.payload;
+            const { id, title, repetitions, specialInstruction } = action.payload;
             state.patternSections.byId[id] = {
                 id: id,
-                title: sectionTitle,
+                title: title,
                 repetitions: repetitions,
                 specialInstruction: specialInstruction,
                 instructionSections: []
@@ -119,6 +119,6 @@ export const {
     addInstruction,
     editInstruction,
     deleteInstruction
-} = patternSectionSlice.actions;
+} = patternSlice.actions;
 
-export default patternSectionSlice.reducer;
+export default patternSlice.reducer;

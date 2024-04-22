@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import { CustomModal } from '../../Common Models/Modals/CustomModal';
 import { CommonTextInput } from '../../Common Models/CommonTextInput';
+import { v4 as uuidv4 } from 'uuid';
 
 // Add/Edit Pattern Section Modal
 //
@@ -40,7 +41,7 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     // When the modal is opened, if it is in edit mode then load the current section title
     useEffect(() => {
       if (modalMode === "edit") {
-          setPatternSectionName(currentInfo.sectionTitle);
+          setPatternSectionName(currentInfo.title);
           setRepetitions(currentInfo.repetitions);
           setSpecialInstruction(currentInfo.specialInstruction);
       }
@@ -53,10 +54,10 @@ export const AddEditPatternSectionModal = ({modalMode, onCloseModal, isModalVisi
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc({sectionTitle: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
+            addFunc({id: uuidv4(), title: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
             break;
           case "edit":
-            editFunc({sectionTitle: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
+            editFunc({title: patternSectionName, repetitions: repetitions, specialInstruction: specialInstruction});
             break;
         }
     

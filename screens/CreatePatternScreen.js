@@ -4,12 +4,12 @@ import { View, Text, Pressable, ScrollView, Switch, StyleSheet } from 'react-nat
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
-import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSectionSlice';
+import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
 
 function CreatePatternScreen() {
-  const patternSections = useSelector(state => state.patternSection.patternSections);
+  const {byId, allIds} = useSelector(state => state.pattern.patternSections);
   const dispatch = useDispatch();
-  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
+  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', allIds.length);
   
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
@@ -25,24 +25,24 @@ function CreatePatternScreen() {
     dispatch(addPatternSection(section));
   }
 
-  const handleEditPatternSection = (section, index) => {
-    dispatch(editPatternSection({ index, section }));
+  const handleEditPatternSection = (id, updates) => {
+    dispatch(editPatternSection({ id, updates }));
   }
-  const handleDeletePatternSection = (index) => {
-    dispatch(deletePatternSection(index));
+  const handleDeletePatternSection = (id) => {
+    dispatch(deletePatternSection(id));
   }
 
   return (
     <View style={styles.outerPageContentContainer}>
       <View style={styles.pageContentContainer}>
         <ScrollView style={styles.contentBody}>
-          {patternSections.map((sec, index) => (
-            <View key={index}>
+          {allIds.map((id, index) => (
+            <View key={id}>
               <PatternSection
                 isViewMode={!isNotViewMode}
-                patternSectionInfo={sec}
-                editFunc={(section) => handleEditPatternSection(section, index)}
-                deleteFunc={() => handleDeletePatternSection(index)}
+                patternSectionInfo={byId[id]}
+                editFunc={(updates) => handleEditPatternSection(id, updates)}
+                deleteFunc={() => handleDeletePatternSection(id)}
                 backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index + 1]}}
               />
             </View>

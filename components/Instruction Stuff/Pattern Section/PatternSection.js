@@ -81,7 +81,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                     />
                     <Pressable onPress={handleToggleIsCollapsed} style={styles.headerTextAndToggleContainer}>
                         <View style={styles.headerTextContainer}>
-                            <Text style={styles.headerText}>{patternSectionInfo.sectionTitle}</Text>
+                            <Text style={styles.headerText}>{patternSectionInfo.title}</Text>
                         </View>
                         <View style={styles.toggleIconContainer}>
                             <Text>{isCollapsed ? '^' : '-'}</Text>
