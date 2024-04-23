@@ -67,6 +67,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
       switch(modalMode) {
         case "add":
           addFunc({
+            id: uuidv4(),
             instruction: instPreview, 
             instructionSteps: instSteps, 
             repetition: repetitionsNum ? Number(repetitionsNum) : 1, 

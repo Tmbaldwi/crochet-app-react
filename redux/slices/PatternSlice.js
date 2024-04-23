@@ -26,7 +26,7 @@ const patternSlice = createSlice({
                 title: title,
                 repetitions: repetitions,
                 specialInstruction: specialInstruction,
-                instructionSections: []
+                instructionSections: [],
             };
             state.patternSectionData.patternSectionIds.push(id);
         },
@@ -48,7 +48,8 @@ const patternSlice = createSlice({
             if (pattern) {
                 const instructionSectionId = instructionSection.id;
                 state.instructionSectionData.instructionSectionSet[instructionSectionId] = {
-                    ...instructionSection
+                    ...instructionSection,
+                    instructions: [],
                 };
                 pattern.instructionSections.push(instructionSectionId);
                 state.instructionSectionData.instructionSectionIds.push(instructionSectionId);
@@ -76,16 +77,8 @@ const patternSlice = createSlice({
             if (section) {
                 const instructionId = instruction.id; 
                 state.instructionData.instructionSet[instructionId] = {
-                    id: instructionId,
-                    text: instruction.instruction,
-                    steps: instruction.instructionSteps,
-                    repetitions: instruction.repetition,
-                    color: instruction.color,
-                    specialInstruction: instruction.specialInstruction
+                    ...instruction
                 };
-                if (!section.instructions) {
-                    section.instructions = [];
-                }
                 section.instructions.push(instructionId);
                 state.instructionData.instructionIds.push(instructionId);
             }

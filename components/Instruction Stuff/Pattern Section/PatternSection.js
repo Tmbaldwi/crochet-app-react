@@ -99,7 +99,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                             <InstructionSection
                                 key={id}
                                 isViewMode={isViewMode}
-                                sectionInfo={instructionSectionSet[id]}
+                                instructionSectionInfo={instructionSectionSet[id]}
                                 editFunc={(updates) => handleEditInstructionSection(id, updates)}
                                 deleteFunc={() => handleDeleteInstructionSection(id)}
                                 backgroundColor={gradientArray[index + 1]}
