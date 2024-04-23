@@ -7,9 +7,9 @@ import { ColorCalculator } from '../components/Tools/ColorCalculator';
 import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
 
 function CreatePatternScreen() {
-  const {byId, allIds} = useSelector(state => state.pattern.patternSections);
+  const {patternSectionSet, patternSectionIds} = useSelector(state => state.pattern.patternSectionData);
   const dispatch = useDispatch();
-  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', allIds.length);
+  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSectionIds.length);
   
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
@@ -25,24 +25,24 @@ function CreatePatternScreen() {
     dispatch(addPatternSection(section));
   }
 
-  const handleEditPatternSection = (id, updates) => {
-    dispatch(editPatternSection({ id, updates }));
+  const handleEditPatternSection = (patternSectionId, updates) => {
+    dispatch(editPatternSection({ patternSectionId, updates }));
   }
-  const handleDeletePatternSection = (id) => {
-    dispatch(deletePatternSection(id));
+  const handleDeletePatternSection = (patternSectionId) => {
+    dispatch(deletePatternSection(patternSectionId));
   }
 
   return (
     <View style={styles.outerPageContentContainer}>
       <View style={styles.pageContentContainer}>
         <ScrollView style={styles.contentBody}>
-          {allIds.map((id, index) => (
-            <View key={id}>
+          {patternSectionIds.map((patternSectionId, index) => (
+            <View key={patternSectionId}>
               <PatternSection
                 isViewMode={!isNotViewMode}
-                patternSectionInfo={byId[id]}
-                editFunc={(updates) => handleEditPatternSection(id, updates)}
-                deleteFunc={() => handleDeletePatternSection(id)}
+                patternSectionInfo={patternSectionSet[patternSectionId]}
+                editFunc={(updates) => handleEditPatternSection(patternSectionId, updates)}
+                deleteFunc={() => handleDeletePatternSection(patternSectionId)}
                 backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index + 1]}}
               />
             </View>

@@ -10,16 +10,16 @@ import { ColorCalculator } from "../../Tools/ColorCalculator";
 import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 import { SpecialInstructionModal } from "../../Common Models/Modals/SpecialInstructionModal";
 import { addInstructionSection, editInstructionSection, deleteInstructionSection } 
-    from "../../../redux/slices/InstructionSectionSlice";
+    from "../../../redux/slices/PatternSlice";
 
 export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, deleteFunc, backgroundColorInfo }) => {
     const dispatch = useDispatch();
-    const instructionSections = useSelector(state => state.instructionSection.instructionSections);
+    const {instructionSectionSet, instructionSectionIds} = useSelector(state => state.pattern.instructionSectionData);
     const [isInstructionSectionModalVisible, setInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setPatternSectionEditModalVisible] = useState(false);
     const [isSpecialInstructionModalVisible, setSpecialInstructionModalVisible] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSections.length + 1);
+    const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSectionIds.length + 1);
     const isInfoDisabled = patternSectionInfo.specialInstruction.trim().length === 0;
 
     if(isInfoDisabled){
@@ -28,7 +28,8 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
 
     const getPreviousRoundNum = (idx) =>{
         if(idx > 0){
-            let prevSec = instructionSections[idx-1];
+            let prevSecId = instructionSectionIds[idx-1];
+            let prevSec = instructionSectionSet[prevSecId];
             return prevSec.endNum? prevSec.endNum : prevSec.startNum;
         }
         else{
@@ -51,16 +52,16 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
         setSpecialInstructionModalVisible(isVisible);
     }
 
-    const handleEditInstructionSection = (section, index) => {
-        dispatch(editInstructionSection({ index, section }));
+    const handleAddInstructionSection = (instructionSection) => {
+        dispatch(addInstructionSection({patternSectionId: patternSectionInfo.id, instructionSection}));
+    }
+
+    const handleEditInstructionSection = (id, updates) => {
+        dispatch(editInstructionSection({ id, updates }));
     }
 
     const handleDeleteInstructionSection = (index) => {
-        dispatch(deleteInstructionSection(index));
-    }
-
-    const handleAddInstructionSection = (section) => {
-        dispatch(addInstructionSection(section));
+        dispatch(deleteInstructionSection(index)); 
     }
 
     return (
@@ -92,21 +93,21 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                     collapsed={isCollapsed}
                     style={{ backgroundColor: backgroundColorInfo?.colorStart + '80' }}
                 >
-                    <View style={[styles.patternSectionContent, { padding: instructionSections.length === 0 ? 0 : 15 }]}>
-                        {instructionSections.map((sec, index) => (
+                    <View style={[styles.patternSectionContent, { padding: instructionSectionIds.length === 0 ? 0 : 15 }]}>
+                        {instructionSectionIds.map((id, index) => (
                             <InstructionSection
-                                key={index}
+                                key={id}
                                 isViewMode={isViewMode}
-                                sectionInfo={sec}
-                                editFunc={(section) => handleEditInstructionSection(section, index)}
-                                deleteFunc={() => handleDeleteInstructionSection(index)}
+                                sectionInfo={instructionSectionSet[id]}
+                                editFunc={(updates) => handleEditInstructionSection(id, updates)}
+                                deleteFunc={() => handleDeleteInstructionSection(id)}
                                 backgroundColor={gradientArray[index + 1]}
                             />
                         ))}
                     </View>
                     <View style={[styles.lowerPatternSectionContainer, 
                         {
-                            borderTopWidth: instructionSections.length === 0 ? 0 : 2,
+                            borderTopWidth: instructionSectionIds.length === 0 ? 0 : 2,
                             backgroundColor: backgroundColorInfo?.colorStart
                         }
                     ]}>
@@ -135,14 +136,13 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
                 currentInfo={patternSectionInfo}
-                previousRoundNum={getPreviousRoundNum(instructionSections.length)}
             />
 
             <AddEditInstructionSectionModal
                 modalMode="add"
                 onCloseModal={() => handleSetInstructionSectionModalVisible(false)}
                 isModalVisible={isInstructionSectionModalVisible}
-                previousRoundNum={getPreviousRoundNum(instructionSections.length)}
+                previousRoundNum={getPreviousRoundNum(instructionSectionIds.length)}
                 addFunc={handleAddInstructionSection}
             />
 

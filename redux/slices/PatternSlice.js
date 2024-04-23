@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    patternSections: {
-        byId: {},
-        allIds: []
+    patternSectionData: {
+        patternSectionSet: {},
+        patternSectionIds: []
     },
-    instructionSections: {
-        byId: {},
-        allIds: []
+    instructionSectionData: {
+        instructionSectionSet: {},
+        instructionSectionIds: []
     },
-    instructions: {
-        byId: {},
-        allIds: []
+    instructionData: {
+        instructionSet: {},
+        instructionIds: []
     }
 };
 
@@ -21,61 +21,61 @@ const patternSlice = createSlice({
     reducers: {
         addPatternSection: (state, action) => {
             const { id, title, repetitions, specialInstruction } = action.payload;
-            state.patternSections.byId[id] = {
+            state.patternSectionData.patternSectionSet[id] = {
                 id: id,
                 title: title,
                 repetitions: repetitions,
                 specialInstruction: specialInstruction,
                 instructionSections: []
             };
-            state.patternSections.allIds.push(id);
+            state.patternSectionData.patternSectionIds.push(id);
         },
         editPatternSection: (state, action) => {
             const { id, updates } = action.payload;
-            const patternSection = state.patternSections.byId[id];
+            const patternSection = state.patternSectionData.patternSectionSet[id];
             if (patternSection) {
                 Object.assign(patternSection, updates);
             }
         },
         deletePatternSection: (state, action) => {
             const deleteId = action.payload;
-            delete state.patternSections.byId[deleteId];
-            state.patternSections.allIds = state.patternSections.allIds.filter(id => id !== deleteId);
+            delete state.patternSectionData.patternSectionSet[deleteId];
+            state.patternSectionData.patternSectionIds = state.patternSectionData.patternSectionIds.filter(id => id !== deleteId);
         },
         addInstructionSection: (state, action) => {
-            const { patternId, instructionSection } = action.payload;
-            const pattern = state.patternSections.byId[patternId];
+            const {patternSectionId, instructionSection } = action.payload;
+            const pattern = state.patternSectionData.patternSectionSet[patternSectionId];
             if (pattern) {
-                const sectionId = instructionSection.id;
-                state.instructionSections.byId[sectionId] = {
+                const instructionSectionId = instructionSection.id;
+                state.instructionSectionData.instructionSectionSet[instructionSectionId] = {
                     ...instructionSection
                 };
-                pattern.instructionSections.push(sectionId);
-                state.instructionSections.allIds.push(sectionId);
+                pattern.instructionSections.push(instructionSectionId);
+                state.instructionSectionData.instructionSectionIds.push(instructionSectionId);
             }
         },
         editInstructionSection: (state, action) => {
-            const { sectionId, updates } = action.payload;
-            const section = state.instructionSections.byId[sectionId];
+            const { instructionSectionId, updates } = action.payload;
+            const section = state.instructionSectionData.instructionSectionSet[instructionSectionId];
             if (section) {
                 Object.assign(section, updates);
             }
         },
         deleteInstructionSection: (state, action) => {
-            const { patternId, sectionId } = action.payload;
-            const pattern = state.patternSections.byId[patternId];
+            const { patternSectionId, instructionSectionId } = action.payload;
+            const pattern = state.patternSectionData.patternSectionSet[patternSectionId];
             if (pattern) {
-                pattern.instructionSections = pattern.instructionSections.filter(id => id !== sectionId);
+                pattern.instructionSections = pattern.instructionSections.filter(id => id !== instructionSectionId);
             }
-            delete state.instructionSections.byId[sectionId];
-            state.instructionSections.allIds = state.instructionSections.allIds.filter(id => id !== sectionId);
+            delete state.instructionSectionData.instructionSectionSet[instructionSectionId];
+            state.instructionSectionData.instructionSectionIds = state.instructionSectionData.instructionSectionIds.filter(id => id !== instructionSectionId);
         },
         addInstruction: (state, action) => {
-            const { sectionId, instruction } = action.payload;
-            const section = state.instructionSections.byId[sectionId];
+            const { instructionSectionId, instruction } = action.payload;
+            const section = state.instructionSectionData.instructionSectionSet[instructionSectionId];
             if (section) {
                 const instructionId = instruction.id; 
-                state.instructions.byId[instructionId] = {
+                state.instructionData.instructionSet[instructionId] = {
                     id: instructionId,
                     text: instruction.instruction,
                     steps: instruction.instructionSteps,
@@ -87,24 +87,24 @@ const patternSlice = createSlice({
                     section.instructions = [];
                 }
                 section.instructions.push(instructionId);
-                state.instructions.allIds.push(instructionId);
+                state.instructionData.instructionIds.push(instructionId);
             }
         },
         editInstruction: (state, action) => {
             const { instructionId, updates } = action.payload;
-            const instruction = state.instructions.byId[instructionId];
+            const instruction = state.instructionData.instructionSet[instructionId];
             if (instruction) {
                 Object.assign(instruction, updates);
             }
         },
         deleteInstruction: (state, action) => {
-            const { sectionId, instructionId } = action.payload;
-            const section = state.instructionSections.byId[sectionId];
+            const { instructionSectionId, instructionId } = action.payload;
+            const section = state.instructionSectionData.instructionSectionSet[instructionSectionId];
             if (section) {
                 section.instructions = section.instructions.filter(id => id !== instructionId);
             }
-            delete state.instructions.byId[instructionId];
-            state.instructions.allIds = state.instructions.allIds.filter(id => id !== instructionId);
+            delete state.instructionData.instructionSet[instructionId];
+            state.instructionData.instructionIds = state.instructionData.instructionIds.filter(id => id !== instructionId);
         },
     }
 });

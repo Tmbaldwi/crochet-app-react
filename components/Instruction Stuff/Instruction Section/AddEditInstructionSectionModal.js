@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Switch } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
 import { DropdownComponent } from "../../Common Models/Dropdown";
+import { v4 as uuidv4 } from 'uuid';
 
 // Add/Edit Instruction Section Modal
 //
@@ -74,7 +75,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc({title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
+            addFunc({id: uuidv4(), title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
             break;
           case "edit":
             editFunc({title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
