@@ -15,11 +15,12 @@ import { addInstructionSection, editInstructionSection, deleteInstructionSection
 export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, deleteFunc, backgroundColorInfo }) => {
     const dispatch = useDispatch();
     const {instructionSectionSet, instructionSectionIds} = useSelector(state => state.pattern.instructionSectionData);
+    const relevantInstructionSectionIds = patternSectionInfo.instructionSections;
     const [isInstructionSectionModalVisible, setInstructionSectionModalVisible] = useState(false);
     const [isPatternSectionEditModalVisible, setPatternSectionEditModalVisible] = useState(false);
     const [isSpecialInstructionModalVisible, setSpecialInstructionModalVisible] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, instructionSectionIds.length + 1);
+    const gradientArray = ColorCalculator.createGradient(backgroundColorInfo.colorStart, backgroundColorInfo.colorEnd, relevantInstructionSectionIds.length + 1);
     const isInfoDisabled = patternSectionInfo.specialInstruction.trim().length === 0;
 
     if(isInfoDisabled){
@@ -28,7 +29,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
 
     const getPreviousRoundNum = (idx) =>{
         if(idx > 0){
-            let prevSecId = instructionSectionIds[idx-1];
+            let prevSecId = relevantInstructionSectionIds[idx-1];
             let prevSec = instructionSectionSet[prevSecId];
             return prevSec.endNum? prevSec.endNum : prevSec.startNum;
         }
@@ -57,11 +58,11 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
     }
 
     const handleEditInstructionSection = (id, updates) => {
-        dispatch(editInstructionSection({ id, updates }));
+        dispatch(editInstructionSection({ instructionSectionId: id, updates }));
     }
 
-    const handleDeleteInstructionSection = (index) => {
-        dispatch(deleteInstructionSection(index)); 
+    const handleDeleteInstructionSection = (id) => {
+        dispatch(deleteInstructionSection({patternSectionId: patternSectionInfo.id, instructionSectionId: id})); 
     }
 
     return (
@@ -93,8 +94,8 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                     collapsed={isCollapsed}
                     style={{ backgroundColor: backgroundColorInfo?.colorStart + '80' }}
                 >
-                    <View style={[styles.patternSectionContent, { padding: instructionSectionIds.length === 0 ? 0 : 15 }]}>
-                        {instructionSectionIds.map((id, index) => (
+                    <View style={[styles.patternSectionContent, { padding: relevantInstructionSectionIds.length === 0 ? 0 : 15 }]}>
+                        {relevantInstructionSectionIds.map((id, index) => (
                             <InstructionSection
                                 key={id}
                                 isViewMode={isViewMode}
@@ -107,7 +108,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                     </View>
                     <View style={[styles.lowerPatternSectionContainer, 
                         {
-                            borderTopWidth: instructionSectionIds.length === 0 ? 0 : 2,
+                            borderTopWidth: relevantInstructionSectionIds.length === 0 ? 0 : 2,
                             backgroundColor: backgroundColorInfo?.colorStart
                         }
                     ]}>
@@ -142,7 +143,7 @@ export const PatternSection = ({ isViewMode, patternSectionInfo, editFunc, delet
                 modalMode="add"
                 onCloseModal={() => handleSetInstructionSectionModalVisible(false)}
                 isModalVisible={isInstructionSectionModalVisible}
-                previousRoundNum={getPreviousRoundNum(instructionSectionIds.length)}
+                previousRoundNum={getPreviousRoundNum(relevantInstructionSectionIds.length)}
                 addFunc={handleAddInstructionSection}
             />
 
