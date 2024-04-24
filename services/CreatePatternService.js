@@ -5,7 +5,9 @@ export const CreatePatternService = ({}) => {
     const { db } = useDatabase();
 
     // will be called when the pattern is saved in create mode
-    const addPatternData = ({}) => {}
+    const addPatternData = () => {
+        alert('hit!')
+    }
 
     // will be called when the pattern is saved in edit mode
     const updatePatternData = ({}) => {}

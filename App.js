@@ -6,6 +6,7 @@ import CreatePatternScreen from './screens/CreatePatternScreen';
 import * as SQLite from 'expo-sqlite';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/Store';
+import { Button } from 'react-native';
 
 const Stack = createStackNavigator();
 const DatabaseContext = createContext();
@@ -27,6 +28,15 @@ function App() {
             <Stack.Screen
               name="Create Pattern"
               component={CreatePatternScreen}
+              options={({ navigation }) => ({
+                title: 'My Home',
+                headerRight: () => (
+                  <Button
+                    onPress={() => alert('This is a button!')}
+                    title="Save   "
+                  />
+                ),
+              })}
             />
           </Stack.Navigator>
         </NavigationContainer>      
