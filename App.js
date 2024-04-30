@@ -1,9 +1,9 @@
-import React, { createContext, useContext} from 'react';
+import React, { createContext, useContext, useRef} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen'; 
 import CreatePatternScreen from './screens/CreatePatternScreen';
-import * as SQLite from 'expo-sqlite';
+import db from './database/Database'
 import { Provider } from 'react-redux';
 import { store } from './redux/store/Store';
 import { Button } from 'react-native';
@@ -13,9 +13,9 @@ const DatabaseContext = createContext();
 
 export const useDatabase = () => useContext(DatabaseContext);
 
-const db = SQLite.openDatabase('CrochetAppDatabase');
-
 function App() {
+  const createPatternRef = useRef();
+
   return (
     <Provider store={store}>
       <DatabaseContext.Provider value={{db}}>
@@ -25,19 +25,17 @@ function App() {
               name="Home"
               component={HomeScreen}
             />
-            <Stack.Screen
-              name="Create Pattern"
-              component={CreatePatternScreen}
-              options={({ navigation }) => ({
-                title: 'My Home',
-                headerRight: () => (
-                  <Button
-                    onPress={() => alert('This is a button!')}
-                    title="Save   "
-                  />
-                ),
-              })}
-            />
+          <Stack.Screen name="Create Pattern" options={{
+            title: 'Create New Pattern',
+            headerRight: () => (
+              <Button
+                onPress={() => {createPatternRef.current?.openSavePatternDataModal()}}
+                title="Save"
+              />
+            ),
+          }}>
+            {props => <CreatePatternScreen ref={createPatternRef} {...props} />}
+          </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>      
       </DatabaseContext.Provider>

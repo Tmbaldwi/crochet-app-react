@@ -1,21 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Pressable, ScrollView, Switch, StyleSheet } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
 import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
+import { CreatePatternService } from '../services/CreatePatternService';
+import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
 
-function CreatePatternScreen() {
-  const {patternSectionSet, patternSectionIds} = useSelector(state => state.pattern.patternSectionData);
+export const CreatePatternScreen = forwardRef((props, ref) => {
+  const patternState = useSelector(state => state.pattern);
+  const patternSectionSet = patternState.patternSectionData.patternSectionSet;
+  const patternSectionIds = patternState.patternSectionData.patternSectionIds;
   const dispatch = useDispatch();
   const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSectionIds.length);
   
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isPatternSectionModalVisible, setIsPatternSectionModalVisible] = useState(false);
+  const [isPatternSaveModalVisible, setIsPatterSaveModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
 
+  const {addPatternData , updatePatternData, getPatternData} = CreatePatternService();
+
+  const openSavePatternDataModal = () => {
+    setIsPatterSaveModalVisible(true);
+  }
+
+  useImperativeHandle(ref, () => ({
+    openSavePatternDataModal,
+  }));
+
+  const savePatternData = (patternName) => {
+    addPatternData({patternName: patternName, patternData: patternState});
+  }
+
   const handleSetIsModalVisible = (isVisible) => {
-    setIsModalVisible(isVisible);
+    setIsPatternSectionModalVisible(isVisible);
   }
   const handleToggleIsNotViewMode = () => {
     setIsNotViewMode(!isNotViewMode);
@@ -65,16 +84,23 @@ function CreatePatternScreen() {
             </View>
           )}
         </View>
+
         <AddEditPatternSectionModal
           modalMode="add"
           onCloseModal={() => handleSetIsModalVisible(false)}
-          isModalVisible={isModalVisible}
+          isModalVisible={isPatternSectionModalVisible}
           addFunc={handleAddPatternSection}
+        />
+
+        <SavePatternModal
+          onCloseModal={() => setIsPatterSaveModalVisible(false)}
+          isModalVisible={isPatternSaveModalVisible}
+          addFunc={savePatternData}
         />
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   outerPageContentContainer: {

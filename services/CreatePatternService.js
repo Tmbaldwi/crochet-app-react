@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import { useDatabase } from '../App';
+import db from '../database/Database';
 
-export const CreatePatternService = ({}) => {
-    const { db } = useDatabase();
-
+export const CreatePatternService = () => {
     // will be called when the pattern is saved in create mode
-    const addPatternData = () => {
-        alert('hit!')
+    const addPatternData = (patternData) => {
+        console.log(patternData)
     }
 
     // will be called when the pattern is saved in edit mode
@@ -14,4 +11,6 @@ export const CreatePatternService = ({}) => {
 
     // will be called to get pattern data when loading
     const getPatternData = ({}) => {}
+
+    return {addPatternData , updatePatternData, getPatternData};
 }
