@@ -2,6 +2,24 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('CrochetAppDatabase');
 
+// for debug purposes
+const deleteTables = () => {
+    db.transaction(tx => {
+        // PatternData table creation
+        tx.executeSql(
+            `DROP TABLE PatternData;
+            DROP TABLE PatternSectionData;
+            DROP TABLE InstructionSectionData;
+            DROP TABLE InstructionData;
+            DROP TABLE InstructionStepData;
+            `,
+            [],
+            () => console.log("Tables dropped"),
+            (_, error) => console.log("Failed to drop tables", error)
+        );
+    });
+}
+
 const initializeDatabase = () => {
     db.transaction(tx => {
         // PatternData table creation
@@ -23,7 +41,7 @@ const initializeDatabase = () => {
                 PatternID INTEGER NOT NULL,
                 PatternSectionName TEXT NOT NULL,
                 Repetitions INTEGER NOT NULL,
-                SpecialInstruction TEXT NOT NULL,
+                SpecialInstruction TEXT,
                 OrderIndex INTEGER NOT NULL,
                 CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );`,
@@ -57,7 +75,7 @@ const initializeDatabase = () => {
                 InstructionSectionID NOT NULL,
                 Repetition INTEGER NOT NULL,
                 YarnColor TEXT NOT NULL,
-                SpecialInstruction TEXT NOT NULL,
+                SpecialInstruction TEXT,
                 OrderIndex INTEGER NOT NULL,
                 CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );`,

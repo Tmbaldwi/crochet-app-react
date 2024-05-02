@@ -5,7 +5,7 @@ import { PatternSection } from '../components/Instruction Stuff/Pattern Section/
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
 import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
-import { CreatePatternService } from '../services/CreatePatternService';
+import { createNewPattern } from '../services/CreatePatternService';
 import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
 
 export const CreatePatternScreen = forwardRef((props, ref) => {
@@ -19,8 +19,6 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
   const [isPatternSaveModalVisible, setIsPatterSaveModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
 
-  const {addPatternData , updatePatternData, getPatternData} = CreatePatternService();
-
   const openSavePatternDataModal = () => {
     setIsPatterSaveModalVisible(true);
   }
@@ -30,7 +28,7 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
   }));
 
   const savePatternData = (patternName) => {
-    addPatternData({patternName: patternName, patternData: patternState});
+    createNewPattern(patternName, patternState);
   }
 
   const handleSetIsModalVisible = (isVisible) => {
