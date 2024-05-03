@@ -56,8 +56,8 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                 setRoundStartNum(currentInfo.startNum);
                 setRoundEndNum(currentInfo.endNum);
                 setRoundEndIsSelected(currentInfo.endNum);
-                setSectionTypeSelection(currentInfo.sectionTypeSelection)
-                setIsSectionTypeTextInputDisabled(currentInfo.sectionTypeSelection.value !== "other")
+                setSectionTypeSelection({label: currentInfo.title, value: currentInfo.value})
+                setIsSectionTypeTextInputDisabled(currentInfo.value !== "other")
                 break;
             case "add":
                 setRoundStartNum(previousRoundNum? (parseInt(previousRoundNum) + 1).toString() : "1");
@@ -75,10 +75,10 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc({id: uuidv4(), title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
+            addFunc({id: uuidv4(), title: sectionTypeSelection.label, value: sectionTypeSelection.value, startNum: roundStartNum, endNum: roundEndNum});
             break;
           case "edit":
-            editFunc({title: sectionTypeSelection.label, sectionTypeSelection: sectionTypeSelection, startNum: roundStartNum, endNum: roundEndNum});
+            editFunc({title: sectionTypeSelection.label, value: sectionTypeSelection.value, startNum: roundStartNum, endNum: roundEndNum});
             break;
         }
     
@@ -141,7 +141,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                             <DropdownComponent
                                 callback={handleSectionTypeChange}
                                 dataType={"instructionSectionType"}
-                                currentSelection={currentInfo?.sectionTypeSelection.value}
+                                currentSelection={currentInfo?.value}
                             />
                         </View>
                         <View style={instructionSectionModalStyling.instructionSectionOtherTextInput}>

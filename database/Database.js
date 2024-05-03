@@ -7,15 +7,34 @@ const deleteTables = () => {
     db.transaction(tx => {
         // PatternData table creation
         tx.executeSql(
-            `DROP TABLE PatternData;
-            DROP TABLE PatternSectionData;
-            DROP TABLE InstructionSectionData;
-            DROP TABLE InstructionData;
-            DROP TABLE InstructionStepData;
-            `,
+            `DROP TABLE PatternData;`,
             [],
-            () => console.log("Tables dropped"),
-            (_, error) => console.log("Failed to drop tables", error)
+            () => console.log("PatternData dropped"),
+            (_, error) => console.log("Failed to drop PatternData", error)
+        );
+        tx.executeSql(
+            `DROP TABLE PatternSectionData;`,
+            [],
+            () => console.log("PatternSectionData dropped"),
+            (_, error) => console.log("Failed to drop PatternSectionData", error)
+        );
+        tx.executeSql(
+            `DROP TABLE InstructionSectionData;`,
+            [],
+            () => console.log("InstructionSectionData dropped"),
+            (_, error) => console.log("Failed to drop InstructionSectionData", error)
+        );
+        tx.executeSql(
+            `DROP TABLE InstructionData;`,
+            [],
+            () => console.log("InstructionData dropped"),
+            (_, error) => console.log("Failed to drop InstructionData", error)
+        );
+        tx.executeSql(
+            `DROP TABLE InstructionStepData;`,
+            [],
+            () => console.log("InstructionStepData dropped"),
+            (_, error) => console.log("Failed to drop InstructionStepData", error)
         );
     });
 }
@@ -38,6 +57,7 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS PatternSectionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                GUID TEXT NOT NULL,
                 PatternID INTEGER NOT NULL,
                 PatternSectionName TEXT NOT NULL,
                 Repetitions INTEGER NOT NULL,
@@ -54,12 +74,12 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionSectionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                PatternSectionID INTEGER NOT NULL,
+                GUID TEXT NOT NULL,
+                PatternSectionGUID INTEGER NOT NULL,
                 InstructionSectionName TEXT NOT NULL,
-                SectionTypeSelectionLabel TEXT NOT NULL,
                 SectionTypeSelectionValue TEXT NOT NULL,
                 StartNum INTEGER NOT NULL,
-                EndNum INTEGER NOT NULL,
+                EndNum INTEGER,
                 OrderIndex INTEGER NOT NULL,
                 CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
             );`,
@@ -72,7 +92,8 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                InstructionSectionID NOT NULL,
+                GUID TEXT NOT NULL,
+                InstructionSectionGUID NOT NULL,
                 Repetition INTEGER NOT NULL,
                 YarnColor TEXT NOT NULL,
                 SpecialInstruction TEXT,
@@ -88,7 +109,8 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionStepData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                InstructionID NOT NULL,
+                GUID TEXT NOT NULL,
+                InstructionGUID NOT NULL,
                 Repetition INTEGER NOT NULL,
                 Stitch TEXT NOT NULL,
                 OrderIndex INTEGER NOT NULL,
@@ -101,6 +123,7 @@ const initializeDatabase = () => {
     });
 };
 
+deleteTables();
 initializeDatabase();
 
 export default db;

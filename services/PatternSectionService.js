@@ -5,14 +5,14 @@ export const addPatternSectionData = (patternId, patternSectionData) => {
         db.transaction(
             tx => {
                 // Start the SQL statement
-                let sql = 'INSERT INTO PatternSectionData (PatternID, PatternSectionName, Repetitions, SpecialInstruction, OrderIndex) VALUES ';
+                let sql = 'INSERT INTO PatternSectionData (GUID, PatternID, PatternSectionName, Repetitions, SpecialInstruction, OrderIndex) VALUES ';
 
                 const sectionSet = patternSectionData.patternSectionSet;
                 const sqlParamSet = [];
 
                 // Build values part of the SQL command
                 patternSectionData.patternSectionIds.forEach((id, index) => {
-                    const sqlParamLine = `(${patternId}, '${sectionSet[id].title}', ${sectionSet[id].repetitions}, '${sectionSet[id].specialInstruction}', ${index})`;
+                    const sqlParamLine = `('${id}', ${patternId}, '${sectionSet[id].title}', ${sectionSet[id].repetitions}, '${sectionSet[id].specialInstruction}', ${index})`;
                     sqlParamSet.push(sqlParamLine);
                 });
 

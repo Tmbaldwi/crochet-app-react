@@ -6,6 +6,7 @@ import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Patt
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
 import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
 import { createNewPattern } from '../services/CreatePatternService';
+import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData } from '../services/ServiceTools';
 import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
 
 export const CreatePatternScreen = forwardRef((props, ref) => {
@@ -21,6 +22,18 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
 
   const openSavePatternDataModal = () => {
     setIsPatterSaveModalVisible(true);
+    // fetchAllPatternData().then(result => {
+    //   console.log("PatternData:")
+    //   console.log(result);
+    // })
+    // fetchAllPatternSectionData().then(result => {
+    //   console.log("PatternSectionData:")
+    //   console.log(result);
+    // })
+    // fetchAllInstructionSectionData().then(result => {
+    //   console.log("InstructionSectionData:")
+    //   console.log(result);
+    // })
   }
 
   useImperativeHandle(ref, () => ({

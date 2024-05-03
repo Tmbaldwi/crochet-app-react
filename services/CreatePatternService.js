@@ -1,5 +1,6 @@
 import db from '../database/Database';
-import {addPatternSectionData} from './PatternSectionService';
+import { addPatternSectionData } from './PatternSectionService';
+import { addInstructionSectionData } from './InstructionSectionService';
 
 export const createNewPattern = async (patternName, patternData) => {
     try {
@@ -7,7 +8,9 @@ export const createNewPattern = async (patternName, patternData) => {
 
         const patternSectionId = await addPatternSectionData(patternId, patternData.patternSectionData);
 
-        return patternSectionId;
+        const instructionSectionId = await addInstructionSectionData(patternData.instructionSectionData);
+
+        return instructionSectionId;
     } catch (error) {
         console.error('Error creating new pattern', error);
         throw error;
@@ -48,39 +51,3 @@ export const updatePatternData = () => { }
 
 // will be called to get pattern data when loading
 export const getPatternData = () => { }
-
-export const fetchAllPatternData = async () => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql(
-                `SELECT * FROM PatternData ORDER BY CreatedAt DESC;`,
-                [],
-                (_, { rows }) => {
-                    resolve(rows._array);
-                },
-                (_, error) => {
-                    console.error("Error fetching PatternData: ", error);
-                    reject(error);
-                }
-            );
-        });
-    });
-};
-
-export const fetchAllPatternSectionData = async () => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql(
-                `SELECT * FROM PatternSectionData ORDER BY OrderIndex ASC;`,
-                [],
-                (_, { rows }) => {
-                    resolve(rows._array);
-                },
-                (_, error) => {
-                    console.error("Error fetching PatternSectionData: ", error);
-                    reject(error);
-                }
-            );
-        });
-    });
-};

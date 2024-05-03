@@ -31,8 +31,8 @@ const patternSlice = createSlice({
             state.patternSectionData.patternSectionIds.push(id);
         },
         editPatternSection: (state, action) => {
-            const { id, updates } = action.payload;
-            const patternSection = state.patternSectionData.patternSectionSet[id];
+            const { patternSectionId, updates } = action.payload;
+            const patternSection = state.patternSectionData.patternSectionSet[patternSectionId];
             if (patternSection) {
                 Object.assign(patternSection, updates);
             }
@@ -48,6 +48,7 @@ const patternSlice = createSlice({
             if (pattern) {
                 const instructionSectionId = instructionSection.id;
                 state.instructionSectionData.instructionSectionSet[instructionSectionId] = {
+                    patternSectionId,
                     ...instructionSection,
                     instructions: [],
                 };
@@ -77,6 +78,7 @@ const patternSlice = createSlice({
             if (section) {
                 const instructionId = instruction.id; 
                 state.instructionData.instructionSet[instructionId] = {
+                    instructionSectionId,
                     ...instruction
                 };
                 section.instructions.push(instructionId);
