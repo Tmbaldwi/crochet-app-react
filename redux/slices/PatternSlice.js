@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { addInstructionSteps, editInstructionSteps, deleteInstructionSteps } from './PatternSliceUtility';
 
 const initialState = {
     patternSectionData: {
@@ -12,6 +13,10 @@ const initialState = {
     instructionData: {
         instructionSet: {},
         instructionIds: []
+    },
+    instructionStepData: {
+        instructionStepSet: {},
+        instructionStepIds: []
     }
 };
 
@@ -79,10 +84,15 @@ const patternSlice = createSlice({
                 const instructionId = instruction.id; 
                 state.instructionData.instructionSet[instructionId] = {
                     instructionSectionId,
-                    ...instruction
+                    id: instruction.id,
+                    repetition: instruction.repetition,
+                    color: instruction.color,
+                    specialInstruction: instruction.specialInstruction,
                 };
                 section.instructions.push(instructionId);
                 state.instructionData.instructionIds.push(instructionId);
+
+                addInstructionSteps(state, instruction.id, instruction.instSteps);
             }
         },
         editInstruction: (state, action) => {
@@ -90,6 +100,8 @@ const patternSlice = createSlice({
             const instruction = state.instructionData.instructionSet[instructionId];
             if (instruction) {
                 Object.assign(instruction, updates);
+                
+                editInstructionSteps(state, instructionId, updates.instSteps);
             }
         },
         deleteInstruction: (state, action) => {
@@ -100,6 +112,8 @@ const patternSlice = createSlice({
             }
             delete state.instructionData.instructionSet[instructionId];
             state.instructionData.instructionIds = state.instructionData.instructionIds.filter(id => id !== instructionId);
+
+            deleteInstructionSteps(state, instructionId);
         },
     }
 });
