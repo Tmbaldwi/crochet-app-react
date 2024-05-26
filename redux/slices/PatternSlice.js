@@ -85,14 +85,16 @@ const patternSlice = createSlice({
                 state.instructionData.instructionSet[instructionId] = {
                     instructionSectionId,
                     id: instruction.id,
+                    instruction: instruction.instruction,
                     repetition: instruction.repetition,
                     color: instruction.color,
                     specialInstruction: instruction.specialInstruction,
+                    instructionSteps: instruction.instructionSteps,
                 };
                 section.instructions.push(instructionId);
                 state.instructionData.instructionIds.push(instructionId);
 
-                addInstructionSteps(state, instruction.id, instruction.instSteps);
+                addInstructionSteps(state, instruction.id, instruction.instructionSteps);
             }
         },
         editInstruction: (state, action) => {

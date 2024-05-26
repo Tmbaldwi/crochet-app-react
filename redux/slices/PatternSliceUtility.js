@@ -2,14 +2,15 @@
  * Adds instruction steps to the given state object for the specified instruction ID.
  */
 export const addInstructionSteps = (state, instructionId, instSteps) => {
-    instSteps.forEach(step => {
-        const stepId = step.id;
+    Object.values(instSteps).forEach(step =>{
+        let stepId = step.id;
         state.instructionStepData.instructionStepSet[stepId] = {
             instructionId,
-            ...step
+            ...instSteps[stepId]
         };
         state.instructionStepData.instructionStepIds.push(stepId);
-    });
+        }
+    )
 }
 
 export const editInstructionSteps = (state, instructionId, updates) => {
@@ -30,5 +31,6 @@ export const deleteInstructionSteps = (state, instructionId) => {
     });
 
     stepData.instructionStepIds = stepData.instructionStepIds.filter(id => !stepsToRemove.includes(id));
+    state.instructionData.instructionSet[instructionId].instructionStepIds.filter(id => !stepsToRemove.includes(id));
 }
 
