@@ -1,16 +1,23 @@
 import db from '../database/Database';
 import { addPatternSectionData } from './PatternSectionService';
 import { addInstructionSectionData } from './InstructionSectionService';
+import { addInstructionRowData } from './InstructionRowService';
+import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData, fetchAllInstructionData, fetchAllInstructionStepData } from './ServiceTools';
+import { addInstructionStepData } from './InstructionStepService';
 
 export const createNewPattern = async (patternName, patternData) => {
     try {
         const patternId = await addPatternData(patternName);
 
-        const patternSectionId = await addPatternSectionData(patternId, patternData.patternSectionData);
+        await addPatternSectionData(patternId, patternData.patternSectionData);
 
-        const instructionSectionId = await addInstructionSectionData(patternData.instructionSectionData);
+        await addInstructionSectionData(patternData.instructionSectionData);
 
-        return instructionSectionId;
+        await addInstructionRowData(patternData.instructionData);
+
+        await addInstructionStepData(patternData.instructionStepData);
+
+        return patternId;
     } catch (error) {
         console.error('Error creating new pattern', error);
         throw error;

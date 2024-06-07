@@ -75,7 +75,7 @@ const initializeDatabase = () => {
             `CREATE TABLE IF NOT EXISTS InstructionSectionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 GUID TEXT NOT NULL,
-                PatternSectionGUID INTEGER NOT NULL,
+                PatternSectionGUID TEXT NOT NULL,
                 InstructionSectionName TEXT NOT NULL,
                 SectionTypeSelectionValue TEXT NOT NULL,
                 StartNum INTEGER NOT NULL,
@@ -93,7 +93,8 @@ const initializeDatabase = () => {
             `CREATE TABLE IF NOT EXISTS InstructionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 GUID TEXT NOT NULL,
-                InstructionSectionGUID NOT NULL,
+                InstructionSectionGUID TEXT NOT NULL,
+                Instruction TEXT NOT NULL,
                 Repetition INTEGER NOT NULL,
                 YarnColor TEXT NOT NULL,
                 SpecialInstruction TEXT,

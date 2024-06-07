@@ -2,11 +2,11 @@
  * Adds instruction steps to the given state object for the specified instruction ID.
  */
 export const addInstructionSteps = (state, instructionId, instSteps) => {
-    Object.values(instSteps).forEach(step =>{
+    instSteps.forEach(step =>{
         let stepId = step.id;
         state.instructionStepData.instructionStepSet[stepId] = {
             instructionId,
-            ...instSteps[stepId]
+            ...step
         };
         state.instructionStepData.instructionStepIds.push(stepId);
         }
