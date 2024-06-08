@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 // Usage:
 // Must pass a close callback function, the modal's visibility variable, and the array where instructions will be added to
 export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo}) => {
-    const [repetitionsNum, setRepetitionsNum] = useState(1);
+    const [repetitionsNum, setRepetitionsNum] = useState("1");
     const [colorText, setColorText] = useState("");
     const [instSteps, setInstSteps] = useState([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
     const [instPreview, setInstPreview] = useState("[]");
@@ -53,7 +53,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     // When the modal is opened, if it is in edit mode then load the current range
     useEffect(() => {
       if (modalMode === "edit") {
-        setRepetitionsNum(currentInfo.repetition);
+        setRepetitionsNum('' + currentInfo.repetition);
         setColorText(currentInfo.color);
         setSpecialInstruction(currentInfo.specialInstruction)
         setInstSteps(currentInfo.instructionSteps)
@@ -66,10 +66,21 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const onSubmitInstructionModal = () =>{
       switch(modalMode) {
         case "add":
-          addFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          addFunc({
+            id: uuidv4(),
+            instruction: instPreview, 
+            instructionSteps: instSteps, 
+            repetition: repetitionsNum ? Number(repetitionsNum) : 1, 
+            color: colorText, 
+            specialInstruction: specialInstruction});
           break;
         case "edit":
-          editFunc(instPreview, instSteps, repetitionsNum ? repetitionsNum : 1, colorText, specialInstruction);
+          editFunc({
+            instruction: instPreview, 
+            instructionSteps: instSteps, 
+            repetition: repetitionsNum ? Number(repetitionsNum) : 1, 
+            color: colorText, 
+            specialInstruction: specialInstruction});
           break;
       }
   
@@ -98,7 +109,7 @@ export const AddEditInstructionModal = ({modalMode, onCloseModal, isModalVisible
     const onCloseInstructionModal = () => {
         setInstSteps([{id: uuidv4(), rep: "", stitch: "", stitchAbbr: ""}]);
         setInstPreview("");
-        setRepetitionsNum(1);
+        setRepetitionsNum("1");
         setColorText("");
         setSpecialInstruction("");
         setSpecialInstHeight(0);

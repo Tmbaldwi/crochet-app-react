@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Switch } from 'react-native';
 import {CustomModal} from "../../Common Models/Modals/CustomModal";
 import { CommonTextInput } from "../../Common Models/CommonTextInput";
 import { DropdownComponent } from "../../Common Models/Dropdown";
+import { v4 as uuidv4 } from 'uuid';
 
 // Add/Edit Instruction Section Modal
 //
@@ -17,7 +18,7 @@ import { DropdownComponent } from "../../Common Models/Dropdown";
 // Edit mode: must pass an edit function to edit the instruction section, a delete function to delete the instruction section,
 //  and the current section range
 export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModalVisible, addFunc, editFunc, deleteFunc, currentInfo, previousRoundNum}) => {
-    const [roundStartNum, setRoundStartNum] = useState(previousRoundNum? Number(parseInt(previousRoundNum) + 1): 1);
+    const [roundStartNum, setRoundStartNum] = useState("1");
     const [roundEndNum, setRoundEndNum] = useState("");
     const [roundEndIsSelected, setRoundEndIsSelected] = useState(false);
     const [sectionTypeSelection, setSectionTypeSelection] = useState({value: "", label: ""});
@@ -55,11 +56,11 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                 setRoundStartNum(currentInfo.startNum);
                 setRoundEndNum(currentInfo.endNum);
                 setRoundEndIsSelected(currentInfo.endNum);
-                setSectionTypeSelection(currentInfo.sectionTypeSelection)
-                setIsSectionTypeTextInputDisabled(currentInfo.sectionTypeSelection.value !== "other")
+                setSectionTypeSelection({label: currentInfo.title, value: currentInfo.value})
+                setIsSectionTypeTextInputDisabled(currentInfo.value !== "other")
                 break;
             case "add":
-                setRoundStartNum(previousRoundNum? previousRoundNum + 1: 1);
+                setRoundStartNum(previousRoundNum? (parseInt(previousRoundNum) + 1).toString() : "1");
         }
       }, [isModalVisible === true]);
 
@@ -74,10 +75,10 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
     const onSubmitModal = () =>{
         switch(modalMode) {
           case "add":
-            addFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
+            addFunc({id: uuidv4(), title: sectionTypeSelection.label, value: sectionTypeSelection.value, startNum: roundStartNum, endNum: roundEndNum});
             break;
           case "edit":
-            editFunc(sectionTypeSelection.label, sectionTypeSelection, roundStartNum, roundEndNum);
+            editFunc({title: sectionTypeSelection.label, value: sectionTypeSelection.value, startNum: roundStartNum, endNum: roundEndNum});
             break;
         }
     
@@ -93,7 +94,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
 
     // close function called after submit/delete/close
     const onCloseInstructionSectionModal = () => {
-        setRoundStartNum(1);
+        setRoundStartNum("1");
         setRoundEndNum("");
         setRoundEndIsSelected(false);
         setSectionTypeSelection({value: "", label: ""});
@@ -140,7 +141,7 @@ export const AddEditInstructionSectionModal = ({modalMode, onCloseModal, isModal
                             <DropdownComponent
                                 callback={handleSectionTypeChange}
                                 dataType={"instructionSectionType"}
-                                currentSelection={currentInfo?.sectionTypeSelection.value}
+                                currentSelection={currentInfo?.value}
                             />
                         </View>
                         <View style={instructionSectionModalStyling.instructionSectionOtherTextInput}>

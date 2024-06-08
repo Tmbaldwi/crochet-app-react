@@ -6,6 +6,8 @@ import { AddEditInstructionModal } from "../Instruction Row/AddEditInstructionMo
 import { AddEditInstructionSectionModal } from "./AddEditInstructionSectionModal";
 import { EditOrInfoButton } from "../../Common Models/Buttons/EditOrInfoButton";
 import { CommonButton } from "../../Common Models/Buttons/CommonButton";
+import { useSelector, useDispatch } from 'react-redux';
+import { addInstruction, editInstruction, deleteInstruction } from '../../../redux/slices/PatternSlice';
 
 // Instruction Section
 //
@@ -17,50 +19,35 @@ import { CommonButton } from "../../Common Models/Buttons/CommonButton";
 // 
 // Usage:
 // Must pass the title, the instruction section's round/row range (ie. Round 1-2), and a function to delete itself from the list
-export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFunc, backgroundColor, previousRoundNum}) => {
+
+export const InstructionSection = ({ isViewMode, instructionSectionInfo, editFunc, deleteFunc, backgroundColor, previousRoundNum }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInstructionRowAddModalVisible, setIsInstructionRowModalVisible] = useState(false);
   const [isInstructionSectionEditModalVisible, setIsInstructionSectionEditModalVisible] = useState(false);
-  const [instructionRows, setInstructionRows] = useState([]); //instruction rows contain instruction, repetition, color, specialInstr
+  const {instructionSet, instructionIds} = useSelector(state => state.pattern.instructionData);
+  const relevantInstructionIds = instructionSectionInfo.instructions;
+  const dispatch = useDispatch();
 
-  //toggles collapse on instruction section
   const toggleSection = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  //adds instruction row based on input of instruction, repetitions, and yarn color to instruction row array
-  const addInstructionRow = (inst, instSteps, rep, color, specialInst) => {
-    const newRow = { instruction: inst, instructionSteps: instSteps, repetition: Number(rep), color: color, specialInstruction: specialInst};
-    setInstructionRows([...instructionRows, newRow]);
+  const handleAddInstructionRow = (instruction) => {
+    dispatch(addInstruction({instructionSectionId: instructionSectionInfo.id, instruction}));
   };
 
-  const editInstructionRow = (newInst, newInstSteps, newRep, newColor, newSpecialInst, index) => {
-    let newRows = instructionRows.map((instruction, idx) => {
-      if (idx === index) {
-        return { ...instruction, instruction: newInst, instructionSteps: newInstSteps, repetition: Number(newRep), color: newColor, specialInstruction: newSpecialInst };
-      }
-
-      return instruction;
-    });
-  
-    setInstructionRows(newRows);
-  }
-
-  // removes given instruction row
-  // passed to the instruction row so that internal delete button deletes itself
-  const removeInstructionRow = (index) => {
-    const newRows = instructionRows.filter((_, i) => i !== index);
-    setInstructionRows(newRows);
+  const handleEditInstructionRow = (id, updates) => {
+    dispatch(editInstruction({instructionId: id, updates}));
   };
 
-  // closes the instruction row add modal
-  // called after the closing code of the modal is ran
-  const onCloseInstructionRowAddModal = () =>{
+  const handleRemoveInstructionRow = (id) => {
+    dispatch(deleteInstruction({instructionSectionId: instructionSectionInfo.id, instructionId: id}));
+  };
+
+  const onCloseInstructionRowAddModal = () => {
     setIsInstructionRowModalVisible(false);
-  }
+  };
 
-  // closes the instruction section edit modal
-  // called after the closing code of the modal is ran
   const onCloseInstructionSectionEditModal = () => {
     setIsInstructionSectionEditModalVisible(false);
   };
@@ -76,11 +63,12 @@ export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFu
           isViewMode={isViewMode}
           onEditPress={() => setIsInstructionSectionEditModalVisible(true)}
           extraStyle={{borderWidth: 0,}}
+          isInfoDisabled={true}
         />
         <Pressable onPress={toggleSection} style={sectionStyles.headerTextAndToggleContainer}>
           <View style={sectionStyles.headerTextContainer}>
             <Text style={sectionStyles.headerText}>
-              {sectionInfo.title + ": " + sectionInfo.startNum + (sectionInfo.endNum? "-" + sectionInfo.endNum : "")}
+              {instructionSectionInfo.title + ": " + instructionSectionInfo.startNum + (instructionSectionInfo.endNum? "-" + instructionSectionInfo.endNum : "")}
             </Text>
           </View>
           <View style={sectionStyles.toggleIconContainer}>
@@ -92,21 +80,21 @@ export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFu
         collapsed={isCollapsed}
         style={{backgroundColor: backgroundColor + '80'}}
       >
-        <View style={[sectionStyles.instructionSectionContent, {padding: instructionRows.length == 0? 0: 15}]}>
-          {instructionRows.map((instRow, index) => (
-            <View key={index}>
+        <View style={[sectionStyles.instructionSectionContent, {padding: relevantInstructionIds.length == 0? 0: 15}]}>
+          {relevantInstructionIds.map((id, index) => (
+            <View key={id}>
               <InstructionRow
                 isViewMode={isViewMode}
-                instructionInfo={instRow}
-                deleteFunc={() => removeInstructionRow(index)}
-                editFunc={(...args) => editInstructionRow(...args, index)}
+                instructionInfo={instructionSet[id]}
+                deleteFunc={() => handleRemoveInstructionRow(id)}
+                editFunc={(updates) => handleEditInstructionRow(id, updates)}
               />
             </View>
           ))}
         </View>
         <View style={[sectionStyles.addInstructionButtonContainer, 
                       {
-                        borderTopWidth: instructionRows.length == 0 ? 0: 2,
+                        borderTopWidth: relevantInstructionIds.length == 0 ? 0: 2,
                         backgroundColor: backgroundColor,
                       }
                       ]}>
@@ -129,7 +117,7 @@ export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFu
         isModalVisible={isInstructionSectionEditModalVisible}
         editFunc={editFunc}
         deleteFunc={deleteFunc}
-        currentInfo={sectionInfo}
+        currentInfo={instructionSectionInfo}
         previousRoundNum={previousRoundNum}
       />
 
@@ -137,7 +125,7 @@ export const InstructionSection = ( {isViewMode, sectionInfo, editFunc, deleteFu
         modalMode={"add"}
         onCloseModal={onCloseInstructionRowAddModal}
         isModalVisible={isInstructionRowAddModalVisible}
-        addFunc={addInstructionRow}
+        addFunc={handleAddInstructionRow}
       />
     </View>
   );

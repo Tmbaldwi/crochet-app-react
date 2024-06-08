@@ -1,107 +1,122 @@
-import React, {useState, useRef} from 'react';
-import { View, StyleSheet, Text, Pressable, ScrollView, Switch } from 'react-native';
+import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, Pressable, ScrollView, Switch, StyleSheet } from 'react-native';
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
+import { addPatternSection, editPatternSection, deletePatternSection, clearPattern } from '../redux/slices/PatternSlice';
+import { createNewPattern } from '../services/CreatePatternService';
+import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData } from '../services/ServiceTools';
+import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
 
-// Create Pattern Screen
-// Description:
-// Hosts all the pattern sections for pattern creation
-// Allows user to add pattern sections, prompts user with a modal to give the pattern section a name
-function CreatePatternScreen(){
-  const [patternSections, setPatternSections] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isNotViewMode, setIsNotViewMode] = useState(true);
-  const scrollViewRef = useRef();
-  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSections.length);
-
-  //called after pattern section modal close function is executed
-  const onClosePatternSectionAddModal = () =>{
-    setIsModalVisible(false);
-  }
-
-  // adds new pattern sections to the array
-  const addPatternSection = (sectionTitle, reps, specialInst) => {
-    let newSec = {sectionTitle: sectionTitle, repetitions: reps, specialInstruction: specialInst};
-    setPatternSections(prevSections => [...prevSections, newSec]);
-  };
-
-  // edits a pattern section at the given index with a new title
-  // passed to every pattern section with its index inputted
-  const editPatternSection = (newSectionTitle, newReps, specialInst, index) => {
-    let newSections = patternSections.map((section, idx) => {
-      if (idx === index) {
-        return { ...section, sectionTitle: newSectionTitle, repetitions: newReps, specialInstruction: specialInst};
-      }
-
-      return section;
-    });
+export const CreatePatternScreen = forwardRef((props, ref) => {
+  const { navigation } = props;
+  const patternState = useSelector(state => state.pattern);
+  const patternSectionSet = patternState.patternSectionData.patternSectionSet;
+  const patternSectionIds = patternState.patternSectionData.patternSectionIds;
+  const dispatch = useDispatch();
+  const gradientArray = ColorCalculator.createGradient('#ffc800', '#0febff', patternSectionIds.length);
   
-    setPatternSections(newSections);
+  const [isPatternSectionModalVisible, setIsPatternSectionModalVisible] = useState(false);
+  const [isPatternSaveModalVisible, setIsPatterSaveModalVisible] = useState(false);
+  const [isNotViewMode, setIsNotViewMode] = useState(true);
+
+  const openSavePatternDataModal = () => {
+    setIsPatterSaveModalVisible(true);
   }
 
-  // deletes a pattern section at the given index
-  // passed to every pattern section with its index inputted
-  const deletePatternSection = (index) => {
-    const newSecs = patternSections.filter((_, i) => i !== index);
-    setPatternSections(newSecs);
-};
+  const handleExitButton = () => {
+    navigation.navigate('Home');
+    dispatch(clearPattern());
+  }
+
+  useImperativeHandle(ref, () => ({
+    openSavePatternDataModal,
+    handleExitButton,
+  }));
+
+  const savePatternData = async (patternName) => {
+    try {
+      await createNewPattern(patternName, patternState);
+      setIsNotViewMode(false);
+      navigation.setOptions({
+        title: patternName,
+      });
+    } catch(error) {
+      throw error;
+    }
+  }
+
+  const handleSetIsModalVisible = (isVisible) => {
+    setIsPatternSectionModalVisible(isVisible);
+  }
+  const handleToggleIsNotViewMode = () => {
+    setIsNotViewMode(!isNotViewMode);
+  }
+
+  const handleAddPatternSection = (section) => {
+    dispatch(addPatternSection(section));
+  }
+
+  const handleEditPatternSection = (patternSectionId, updates) => {
+    dispatch(editPatternSection({ patternSectionId, updates }));
+  }
+  const handleDeletePatternSection = (patternSectionId) => {
+    dispatch(deletePatternSection(patternSectionId));
+  }
 
   return (
-    <View style={patternScreenStyling.outerPageContentContainer}>
-      <View style={patternScreenStyling.pageContentContainer}>
-        <ScrollView 
-          style={patternScreenStyling.contentBody}
-          ref={scrollViewRef}
-        >
-          {patternSections.map((sec, index) => (
-                              <View key={index}>
-                                  <PatternSection
-                                    isViewMode={!isNotViewMode}
-                                    patternSectionInfo={sec}
-                                    editFunc={(newSectionTitle, newReps, newSpecialInst) => editPatternSection(newSectionTitle, newReps, newSpecialInst, index)}
-                                    deleteFunc={() => deletePatternSection(index)}
-                                    backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index+1]}}
-                                  />
-                              </View>
-                          ))}
-        </ScrollView>
-        <View style={patternScreenStyling.bottomButtonContainer}>
-          <View style={patternScreenStyling.bottomLeftContainer}>
-            <View style={patternScreenStyling.editSwitchContainer}>
-              <Text style={patternScreenStyling.editSwitchText}>
-                EDIT:
-              </Text>
-              <Switch
-                onValueChange={setIsNotViewMode}
-                value={isNotViewMode}
+    <View style={styles.outerPageContentContainer}>
+      <View style={styles.pageContentContainer}>
+        <ScrollView style={styles.contentBody}>
+          {patternSectionIds.map((patternSectionId, index) => (
+            <View key={patternSectionId}>
+              <PatternSection
+                isViewMode={!isNotViewMode}
+                patternSectionInfo={patternSectionSet[patternSectionId]}
+                editFunc={(updates) => handleEditPatternSection(patternSectionId, updates)}
+                deleteFunc={() => handleDeletePatternSection(patternSectionId)}
+                backgroundColorInfo={{colorStart: gradientArray[index], colorEnd: gradientArray[index + 1]}}
               />
             </View>
+          ))}
+        </ScrollView>
+        <View style={styles.bottomButtonContainer}>
+          <View style={styles.bottomLeftContainer}>
+            <View style={styles.editSwitchContainer}>
+              <Text style={styles.editSwitchText}>EDIT:</Text>
+              <Switch onValueChange={handleToggleIsNotViewMode} value={isNotViewMode} />
+            </View>
           </View>
-          {isNotViewMode && <View style={patternScreenStyling.addSectionButtonContainer}>
-            <Pressable 
-              style={patternScreenStyling.addSectionButton}
-              onPress={() => setIsModalVisible(true)}
-            >
-              <Text>+</Text>
-            </Pressable>
-          </View>}
+          {isNotViewMode && (
+            <View style={styles.addSectionButtonContainer}>
+              <Pressable 
+                style={styles.addSectionButton} 
+                onPress={() => handleSetIsModalVisible(true)}>
+                <Text>+</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
 
         <AddEditPatternSectionModal
-          modalMode={"add"}
-          onCloseModal={onClosePatternSectionAddModal}
-          isModalVisible={isModalVisible}
-          addFunc={addPatternSection}
-          patternSections={patternSections}
-          setPatternSections={setPatternSections}
+          modalMode="add"
+          onCloseModal={() => handleSetIsModalVisible(false)}
+          isModalVisible={isPatternSectionModalVisible}
+          addFunc={handleAddPatternSection}
+        />
+
+        <SavePatternModal
+          onCloseModal={() => setIsPatterSaveModalVisible(false)}
+          isModalVisible={isPatternSaveModalVisible}
+          addFunc={savePatternData}
         />
       </View>
     </View>
   );
-};
+});
 
-const patternScreenStyling = StyleSheet.create({
+const styles = StyleSheet.create({
   outerPageContentContainer: {
     flex: 1,
     alignItems: 'center',

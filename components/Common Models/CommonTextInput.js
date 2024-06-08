@@ -5,7 +5,7 @@ import { StringValidator } from '../Tools/StringValidator';
 export const CommonTextInput = ({value, onChangeText, placeholder, inputType, maxLength, multiline, scrollEnabled, onContentSizeChange, isDisabled, extraStyle}) => {
     const handleOnChangeText = (input, onChangeText) => {
         switch(inputType) {
-            case "numeric":
+            case 'numeric':
                 onChangeText(StringValidator.enforceNumericsLargerThanZero(input));
                 break;
             default:
@@ -21,6 +21,7 @@ export const CommonTextInput = ({value, onChangeText, placeholder, inputType, ma
             placeholder={placeholder} 
             placeholderTextColor={"lightgrey"}
             inputType={inputType}
+            keyboardType={inputType}
             maxLength={maxLength}
             multiline={multiline}
             scrollEnabled={scrollEnabled}
