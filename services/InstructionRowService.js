@@ -2,6 +2,13 @@ import db from '../database/Database';
 
 export const addInstructionRowData = (instructionData) => {
     return new Promise((resolve, reject) => {
+
+        if(instructionData.instructionIds.length === 0){
+            console.log('No data to insert into InstructionData');
+            resolve(null);
+            return;
+        }
+
         db.transaction(
             tx => {
                 // Start the SQL statement

@@ -4,12 +4,13 @@ import { View, Text, Pressable, ScrollView, Switch, StyleSheet } from 'react-nat
 import { PatternSection } from '../components/Instruction Stuff/Pattern Section/PatternSection';
 import { AddEditPatternSectionModal } from '../components/Instruction Stuff/Pattern Section/AddEditPatternSectionModal';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
-import { addPatternSection, editPatternSection, deletePatternSection } from '../redux/slices/PatternSlice';
+import { addPatternSection, editPatternSection, deletePatternSection, clearPattern } from '../redux/slices/PatternSlice';
 import { createNewPattern } from '../services/CreatePatternService';
 import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData } from '../services/ServiceTools';
 import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
 
 export const CreatePatternScreen = forwardRef((props, ref) => {
+  const { navigation } = props;
   const patternState = useSelector(state => state.pattern);
   const patternSectionSet = patternState.patternSectionData.patternSectionSet;
   const patternSectionIds = patternState.patternSectionData.patternSectionIds;
@@ -22,26 +23,28 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
 
   const openSavePatternDataModal = () => {
     setIsPatterSaveModalVisible(true);
-    // fetchAllPatternData().then(result => {
-    //   console.log("PatternData:")
-    //   console.log(result);
-    // })
-    // fetchAllPatternSectionData().then(result => {
-    //   console.log("PatternSectionData:")
-    //   console.log(result);
-    // })
-    // fetchAllInstructionSectionData().then(result => {
-    //   console.log("InstructionSectionData:")
-    //   console.log(result);
-    // })
+  }
+
+  const handleExitButton = () => {
+    navigation.navigate('Home');
+    dispatch(clearPattern());
   }
 
   useImperativeHandle(ref, () => ({
     openSavePatternDataModal,
+    handleExitButton,
   }));
 
-  const savePatternData = (patternName) => {
-    createNewPattern(patternName, patternState);
+  const savePatternData = async (patternName) => {
+    try {
+      await createNewPattern(patternName, patternState);
+      setIsNotViewMode(false);
+      navigation.setOptions({
+        title: patternName,
+      });
+    } catch(error) {
+      throw error;
+    }
   }
 
   const handleSetIsModalVisible = (isVisible) => {

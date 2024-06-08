@@ -117,6 +117,24 @@ const patternSlice = createSlice({
 
             deleteInstructionSteps(state, instructionId);
         },
+        clearPattern: (state) => {
+            state.patternSectionData = {
+                patternSectionSet: {},
+                patternSectionIds: []
+            };
+            state.instructionSectionData = {
+                instructionSectionSet: {},
+                instructionSectionIds: []
+            };
+            state.instructionData = {
+                instructionSet: {},
+                instructionIds: []
+            };
+            state.instructionStepData = {
+                instructionStepSet: {},
+                instructionStepIds: []
+            };
+        }
     }
 });
 
@@ -129,7 +147,8 @@ export const {
     deleteInstructionSection,
     addInstruction,
     editInstruction,
-    deleteInstruction
+    deleteInstruction,
+    clearPattern
 } = patternSlice.actions;
 
 export default patternSlice.reducer;

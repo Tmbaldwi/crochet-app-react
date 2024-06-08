@@ -2,27 +2,29 @@ import db from '../database/Database';
 import { addPatternSectionData } from './PatternSectionService';
 import { addInstructionSectionData } from './InstructionSectionService';
 import { addInstructionRowData } from './InstructionRowService';
-import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData, fetchAllInstructionData, fetchAllInstructionStepData } from './ServiceTools';
 import { addInstructionStepData } from './InstructionStepService';
+import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData, fetchAllInstructionData, fetchAllInstructionStepData } from './ServiceTools';
 
-export const createNewPattern = async (patternName, patternData) => {
-    try {
-        const patternId = await addPatternData(patternName);
+export const createNewPattern = (patternName, patternData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const patternId = await addPatternData(patternName);
 
-        await addPatternSectionData(patternId, patternData.patternSectionData);
+            await addPatternSectionData(patternId, patternData.patternSectionData);
 
-        await addInstructionSectionData(patternData.instructionSectionData);
+            await addInstructionSectionData(patternData.instructionSectionData);
 
-        await addInstructionRowData(patternData.instructionData);
+            await addInstructionRowData(patternData.instructionData);
 
-        await addInstructionStepData(patternData.instructionStepData);
+            await addInstructionStepData(patternData.instructionStepData);
 
-        return patternId;
-    } catch (error) {
-        console.error('Error creating new pattern', error);
-        throw error;
-    }
-}
+            resolve(patternId);
+        } catch (error) {
+            console.error('Error creating new pattern', error);
+            reject(error);
+        }
+    });
+};
 
 // will be called when the pattern is saved in create mode
 export const addPatternData = (patternName) => {
@@ -51,7 +53,6 @@ export const addPatternData = (patternName) => {
         );
     });
 };
-
 
 // will be called when the pattern is saved in edit mode
 export const updatePatternData = () => { }

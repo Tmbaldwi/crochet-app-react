@@ -2,6 +2,13 @@ import db from '../database/Database';
 
 export const addPatternSectionData = (patternId, patternSectionData) => {
     return new Promise((resolve, reject) => {
+
+        if(patternSectionData.patternSectionIds.length === 0){
+            console.log('No data to insert into InstructionData');
+            reject("No pattern sections to save");
+            return;
+        }
+        
         db.transaction(
             tx => {
                 // Start the SQL statement
