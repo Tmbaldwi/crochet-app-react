@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useCallback , useState } from 'react';
 import { View, ScrollView, Text, Pressable, StyleSheet } from 'react-native';
+import { ColorCalculator } from '../components/Tools/ColorCalculator';
+import { getPatternData } from '../services/CreatePatternService';
+import { useFocusEffect } from '@react-navigation/native';
 
 // Home screen
 function HomeScreen({ navigation }) {
-  const patternIds = ["Teddy Bear", "Peepo", "Forg"];
+  const patternIds = ["Teddy Bear", "Peepo", "Forg", "Apa", "Polar Bear", "Dimple"];
+  const gradientArray = ColorCalculator.createGradient('#0febff', '#ffc800', patternIds.length);
+
+  const [patterns, setPatterns] = useState([]);
+  
+  useFocusEffect(
+    useCallback(() => {
+      const fetchPatterns = async () => {
+        try {
+          const fetchedPatterns = await getPatternData();
+          setPatterns(fetchedPatterns);
+        } catch (error) {
+          console.log('Failed to fetch patterns:', error);
+        }
+      };
+
+      fetchPatterns();
+    }, [])
+  );
   
   return (
     <View style={styles.screenContainer}>
@@ -13,18 +34,18 @@ function HomeScreen({ navigation }) {
         </Text>
       </View>
       <View style={styles.patternNavigatorContainer}>
-        <ScrollView style={styles.patternNavigatorScrollView} contentContainerStyle={styles.patternNavigatorScrollViewContentContainer}>
-          {patternIds.length == 0 && 
-            <Text>
-              Hello I am empty :3
-            </Text>
-          }
-          {patternIds.map((patternNames, index) => (
-            <View key={patternNames}>
-              <Text>{patternNames}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        {patterns.length == 0 && 
+          <Text style={styles.emptyBoxText}>I am empty :(</Text>
+        }
+        {patterns.length > 0 &&  
+          <ScrollView style={styles.patternNavigatorScrollView} contentContainerStyle={styles.patternNavigatorScrollViewContentContainer}>
+            {patterns.map((patternData, index) => (
+              <View key={patternData.ID} style={[styles.patternBox, {backgroundColor: gradientArray[index]}]}>
+                <Text style={styles.patternBoxText}>{patternData.PatternName}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        }
       </View>
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={() => navigation.navigate('Create Pattern')}>
@@ -64,13 +85,32 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
   },
+  emptyBoxText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   patternNavigatorScrollView: {
     flex: 1,
     alignSelf: 'stretch',
   },
   patternNavigatorScrollViewContentContainer: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  patternBox: {
+    width: 160,
+    height: 160,
+    borderWidth: 2,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  patternBoxText: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   buttonContainer: {
     position: 'absolute',

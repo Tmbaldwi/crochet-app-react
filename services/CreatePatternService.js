@@ -58,4 +58,28 @@ export const addPatternData = (patternName) => {
 export const updatePatternData = () => { }
 
 // will be called to get pattern data when loading
-export const getPatternData = () => { }
+export const getPatternData = async () => {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          `SELECT ID, PatternName FROM PatternData;`,
+          [],
+          (_, { rows }) => {
+            let patterns = [];
+            for (let i = 0; i < rows.length; i++) {
+              patterns.push({
+                ID: rows.item(i).ID,
+                PatternName: rows.item(i).PatternName,
+              });
+            }
+            resolve(patterns);
+          },
+          (_, error) => {
+            console.log("Error fetching patterns", error);
+            reject(error);
+            return true;
+          }
+        );
+      });
+    });
+  };
