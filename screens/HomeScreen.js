@@ -6,11 +6,10 @@ import { useFocusEffect } from '@react-navigation/native';
 
 // Home screen
 function HomeScreen({ navigation }) {
-  const patternIds = ["Teddy Bear", "Peepo", "Forg", "Apa", "Polar Bear", "Dimple"];
-  const gradientArray = ColorCalculator.createGradient('#0febff', '#ffc800', patternIds.length);
-
   const [patterns, setPatterns] = useState([]);
+  const gradientArray = ColorCalculator.createGradient('#0febff', '#ffc800', patterns.length-1);
   
+  //Reloads the pattern ids when page loads
   useFocusEffect(
     useCallback(() => {
       const fetchPatterns = async () => {
