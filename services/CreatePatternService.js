@@ -8,17 +8,23 @@ import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSec
 export const createNewPattern = (patternName, patternData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const patternId = await addPatternData(patternName);
+            if(patternData.patternSectionData.patternSectionIds.length == 0){
+                console.error('Error creating new pattern, no pattern sections present');
+                reject();
+            }
+            else{
+                const patternId = await addPatternData(patternName);
 
-            await addPatternSectionData(patternId, patternData.patternSectionData);
-
-            await addInstructionSectionData(patternData.instructionSectionData);
-
-            await addInstructionRowData(patternData.instructionData);
-
-            await addInstructionStepData(patternData.instructionStepData);
-
-            resolve(patternId);
+                await addPatternSectionData(patternId, patternData.patternSectionData);
+    
+                await addInstructionSectionData(patternData.instructionSectionData);
+    
+                await addInstructionRowData(patternData.instructionData);
+    
+                await addInstructionStepData(patternData.instructionStepData);
+    
+                resolve(patternId);
+            }
         } catch (error) {
             console.error('Error creating new pattern', error);
             reject(error);
@@ -58,4 +64,28 @@ export const addPatternData = (patternName) => {
 export const updatePatternData = () => { }
 
 // will be called to get pattern data when loading
-export const getPatternData = () => { }
+export const getPatternData = async () => {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          `SELECT ID, PatternName FROM PatternData ORDER BY PatternName;`,
+          [],
+          (_, { rows }) => {
+            let patterns = [];
+            for (let i = 0; i < rows.length; i++) {
+              patterns.push({
+                ID: rows.item(i).ID,
+                PatternName: rows.item(i).PatternName,
+              });
+            }
+            resolve(patterns);
+          },
+          (_, error) => {
+            console.log("Error fetching patterns", error);
+            reject(error);
+            return true;
+          }
+        );
+      });
+    });
+  };

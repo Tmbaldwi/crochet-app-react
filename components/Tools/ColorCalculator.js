@@ -30,5 +30,13 @@ export const ColorCalculator = {
 
         gradient.push(c2);
         return gradient;
-    }    
+    },
+
+    randomColor: function(){
+        let r = Math.floor(Math.random()*256);
+        let g = Math.floor(Math.random()*256);
+        let b = Math.floor(Math.random()*256);
+
+        return this.rgbToHex(r,g,b);
+    }
 };
