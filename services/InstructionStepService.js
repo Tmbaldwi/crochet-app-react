@@ -1,6 +1,6 @@
 import db from '../database/Database';
 
-export const addInstructionStepData = (instructionStepData) => {
+export const addInstructionStepData = (patternId, instructionStepData) => {
     return new Promise((resolve, reject) => {
 
         if(instructionStepData.instructionStepIds.length === 0){
@@ -12,22 +12,19 @@ export const addInstructionStepData = (instructionStepData) => {
         db.transaction(
             tx => {
                 // Start the SQL statement
-                let sql = 'INSERT INTO InstructionStepData (GUID, InstructionGUID, Repetition, Stitch, OrderIndex) VALUES ';
+                let sql = 'INSERT INTO InstructionStepData (GUID, PatternId, InstructionGUID, Repetition, Stitch, OrderIndex) VALUES ';
 
                 const instructionStepSet = instructionStepData.instructionStepSet;
-                console.log(instructionStepSet)
                 const sqlParamSet = [];
 
                 // Build values part of the SQL command
                 instructionStepData.instructionStepIds.forEach((id, index) => {
-                    const sqlParamLine = `('${id}', '${instructionStepSet[id].instructionId}', ${instructionStepSet[id].rep},'${instructionStepSet[id].stitch}', ${index})`;
+                    const sqlParamLine = `('${id}', ${patternId}, '${instructionStepSet[id].instructionId}', ${instructionStepSet[id].rep},'${instructionStepSet[id].stitch}', ${index})`;
                     sqlParamSet.push(sqlParamLine);
                 });
 
                 // Complete the SQL statement
                 sql += sqlParamSet.join(", ") + ";";
-
-                console.log(sql)
 
                 tx.executeSql(sql, [],
                     (_, result) => {

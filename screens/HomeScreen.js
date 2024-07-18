@@ -3,6 +3,7 @@ import { View, ScrollView, Text, Pressable, StyleSheet } from 'react-native';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
 import { getPatternData } from '../services/CreatePatternService';
 import { useFocusEffect } from '@react-navigation/native';
+import { PatternIcon } from '../components/Common Models/Buttons/PatternIcon';
 
 // Home screen
 function HomeScreen({ navigation }) {
@@ -24,6 +25,17 @@ function HomeScreen({ navigation }) {
       fetchPatterns();
     }, [])
   );
+
+  const loadPattern = (patternId) => {
+    console.log("patternId: " + patternId);
+
+    // Grab pattern data from service, return in format of patternslice w/ pattern name
+
+    // Pass into load pattern from patternslice
+
+    //Navigate to new page with pattern NAME
+    navigation.navigate('Create Pattern', {patternId});
+  }
   
   return (
     <View style={styles.screenContainer}>
@@ -39,8 +51,13 @@ function HomeScreen({ navigation }) {
         {patterns.length > 0 &&  
           <ScrollView style={styles.patternNavigatorScrollView} contentContainerStyle={styles.patternNavigatorScrollViewContentContainer}>
             {patterns.map((patternData, index) => (
-              <View key={patternData.ID} style={[styles.patternBox, {backgroundColor: gradientArray[index]}]}>
-                <Text style={styles.patternBoxText}>{patternData.PatternName}</Text>
+              <View key={patternData.ID}>
+                <PatternIcon
+                  label={patternData.PatternName}
+                  onPress={() => loadPattern(patternData.ID)}
+                  isDisabled={false}
+                  color={gradientArray[index]}
+                />
               </View>
             ))}
           </ScrollView>
@@ -98,18 +115,6 @@ const styles = StyleSheet.create({
     gap: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  patternBox: {
-    width: 160,
-    height: 160,
-    borderWidth: 2,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  patternBoxText: {
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   buttonContainer: {
     position: 'absolute',

@@ -58,7 +58,7 @@ const initializeDatabase = () => {
             `CREATE TABLE IF NOT EXISTS PatternSectionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 GUID TEXT NOT NULL,
-                PatternID INTEGER NOT NULL,
+                PatternId INTEGER NOT NULL,
                 PatternSectionName TEXT NOT NULL,
                 Repetitions INTEGER NOT NULL,
                 SpecialInstruction TEXT,
@@ -74,6 +74,7 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionSectionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                PatternId INTEGER NOT NULL,
                 GUID TEXT NOT NULL,
                 PatternSectionGUID TEXT NOT NULL,
                 InstructionSectionName TEXT NOT NULL,
@@ -92,6 +93,7 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                PatternId INTEGER NOT NULL,
                 GUID TEXT NOT NULL,
                 InstructionSectionGUID TEXT NOT NULL,
                 Instruction TEXT NOT NULL,
@@ -110,6 +112,7 @@ const initializeDatabase = () => {
         tx.executeSql(
             `CREATE TABLE IF NOT EXISTS InstructionStepData (
                 ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                PatternId INTEGER NOT NULL,
                 GUID TEXT NOT NULL,
                 InstructionGUID NOT NULL,
                 Repetition INTEGER NOT NULL,

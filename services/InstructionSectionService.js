@@ -1,6 +1,6 @@
 import db from '../database/Database';
 
-export const addInstructionSectionData = (instructionSectionData) => {
+export const addInstructionSectionData = (patternId, instructionSectionData) => {
     return new Promise((resolve, reject) => {
 
         if(instructionSectionData.instructionSectionIds.length === 0){
@@ -12,14 +12,14 @@ export const addInstructionSectionData = (instructionSectionData) => {
         db.transaction(
             tx => {
                 // Start the SQL statement
-                let sql = 'INSERT INTO InstructionSectionData (GUID, PatternSectionGUID, InstructionSectionName, SectionTypeSelectionValue, StartNum, EndNum, OrderIndex) VALUES ';
+                let sql = 'INSERT INTO InstructionSectionData (GUID, PatternId, PatternSectionGUID, InstructionSectionName, SectionTypeSelectionValue, StartNum, EndNum, OrderIndex) VALUES ';
 
                 const sectionSet = instructionSectionData.instructionSectionSet;
                 const sqlParamSet = [];
 
                 // Build values part of the SQL command
                 instructionSectionData.instructionSectionIds.forEach((id, index) => {
-                    const sqlParamLine = `('${id}', '${sectionSet[id].patternSectionId}', '${sectionSet[id].title}', '${sectionSet[id].value}', ${sectionSet[id].startNum}, ${sectionSet[id].endNum? sectionSet[id].endNum: 'NULL'}, ${index})`;
+                    const sqlParamLine = `('${id}', ${patternId}, '${sectionSet[id].patternSectionId}', '${sectionSet[id].title}', '${sectionSet[id].value}', ${sectionSet[id].startNum}, ${sectionSet[id].endNum? sectionSet[id].endNum: 'NULL'}, ${index})`;
                     sqlParamSet.push(sqlParamLine);
                 });
 

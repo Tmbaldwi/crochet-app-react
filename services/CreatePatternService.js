@@ -17,11 +17,11 @@ export const createNewPattern = (patternName, patternData) => {
 
                 await addPatternSectionData(patternId, patternData.patternSectionData);
     
-                await addInstructionSectionData(patternData.instructionSectionData);
+                await addInstructionSectionData(patternId, patternData.instructionSectionData);
     
-                await addInstructionRowData(patternData.instructionData);
+                await addInstructionRowData(patternId, patternData.instructionData);
     
-                await addInstructionStepData(patternData.instructionStepData);
+                await addInstructionStepData(patternId, patternData.instructionStepData);
     
                 resolve(patternId);
             }
@@ -31,6 +31,17 @@ export const createNewPattern = (patternName, patternData) => {
         }
     });
 };
+
+export const loadNewPattern = (patternId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //load pattern
+        } catch (error) {
+            console.error('Error loading pattern with id: ' + patternId);
+            reject(error);
+        }
+    });
+}
 
 // will be called when the pattern is saved in create mode
 export const addPatternData = (patternName) => {

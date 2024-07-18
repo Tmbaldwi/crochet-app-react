@@ -12,7 +12,7 @@ export const addPatternSectionData = (patternId, patternSectionData) => {
         db.transaction(
             tx => {
                 // Start the SQL statement
-                let sql = 'INSERT INTO PatternSectionData (GUID, PatternID, PatternSectionName, Repetitions, SpecialInstruction, OrderIndex) VALUES ';
+                let sql = 'INSERT INTO PatternSectionData (GUID, PatternId, PatternSectionName, Repetitions, SpecialInstruction, OrderIndex) VALUES ';
 
                 const sectionSet = patternSectionData.patternSectionSet;
                 const sqlParamSet = [];

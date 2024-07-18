@@ -38,13 +38,18 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
   const savePatternData = async (patternName) => {
     try {
       await createNewPattern(patternName, patternState);
-      setIsNotViewMode(false);
-      navigation.setOptions({
-        title: patternName,
-      });
+      setViewMode(patternName);
     } catch(error) {
       throw error;
     }
+  }
+
+  const setViewMode = (patternName) => {
+    setIsNotViewMode(false);
+
+    navigation.setOptions({
+      title: patternName,
+    });
   }
 
   const handleSetIsModalVisible = (isVisible) => {

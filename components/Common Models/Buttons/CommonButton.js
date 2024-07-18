@@ -27,10 +27,10 @@ export const CommonButton = ({ label, onPress, isHidden, isDisabled, buttonStyle
             onPress={onPress}
             disabled={isDisabledMode}
             style={[
-                    modalStyles.defaultButtonStyle,
-                    {display: isHidden? 'none' : 'flex'}, 
-                    isDisabledMode? modalStyles.disabledButtonStyle: {},
-                    buttonStyle,
+                modalStyles.defaultButtonStyle,
+                {display: isHidden? 'none' : 'flex'}, 
+                isDisabledMode? modalStyles.disabledButtonStyle: {},
+                buttonStyle,
             ]}
         >
             <Text 

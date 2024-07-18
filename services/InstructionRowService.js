@@ -1,6 +1,6 @@
 import db from '../database/Database';
 
-export const addInstructionRowData = (instructionData) => {
+export const addInstructionRowData = (patternId, instructionData) => {
     return new Promise((resolve, reject) => {
 
         if(instructionData.instructionIds.length === 0){
@@ -12,14 +12,14 @@ export const addInstructionRowData = (instructionData) => {
         db.transaction(
             tx => {
                 // Start the SQL statement
-                let sql = 'INSERT INTO InstructionData (GUID, InstructionSectionGUID, Instruction, Repetition, YarnColor, SpecialInstruction, OrderIndex) VALUES ';
+                let sql = 'INSERT INTO InstructionData (GUID, PatternId, InstructionSectionGUID, Instruction, Repetition, YarnColor, SpecialInstruction, OrderIndex) VALUES ';
 
                 const instructionSet = instructionData.instructionSet;
                 const sqlParamSet = [];
 
                 // Build values part of the SQL command
                 instructionData.instructionIds.forEach((id, index) => {
-                    const sqlParamLine = `('${id}', '${instructionSet[id].instructionSectionId}', '${instructionSet[id].instruction}', ${instructionSet[id].repetition}, '${instructionSet[id].color}', '${instructionSet[id].specialInstruction}', ${index})`;
+                    const sqlParamLine = `('${id}', ${patternId}, '${instructionSet[id].instructionSectionId}', '${instructionSet[id].instruction}', ${instructionSet[id].repetition}, '${instructionSet[id].color}', '${instructionSet[id].specialInstruction}', ${index})`;
                     sqlParamSet.push(sqlParamLine);
                 });
 
