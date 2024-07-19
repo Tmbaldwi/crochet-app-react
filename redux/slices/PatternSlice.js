@@ -25,9 +25,12 @@ const patternSlice = createSlice({
     initialState,
     reducers: {
         loadPattern: (state, action) => {
-            const {newState} = action.payload;
+            const {patternSectionData, instructionSectionData, instructionData, instructionStepData} = action.payload;
 
-            state = newState;
+            state.patternSectionData = patternSectionData;
+            state.instructionSectionData = instructionSectionData;
+            state.instructionData = instructionData;
+            state.instructionStepData = instructionStepData;
         },
         addPatternSection: (state, action) => {
             const { id, title, repetitions, specialInstruction } = action.payload;
@@ -144,6 +147,7 @@ const patternSlice = createSlice({
 });
 
 export const {
+    loadPattern,
     addPatternSection,
     editPatternSection,
     deletePatternSection,

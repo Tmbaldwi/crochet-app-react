@@ -1,14 +1,17 @@
 import React, { useCallback , useState } from 'react';
 import { View, ScrollView, Text, Pressable, StyleSheet } from 'react-native';
 import { ColorCalculator } from '../components/Tools/ColorCalculator';
-import { getPatternData } from '../services/CreatePatternService';
+import { getPatternData, getAllPatternData } from '../services/CreatePatternService';
 import { useFocusEffect } from '@react-navigation/native';
 import { PatternIcon } from '../components/Common Models/Buttons/PatternIcon';
+import { useDispatch } from 'react-redux';
+import { loadPattern } from '../redux/slices/PatternSlice';
 
 // Home screen
 function HomeScreen({ navigation }) {
   const [patterns, setPatterns] = useState([]);
   const gradientArray = ColorCalculator.createGradient('#0febff', '#ffc800', patterns.length-1);
+  const dispatch = useDispatch();
   
   //Reloads the pattern ids when page loads
   useFocusEffect(
@@ -26,12 +29,15 @@ function HomeScreen({ navigation }) {
     }, [])
   );
 
-  const loadPattern = (patternId) => {
+  const loadPatternData = async (patternId) => {
     console.log("patternId: " + patternId);
 
     // Grab pattern data from service, return in format of patternslice w/ pattern name
 
     // Pass into load pattern from patternslice
+    const test = await getAllPatternData(patternId);
+
+    dispatch(loadPattern(test));
 
     //Navigate to new page with pattern NAME
     navigation.navigate('Create Pattern', {patternId});
@@ -54,7 +60,7 @@ function HomeScreen({ navigation }) {
               <View key={patternData.ID}>
                 <PatternIcon
                   label={patternData.PatternName}
-                  onPress={() => loadPattern(patternData.ID)}
+                  onPress={() => loadPatternData(patternData.ID)}
                   isDisabled={false}
                   color={gradientArray[index]}
                 />

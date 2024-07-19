@@ -45,6 +45,49 @@ export const addInstructionStepData = (patternId, instructionStepData) => {
     });
 }
 
+export const getInstructionSteps = (patternId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(
+            tx => {
+                const sql = `
+                    SELECT GUID, PatternId, InstructionGUID, Repetition, Stitch, OrderIndex
+                    FROM InstructionStepData
+                    WHERE PatternId = ${patternId}
+                    ORDER BY OrderIndex;
+                `;
+                
+                tx.executeSql(sql, [], 
+                    (tx, results) => {
+                        const instructionStepSet = {};
+                        const instructionStepIds = [];
+                        for (let i = 0; i < results.rows.length; i++) {
+                            const row = results.rows.item(i);
+                            const id = row.GUID;
+                            instructionStepSet[id] = {
+                                instructionId: row.InstructionGUID,
+                                id: id,
+                                repetition: row.Repetition,
+                                stitch: row.Stitch,
+                                orderIndex: row.OrderIndex,
+                            };
+                            instructionStepIds.push(id);
+                        }
+                        resolve({ instructionStepSet, instructionStepIds });
+                    },
+                    (tx, error) => {
+                        console.log('Error executing SQL for retrieving InstructionStepData:', error);
+                        reject(error);
+                    }
+                );
+            },
+            error => {
+                console.log('Transaction error while retrieving InstructionStepData:', error);
+                reject(error);
+            }
+        );
+    });
+};
+
 // will be called when the instruction step edit is made
 export const updateInstructionStepData = ({ }) => {
 

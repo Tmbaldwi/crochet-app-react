@@ -4,6 +4,10 @@ import { addInstructionSectionData } from './InstructionSectionService';
 import { addInstructionRowData } from './InstructionRowService';
 import { addInstructionStepData } from './InstructionStepService';
 import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData, fetchAllInstructionData, fetchAllInstructionStepData } from './ServiceTools';
+import { getPatternSections } from './PatternSectionService';
+import { getInstructionSections } from './InstructionSectionService';
+import { getInstructionData } from './InstructionRowService';
+import { getInstructionSteps } from './InstructionStepService';
 
 export const createNewPattern = (patternName, patternData) => {
     return new Promise(async (resolve, reject) => {
@@ -32,16 +36,26 @@ export const createNewPattern = (patternName, patternData) => {
     });
 };
 
-export const loadNewPattern = (patternId) => {
+export const getAllPatternData = (patternId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            //load pattern
+            const patternSectionData = await getPatternSections(patternId);
+
+            const instructionSectionData = await getInstructionSections(patternId);
+
+            const instructionData = await getInstructionData(patternId);
+
+            const instructionStepData = await getInstructionSteps(patternId);
+
+            console.log( instructionStepData)
+
+            resolve({patternSectionData, instructionSectionData, instructionData, instructionStepData})
         } catch (error) {
-            console.error('Error loading pattern with id: ' + patternId);
+            console.error('Error getting all pattern data', error);
             reject(error);
         }
     });
-}
+};
 
 // will be called when the pattern is saved in create mode
 export const addPatternData = (patternName) => {
