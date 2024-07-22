@@ -30,17 +30,13 @@ function HomeScreen({ navigation }) {
   );
 
   const loadPatternData = async (patternId) => {
-    console.log("patternId: " + patternId);
+    const patternData = await getAllPatternData(patternId);
 
-    // Grab pattern data from service, return in format of patternslice w/ pattern name
+    dispatch(loadPattern(patternData));
 
-    // Pass into load pattern from patternslice
-    const test = await getAllPatternData(patternId);
-
-    dispatch(loadPattern(test));
-
-    //Navigate to new page with pattern NAME
-    navigation.navigate('Create Pattern', {patternId});
+    const patternName = patterns.PatternName;
+    //Navigate to new page with pattern NAME TODO
+    navigation.navigate('Create Pattern', {patternName});
   }
   
   return (

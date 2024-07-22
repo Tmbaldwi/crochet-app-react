@@ -8,9 +8,12 @@ import { addPatternSection, editPatternSection, deletePatternSection, clearPatte
 import { createNewPattern } from '../services/CreatePatternService';
 import { fetchAllPatternData, fetchAllPatternSectionData, fetchAllInstructionSectionData } from '../services/ServiceTools';
 import { SavePatternModal } from '../components/Instruction Stuff/Pattern Save/SavePatternModal';
+import { useRoute } from '@react-navigation/native';
 
 export const CreatePatternScreen = forwardRef((props, ref) => {
   const { navigation } = props;
+  const route = useRoute();
+  const { patternName } = route.params || {};
   const patternState = useSelector(state => state.pattern);
   const patternSectionSet = patternState.patternSectionData.patternSectionSet;
   const patternSectionIds = patternState.patternSectionData.patternSectionIds;
@@ -20,6 +23,12 @@ export const CreatePatternScreen = forwardRef((props, ref) => {
   const [isPatternSectionModalVisible, setIsPatternSectionModalVisible] = useState(false);
   const [isPatternSaveModalVisible, setIsPatterSaveModalVisible] = useState(false);
   const [isNotViewMode, setIsNotViewMode] = useState(true);
+
+  //FIXXXXXX
+  if(patternName){
+    console.log("hit inside")
+    setViewMode(patternName);
+  }
 
   const openSavePatternDataModal = () => {
     setIsPatterSaveModalVisible(true);

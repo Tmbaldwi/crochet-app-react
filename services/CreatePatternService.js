@@ -47,7 +47,20 @@ export const getAllPatternData = (patternId) => {
 
             const instructionStepData = await getInstructionSteps(patternId);
 
-            console.log( instructionStepData)
+            //fix data
+            instructionData.instructionIds.forEach((instructionId) => {
+                //make new array
+                const newInstructionSteps = [];
+
+                //for every instruction step id we have...
+                instructionData.instructionSet[instructionId].instructionSteps.forEach((instructionStepId) =>{
+                    //add the corresponding instruction step data
+                    newInstructionSteps.push(instructionStepData.instructionStepSet[instructionStepId])
+                })
+
+                //replace:
+                instructionData.instructionSet[instructionId].instructionSteps = newInstructionSteps;
+            })
 
             resolve({patternSectionData, instructionSectionData, instructionData, instructionStepData})
         } catch (error) {

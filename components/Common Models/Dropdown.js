@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-const stitchData = [
+export const stitchData = [
     {label: 'ch', value: 'Chain'},
     {label: 'sl st', value: 'Slip Stitch'},
     {label: 'sc', value: 'Single Crochet'},
@@ -38,6 +38,11 @@ const stitchData = [
     {label: 'shell', value: 'Shell stitch'},
     {label: 'cl', value: 'Cluster'}
   ];
+
+export const getLabelByValue = (value) => {
+  const stitch = stitchData.find(item => item.value === value);
+  return stitch ? stitch.label : null;
+};
 
 const instSecTypeData = [
   {label: 'Round', value: 'round'},

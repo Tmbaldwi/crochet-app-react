@@ -1,4 +1,5 @@
 import db from '../database/Database';
+import { getLabelByValue } from '../components/Common Models/Dropdown';
 
 export const addInstructionStepData = (patternId, instructionStepData) => {
     return new Promise((resolve, reject) => {
@@ -19,7 +20,7 @@ export const addInstructionStepData = (patternId, instructionStepData) => {
 
                 // Build values part of the SQL command
                 instructionStepData.instructionStepIds.forEach((id, index) => {
-                    const sqlParamLine = `('${id}', ${patternId}, '${instructionStepSet[id].instructionId}', ${instructionStepSet[id].rep},'${instructionStepSet[id].stitch}', ${index})`;
+                    const sqlParamLine = `('${id}', ${patternId}, '${instructionStepSet[id].instructionId}', ${instructionStepSet[id].repetition},'${instructionStepSet[id].stitch}', ${index})`;
                     sqlParamSet.push(sqlParamLine);
                 });
 
@@ -66,9 +67,9 @@ export const getInstructionSteps = (patternId) => {
                             instructionStepSet[id] = {
                                 instructionId: row.InstructionGUID,
                                 id: id,
-                                repetition: row.Repetition,
+                                repetition: row.Repetition.toString(),
                                 stitch: row.Stitch,
-                                orderIndex: row.OrderIndex,
+                                stitchAbbr: getLabelByValue(row.Stitch)
                             };
                             instructionStepIds.push(id);
                         }
